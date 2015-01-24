@@ -17,5 +17,3 @@ Tareas terminadas
 
 1.	ABM de todas las tablas
 2.	Arquitectura base de la aplicación
-
-INSERT INTO usuarios (dni, nombre, password, email, lu, estado, id_facultad, id_provincia, id_perfil, id_categoria) value (33661787, 'Ocampo Javier Alfonso', 'rony214292', 'ferroxido@gmail.com', 214292, 1, 6, 17, 5, 1)
