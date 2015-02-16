@@ -35,9 +35,42 @@ class CalendarioLib {
 					$month++;
 				}
 			}
-		}
 
-		return $calendario;
+			return $calendario;
+		}else{
+			return false;
+		}
+		
+	}
+
+	public function calcular_meses($id_calendario){
+		$query = $this->CI->Model_Calendario->buscar($id_calendario);
+		$resultado = array();
+
+		if($query->num_rows == 1){
+			$ajuste = 1;
+			$total = 0;
+			$totalMeses = 12;
+
+			$fechaDesde = date_parse($query->row('desde'));
+			$fechaHasta = date_parse($query->row('hasta'));
+			$monthDesde = (int) $fechaDesde['month'];
+			$monthHasta = (int) $fechaHasta['month'];
+
+			if($monthDesde <= $monthHasta){
+				$total = $monthHasta - $monthDesde + $ajuste;
+			}else{
+				$total = $totalMeses - $monthDesde + $monthHasta + $ajuste;
+			}
+
+			$resultado['year'] = $fechaDesde['year'];
+			$resultado['month'] = $monthDesde;
+			$resultado['total'] = $total;
+
+			return $resultado;
+		}else{
+			return false;
+		}
 	}
 
 	//Generar los dias entre las fechas pasadas como parámetros y los insertará en la BD

@@ -27,14 +27,23 @@ class Calendario extends CI_Controller{
 		$this->load->view('template-admin', $data);
 	}
 
-	public function variosmeses(){
-		$data['contenido'] = 'calendario/detalle';
-		$data['titulo'] = 'Calendario';
-		$data['calendario'] = $this->calendariolib->generar_calendario(2012,11,6);
-		$this->load->view('template-admin', $data);
+	public function variosmeses($id = null){
+		if(isset($id) && is_numeric($id)){
+			$data['contenido'] = 'calendario/detalle';
+			$data['titulo'] = 'Calendario';
+			$resultado = $this->calendariolib->calcular_meses($id);
+			if($resultado){
+				$data['calendario'] = $this->calendariolib->generar_calendario($resultado['year'],$resultado['month'],$resultado['total']);
+				$this->load->view('template-admin', $data);
+			}else{
+				show_404();
+			}
+		}else{
+			show_404();
+		}
 	}
 
-	public function mostrar_info_dia($year, $month, $id){
+	public function mostrar_info_dia($year = null, $month = null, $id = null){
 		if($this->input->is_ajax_request()){
 
 			$year = (int) $year;

@@ -11,7 +11,7 @@
 		base_url = '<?=base_url(); ?>';
 	</script>
 	<script src="<?= base_url('js/pruebaslocas.js'); ?>"></script>
-	<div class="row">
+	<div id="contenedor_calendario" class="row">
 		<?php foreach ($calendario as $cal): ?>
 			<div class="meses">
 				<?= $cal; ?>

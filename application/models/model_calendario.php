@@ -11,7 +11,7 @@ class Model_Calendario extends CI_Model{
                'start_day'    => 'monday',
                'month_type'   => 'long',
                'day_type'     => 'abr',
-               'show_next_prev' => true,
+               'show_next_prev' => false,
                'next_prev_url' => base_url().'calendario/detalle'
              );
 
@@ -91,9 +91,15 @@ class Model_Calendario extends CI_Model{
     	return $query->result();
     }
 
-    function find($id){
+    public function find($id){
     	$query = $this->db->query("SELECT extract(year FROM desde) AS year_desde ,extract(month FROM desde) AS month_desde,extract(year FROM hasta) AS year_hasta ,extract(month FROM hasta) AS month_hasta FROM calendario WHERE id = '$id'"); 
     	return $query;
+    }
+
+    public function buscar($id){
+        $this->db->where('id', $id);
+        $query = $this->db->get('calendario'); 
+        return $query;     
     }
 }
 

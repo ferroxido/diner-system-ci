@@ -28,11 +28,18 @@ body {
   padding-top: 60px;
   padding-bottom: 40px;
 }
+div#contenedor_calendario{
+  text-align: center;
+}
 div#menu_collapse:hover {
   background-color: #fff;
 }
 div#menu_collapse:hover h4 a:hover {
   text-decoration: none;
+}
+div.meses{
+  display: inline-block;
+  margin: 1em;
 }
 div.navbar-fixed-top{
   font-weight: bold;
@@ -118,6 +125,10 @@ table.calendario {
   border: 1px solid #999;
   vertical-align: top;
   background-color: #def;
+}
+.calendario .dias td:hover{
+  background-color: #fff; 
+  cursor: pointer;
 }
 .calendario .highlight {
   font-weight: bold;
