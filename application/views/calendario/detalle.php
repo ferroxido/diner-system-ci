@@ -7,6 +7,16 @@
 			
 		</div>
 	</div>
+
+	<div class="row">
+		<?php foreach ($calendario as $cal): ?>
+			<div class="meses">
+				<?= $cal; ?>
+			</div>
+		<?php endforeach; ?>
+	</div>
+
+	<!--
 	<div class="row">
 		<div class="col-md-7">
 			<?= $calendario; ?>
@@ -31,9 +41,5 @@
 			</div>
 		</div>
 	</div>
+	-->
 </div>
-
-
-
-
-

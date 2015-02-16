@@ -48,7 +48,7 @@
 $active_group = 'default';
 $active_record = TRUE;
 
-$db['default']['hostname'] = 'localhost';//'170.210.201.139';
+$db['default']['hostname'] = 'localhost';//'170.210.201.139';//postgres;201.146 apache.
 $db['default']['username'] = 'postgres';
 $db['default']['password'] = 'rony214292';
 $db['default']['database'] = 'comedorDB';

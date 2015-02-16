@@ -18,6 +18,28 @@ class CalendarioLib {
 		}
 	}
 
+	//Generar calendario y mostrar todos los meses que necesitamos
+	public function generar_calendario($year, $month, $totalMonth){
+
+		if ($totalMonth > 0 && $totalMonth < 13){
+			$calendario = array();
+
+			for ($i = 0; $i < $totalMonth; $i++){
+				$calendario[$month] = $this->CI->Model_Calendario->generate($year, $month);
+
+				//Si el mes es diciembre, incrementamos $year
+				if ($month == 12){
+					$year++;
+					$month = 1;//ponemos el mes en enero
+				}else{
+					$month++;
+				}
+			}
+		}
+
+		return $calendario;
+	}
+
 	//Generar los dias entre las fechas pasadas como parámetros y los insertará en la BD
 	public function generar_dias($desde, $hasta){
 

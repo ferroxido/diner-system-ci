@@ -18,13 +18,12 @@
 	<div class="navbar navbar-default navbar-fixed-top">
 	    <div class="container">
 	        <div class="navbar-header">
-	          	<a class="navbar-brand glyphicon glyphicon-home" href="#"> UNSa</a>
+	          	<a class="navbar-brand" href="#">ComedorUNSa</a>
 	          	<button class="navbar-toggle" type="button" data-toggle="collapse" data-target="#navbar-main">
 	            	<span class="icon-bar"></span>
 	            	<span class="icon-bar"></span>
 	            	<span class="icon-bar"></span>
 	          	</button>
-	          	
 	        </div>
 
 	        <div class="navbar-collapse collapse" id="navbar-main">

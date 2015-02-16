@@ -12,7 +12,7 @@ class Model_Calendario extends CI_Model{
                'month_type'   => 'long',
                'day_type'     => 'abr',
                'show_next_prev' => true,
-               'next_prev_url' => base_url().'calendario/mostrar_calendario'
+               'next_prev_url' => base_url().'calendario/detalle'
              );
 
         $this->conf['template'] = '
