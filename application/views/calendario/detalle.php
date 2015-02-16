@@ -7,7 +7,10 @@
 			
 		</div>
 	</div>
-
+	<script type="text/javascript">
+		base_url = '<?=base_url(); ?>';
+	</script>
+	<script src="<?= base_url('js/pruebaslocas.js'); ?>"></script>
 	<div class="row">
 		<?php foreach ($calendario as $cal): ?>
 			<div class="meses">
