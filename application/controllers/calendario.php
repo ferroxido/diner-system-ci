@@ -43,6 +43,26 @@ class Calendario extends CI_Controller{
 		}
 	}
 
+	public function mostrar_info(){
+		if($this->input->is_ajax_request()){
+			//Variables enviadas por ajax
+			$day = (int) $this->input->post('dia');
+			$month = $this->calendariolib->fromNameToNumber($this->input->post('month'));
+			$year =  $this->input->post('year');
+			$idCalendario = $this->input->post('idCalendario');
+			
+			if($day != null){
+				$fecha = date('Y-m-d', strtotime($year.'-'.$month.'-'.$day));
+				$query = $this->Model_Calendario->get_calendar_data($fecha, $idCalendario);
+
+				echo json_encode($query);
+			}
+		}else{
+			show_404();
+		}
+		
+	}
+
 	public function mostrar_info_dia($year = null, $month = null, $id = null){
 		if($this->input->is_ajax_request()){
 

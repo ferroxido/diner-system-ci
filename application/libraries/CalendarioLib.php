@@ -73,6 +73,11 @@ class CalendarioLib {
 		}
 	}
 
+	public function fromNameToNumber($monthName){
+		$monthNumber = date('m', strtotime($monthName));
+		return $monthNumber;
+	}
+
 	//Generar los dias entre las fechas pasadas como parámetros y los insertará en la BD
 	public function generar_dias($desde, $hasta){
 
