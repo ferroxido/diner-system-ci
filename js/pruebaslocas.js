@@ -1,4 +1,5 @@
 $(document).ready(function() {
+	var estructuraHtml = $('#cuerpo_modal').html();
   	
 	$('.calendario .dia').click(function(){
 		//Obtengo el mes y el año del calendario al hacer click en cualquier dia
@@ -26,7 +27,7 @@ $(document).ready(function() {
 				},
 				success: function(response){
 					$('#encabezado_modal').html("");
-					//$('#cuerpo_modal').html("");
+					$('#cuerpo_modal').html(estructuraHtml);
 					$('#pie_modal').html("");
 					var obj = JSON.parse(response);
 					if(obj.length > 0){
@@ -51,10 +52,11 @@ $(document).ready(function() {
 								$('#textarea_evento').html("");
 								$('#textarea_evento').append('<textarea name="evento" class="form-control" rows="3">' + val.evento + '</textarea>');
 
+								/*
 								$('#radio_button_estado').html("");
 								$('#radio_button_estado').append('<div><label><input name="estado" id="habilitado" value="habilitado" type="radio"/> Habilitado</label></div>');
 								$('#radio_button_estado').append('<div><label><input name="estado" id="feriado" value="feriado" type="radio"/> Feriado</label></div>');
-
+								*/
 								$('#boton_actualizar').html("");
 								$('#boton_actualizar').append('<input type="submit" class="btn btn-success" value="Actualizar">');
 								
@@ -74,6 +76,28 @@ $(document).ready(function() {
 			});
 		}//fin del if
 	});//fin evento click
-	
 
 });//fin document ready
+
+
+$(document).ready(function() {
+
+	$('.modal').on('submit', 'form[data-async]', function(event){
+		
+		$.ajax({
+			type: "post",
+			url: $(this).attr("action"),
+			data: $(this).serialize(),
+			success: function(data){
+				//$("#mensaje").html(data);
+				//$("#mensaje").fadeOut(2000);
+			},
+			error: function(){						
+				alert('Error en la respuesta');
+			}
+		});
+
+		event.preventDefault();
+	});
+
+});

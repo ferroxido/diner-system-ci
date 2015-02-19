@@ -267,9 +267,9 @@ class UsuarioLib {
 		$this->CI->email->from($query->email, 'UNSA');
 		$this->CI->email->to($email);
 		$this->CI->email->subject('Registración UNSA comedor');//Título del mail
-		$cadena = '<h2>gracias '.$nombre.' por registrarte en el comedor de la UNSA</h2><hr><br><br>';
-		$cadena = $cadena.'<div><p>Su contraseña es: '.$password_generada.' </p></div>';
-		$this->CI->email->message($cadena);
+		$mensaje = str_replace("<nombre>", $nombre, $query->mensaje_email);
+		$mensaje = str_replace("<password>", $password_generada, $mensaje);
+		$this->CI->email->message($mensaje);
 
 		//-----------realizamos el envío------------------//
 		if(! $this->CI->email->send()){

@@ -57,7 +57,7 @@
 	        	<h3 id="encabezado_modal"></h3>
 	      	</div>
 	      	<div id="cuerpo_modal" class="modal-body">
-			<?= form_open('index.php/calendario/actualizar', array('class'=>'form-horizontal')); ?>
+			<?= form_open('calendario/actualizar', array('id'=>'resultado_calendario', 'class'=>'form-horizontal')); ?>
 				
 				<div class="row">
 					<div class="form-group">
@@ -93,7 +93,8 @@
 						</div>
 					</div>
 				</div>	
-
+				
+				<!--
 				<div class="row">
 					<div class="form-group">
 			      		<label class="col-md-offset-2 col-md-3 control-label">Marcar como: </label>
@@ -102,12 +103,13 @@
 			      		</div>
 					</div>
 				</div>
-
+				-->
 				<div class="form-group">
 					<div id="boton_actualizar" class="col-sm-offset-8">
 
 					</div>
 				</div>
+				
 			<?= form_close(); ?>
 	      	</div>
 	      	<div id="pie_modal" class="modal-footer">

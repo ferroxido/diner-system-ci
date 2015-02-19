@@ -11,7 +11,7 @@ class Home extends CI_Controller {
 		$this->form_validation->set_message('loginok', 'Usuario o password incorrecto');
 		$this->form_validation->set_message('valid_email', 'El email %s no es válido');
 		$this->form_validation->set_message('cambiook', 'No se pudo realizar el cambio de clave');
-		$this->form_validation->set_message('max_length', '%s debe ser de a lo sumo %s números');
+		$this->form_validation->set_message('max_length', '%s debe tener como máximo %s números');
 		$this->form_validation->set_message('numeric', '%s debe ser un valor numérico');
 		$this->form_validation->set_message('no_repetir_usuario', 'Existe otro registro con el mismo nombre');
 	}
@@ -171,7 +171,7 @@ class Home extends CI_Controller {
 		$this->form_validation->set_rules('dni', 'Usuario', 'required|max_length[8]|numeric|callback_no_repetir_usuario');
 		$this->form_validation->set_rules('nombre', 'Nombre', 'required');
 		$this->form_validation->set_rules('email', 'Email', 'required|valid_email');
-		$this->form_validation->set_rules('lu', 'Libreta Universitaria', 'required|max_length[7]|numeric');
+		$this->form_validation->set_rules('lu', 'Libreta Universitaria', 'required|max_length[6]|numeric');
 
 		if($this->form_validation->run() == FALSE){
 			//Fallo alguna validación
@@ -196,7 +196,6 @@ class Home extends CI_Controller {
 			$data['contenido'] = 'home/ingreso';
 			$data['mostrar_mensaje'] = TRUE;
 			$this->load->view('template-index', $data);//Cargamos la vista y el template
-
 		}
 	}
 

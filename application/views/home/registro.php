@@ -1,5 +1,5 @@
-<?= form_open('index.php/home/registrarse', array('class'=>'form-horizontal jumbotron')); ?>
-	<legend>Ingreso al sistema</legend>
+<?= form_open('home/registrarse', array('class'=>'form-horizontal jumbotron')); ?>
+	<legend>Registro al sistema</legend>
 
 	<?= my_validation_errors(validation_errors()); ?>
 
@@ -25,8 +25,7 @@
 		<div class="form-group">
 			<?= form_label('Email: ', 'email', array('class'=>'col-md-3 control-label')); ?>
 			<div class="col-md-4">
-				<?= form_input(array('class'=>'form-control','type'=>'email', 'name'=>'email', 'id'=>'email', 'value'=>set_value('email'))); ?>
-				
+				<?= form_input(array('class'=>'form-control','type'=>'email', 'name'=>'email', 'id'=>'email', 'placeholder'=>'Tu dirección de correo', 'value'=>set_value('email'))); ?>
 			</div>	
 		</div>
 	</div>
@@ -35,7 +34,7 @@
 		<div class="form-group">
 			<?= form_label('Libreta Universitaria: ', 'lu', array('class'=>'col-md-3 control-label')); ?>
 			<div class="col-md-4">
-				<?= form_input(array('class'=>'form-control','type'=>'text', 'name'=>'lu', 'id'=>'lu', 'placeholder'=>'Tu l.u', 'value'=>set_value('lu'))); ?>		
+				<?= form_input(array('class'=>'form-control','type'=>'text', 'name'=>'lu', 'id'=>'lu', 'placeholder'=>'Tu libreta Universitaria', 'value'=>set_value('lu'))); ?>		
 			</div>	
 		</div>
 	</div>

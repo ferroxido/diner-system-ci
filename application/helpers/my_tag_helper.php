@@ -156,8 +156,8 @@ if( ! function_exists('my_botonera_home'))
 	{
 		$botones = "";
 		$botones = $botones."<div class='col-md-8 col-xs-12'>";
-		$botones = $botones.anchor('index.php/home/ingreso', ' Ingresar', array('class' => 'btn btn-primary glyphicon glyphicon-log-in'))."<span>&nbsp</span>";
-		$botones = $botones.anchor('index.php/home/registro', ' Registrarse', array('class' => 'btn btn-info glyphicon glyphicon-book', 'disabled' => 'disabled'))."</div>";
+		$botones = $botones.anchor('home/ingreso', ' Ingresar', array('class' => 'btn btn-primary glyphicon glyphicon-log-in'))."<span>&nbsp</span>";
+		$botones = $botones.anchor('home/registro', ' Registrarse', array('class' => 'btn btn-info glyphicon glyphicon-book'))."</div>";
 		return $botones;
 	}
 }
