@@ -1,5 +1,6 @@
-<?= form_open('calendario/insert', array('class'=>'form-horizontal jumbotron')); ?>
+<?= form_open('calendario/feriados', array('class'=>'form-horizontal jumbotron')); ?>
 	<legend>Agregando un nuevo calendario Académico</legend>
+	<h4>Paso 1: Ingrese una descripción e indique un Inicio y un Final para su calendario</h4>
 
 	<?= my_validation_errors(validation_errors()); ?>
 	
@@ -37,7 +38,7 @@
 		<div class="form-group">
 			<div class="col-md-offset-3">
 				<div class="col-md-6">
-					<?= form_button(array('type'=>'submit', 'content'=>' Aceptar', 'class'=>'btn btn-success glyphicon glyphicon-ok')); ?>
+					<?= form_button(array('type'=>'submit', 'content'=>' Siguiente', 'class'=>'btn btn-success glyphicon glyphicon-arrow-right')); ?>
 
 					<?= anchor('calendario/index', ' Cancelar',array('class'=>'btn btn-default glyphicon glyphicon-remove')); ?>
 				</div>

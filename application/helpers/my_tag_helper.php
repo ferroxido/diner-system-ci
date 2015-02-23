@@ -185,7 +185,8 @@ if( ! function_exists('my_boton_permisos'))
 	function my_boton_permisos($destino, $nombre_boton ,$claseHTML)
 	{
 		$boton = "";
-		if(get_instance()->session->userdata('estado_usuario') == 2){
+		$estado_activo = 2;
+		if(get_instance()->session->userdata('estado_usuario') == $estado_activo){
 			if(get_instance()->session->userdata('perfil_nombre') === 'Super Administrador' || get_instance()->session->userdata('perfil_nombre') === 'Administrador'){
 				$boton = $boton.anchor($destino, $nombre_boton,array('class'=>$claseHTML));
 			}else if(get_instance()->session->userdata('perfil_nombre') === 'Consulta'){

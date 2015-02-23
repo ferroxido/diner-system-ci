@@ -13,14 +13,12 @@ class Facultades extends CI_Controller {
 
 	public function index(){
 		$data['contenido'] = 'facultades/index';
-		$data['titulo'] = 'Facultades';
 		$data['registros'] = $this->Model_Facultades->all();
 		$this->load->view('template-admin', $data);
 	}
 
 	public function search(){
 		$data['contenido'] = 'facultades/index';
-		$data['titulo'] = 'Facultades';
 		$valor = $this->input->post('buscar');
 		$data['registros'] = $this->Model_Facultades->allFilter('nombre', $valor);
 		$this->load->view('template-admin', $data);
@@ -30,21 +28,13 @@ class Facultades extends CI_Controller {
 		return $this->facultadeslib->norepetir($this->input->post());
 	}
 
-	public function edit($id){
-		//$id = $this->uri->segment(3);//1->controlador, 2->accion, 3->el id
-		$data['contenido'] = 'facultades/edit';
-		$data['titulo'] = 'Editar Facultades';
-		$data['registro'] = $this->Model_Facultades->find($id);
-		$this->load->view('template-admin',$data);
-	}
-
 	public function update(){
 		$registro = $this->input->post();
 
 		$this->form_validation->set_rules('nombre', 'Nombre', 'required|callback_norepeat');
 		if($this->form_validation->run() == FALSE){
 			//Si no cumplio alguna de las reglas
-			$this->edit($registro['id']);
+			$this->index();
 		}else{
 			$registro['updated'] = date('Y/m/d H:i');
 			$this->Model_Facultades->update($registro);
@@ -54,7 +44,6 @@ class Facultades extends CI_Controller {
 
 	public function create(){
 		$data['contenido'] = 'facultades/create';
-		$data['titulo'] = 'Agregar Facultades';
 		$this->load->view('template-admin',$data);
 	}
 

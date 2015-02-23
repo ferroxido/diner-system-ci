@@ -8,13 +8,55 @@ class CalendarioLib {
 	}
 
 	public function my_validation($desde, $hasta){
-		$unix_desde = strtotime($desde);
-		$unix_hasta = strtotime($hasta);
+		$tokensDesde = explode("/", $desde);
+		$tokensHasta = explode("/", $hasta);
 
-		if($unix_desde < $unix_hasta){
-			return TRUE;
+		$numTokens = 3;//cade fecha tiene 3 tokens: day, month y year, separados por "/"
+
+		//Garantizar que el array tenga dia, mes y año.
+		if(sizeof($tokensDesde) == $numTokens && sizeof($tokensHasta) == $numTokens){
+			//Comparo los años
+			$yearDesde = (int) $tokensDesde[2];
+			$yearHasta = (int) $tokensHasta[2];
+			if($yearDesde <= $yearHasta){
+				//Por ahora son validas
+				if($yearDesde < $yearHasta){
+					//listo la fecha desde es menor que hasta
+					return true;
+				}else{
+					//Coinciden en año. Debo comparar meses
+					$monthDesde = $tokensDesde[1];
+					$monthHasta = $tokensHasta[1];
+
+					if($monthDesde <= $monthHasta){
+						//por ahora son validas
+						if($monthDesde < $monthHasta){
+							//listo la fecha desde es menor que hasta
+							return true;		
+						}else{
+							//Coinciden en mes. Debo comparar dias
+							$dayDesde = $tokensDesde[0];
+							$dayHasta = $tokensHasta[0];
+							if($dayDesde <= $dayHasta){
+								//Fecha valida
+								return true;
+							}else{
+								//La fecha desde es menor que hasta y eso no es posible.
+								return false;
+							}
+						}
+					}else{
+						//La fecha desde es menor que hasta y eso no es posible.
+						return false;
+					}
+				}
+			}else{
+				//La fecha desde es menor que hasta y eso no es posible.
+				return false;
+			}
 		}else{
-			return FALSE;
+			//Formato erroneo
+			return false;
 		}
 	}
 

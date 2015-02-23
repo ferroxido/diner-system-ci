@@ -1,6 +1,5 @@
 $(document).ready(function() {
-	var estructuraHtml = $('#cuerpo_modal').html();
-  	
+	
 	$('.calendario .dia').click(function(){
 		//Obtengo el mes y el año del calendario al hacer click en cualquier dia
 		fecha = $(this).parents(':eq(2)').find('.encabezado').html().replace(/&nbsp;/gi,'/');
@@ -27,8 +26,8 @@ $(document).ready(function() {
 				},
 				success: function(response){
 					$('#encabezado_modal').html("");
-					$('#cuerpo_modal').html(estructuraHtml);
-					$('#pie_modal').html("");
+					$('#form_modal').html("");
+
 					var obj = JSON.parse(response);
 					if(obj.length > 0){
 						try{
@@ -37,36 +36,51 @@ $(document).ready(function() {
 								//Formateamos la fecha
 								var string_fecha = val.fecha;
 								var fecha = string_fecha.substring(8,10) + '/' + string_fecha.substring(5,7) + '/' + string_fecha.substring(0,4);
-								
+
+								//Fecha
 								$('#encabezado_modal').append('Información del ' + fecha);
+								
+								contenidohtml = '<div class="row"><div class="form-group">';
+								contenidohtml = contenidohtml + "<input name='fecha' type='hidden' class='form-control' value='" + val.fecha + "'>";
+								contenidohtml = contenidohtml + '</div></div>';
 
-								$('#fecha_dia').html("");
-								$('#fecha_dia').append("<input name='fecha' type='hidden' class='form-control' value='" + val.fecha + "'>");
+								//Tickets totales
+								contenidohtml = contenidohtml + '<div class="row"><div class="form-group">';
+								contenidohtml = contenidohtml + '<label for="tickets_totales" class="col-md-offset-2 col-md-3 control-label">Tickets totales: </label>'
+								contenidohtml = contenidohtml + '<div class="col-md-4">';
+								contenidohtml = contenidohtml + '<input name="tickets_totales" class="form-control" value="' + val.tickets_totales + '">';
+								contenidohtml = contenidohtml + '</div></div></div>';
 
-								$('#tickets_totales').html("");
-								$('#tickets_totales').append('<input name="tickets_totales" class="form-control" value="' + val.tickets_totales + '">');
+								//Tickets vendidos
+								contenidohtml = contenidohtml + '<div class="row"><div class="form-group">';
+								contenidohtml = contenidohtml + '<label for="tickets_vendidos" class="col-md-offset-2 col-md-3 control-label">Tickets Vendidos: </label>'
+								contenidohtml = contenidohtml + '<div class="col-md-4">';
+								contenidohtml = contenidohtml + '<input name="tickets_vendidos" class="form-control" disabled value="' + val.tickets_vendidos + '">';
+								contenidohtml = contenidohtml + '</div></div></div>';
 
-								$('#tickets_vendidos').html("");
-								$('#tickets_vendidos').append('<input name="tickets_vendidos" class="form-control" disabled value="' + val.tickets_vendidos + '">');
+								//Evento
+								contenidohtml = contenidohtml + '<div class="row"><div class="form-group">';
+								contenidohtml = contenidohtml + '<label for="evento" class="col-md-offset-2 col-md-3 control-label">Evento: </label>'
+								contenidohtml = contenidohtml + '<div class="col-md-4">';
+								contenidohtml = contenidohtml + '<textarea name="evento" class="form-control" rows="3">' + val.evento + '</textarea>';
+								contenidohtml = contenidohtml + '</div></div></div>';
 
-								$('#textarea_evento').html("");
-								$('#textarea_evento').append('<textarea name="evento" class="form-control" rows="3">' + val.evento + '</textarea>');
+								//Boton actualizar
+								contenidohtml = contenidohtml + '<div class="form-group"><div class="col-md-offset-9"><input type="submit" class="btn btn-success" value="Actualizar"></div></div>';
 
 								/*
 								$('#radio_button_estado').html("");
 								$('#radio_button_estado').append('<div><label><input name="estado" id="habilitado" value="habilitado" type="radio"/> Habilitado</label></div>');
 								$('#radio_button_estado').append('<div><label><input name="estado" id="feriado" value="feriado" type="radio"/> Feriado</label></div>');
 								*/
-								$('#boton_actualizar').html("");
-								$('#boton_actualizar').append('<input type="submit" class="btn btn-success" value="Actualizar">');
-								
+								items.push(contenidohtml);
 							});	
-							
+							$('#form_modal').append.apply($('#form_modal'), items);
 						}catch(e) {
 							alert('Error');
 						}
 					}else{
-						$('#cuerpo_modal').html($('<h3/>').text(" No hay información disponible"));
+						$('#form_modal').html($('<h3/>').text(" No hay información disponible"));
 					}
 					$('#myModal').modal('show');
 				},
@@ -81,22 +95,21 @@ $(document).ready(function() {
 
 
 $(document).ready(function() {
-
-	$('.modal').on('submit', 'form[data-async]', function(event){
-		
+	$('#form_modal').submit(function(event){
+		$('#mensaje_exito').fadeIn(1500);
+	  	$('#mensaje_exito').css({"padding":"0.5em"});
 		$.ajax({
-			type: "post",
-			url: $(this).attr("action"),
+			type: 'post',
+			url: $(this).attr('action'),
 			data: $(this).serialize(),
 			success: function(data){
-				//$("#mensaje").html(data);
-				//$("#mensaje").fadeOut(2000);
+				$("#mensaje_exito").html(data);
+				$("#mensaje_exito").fadeOut(3000);
 			},
 			error: function(){						
 				alert('Error en la respuesta');
 			}
 		});
-
 		event.preventDefault();
 	});
 

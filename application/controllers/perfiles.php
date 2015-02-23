@@ -44,7 +44,7 @@ class Perfiles extends CI_Controller {
 		$this->form_validation->set_rules('nombre', 'Nombre', 'required|callback_norepeat');
 		if($this->form_validation->run() == FALSE){
 			//Si no cumplio alguna de las reglas
-			$this->edit($registro['id']);
+			$this->index();
 		}else{
 			$registro['updated'] = date('Y/m/d H:i');
 			$this->Model_Perfiles->update($registro);

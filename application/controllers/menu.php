@@ -46,7 +46,7 @@ class Menu extends CI_Controller {
 		$this->form_validation->set_rules('orden', 'Orden', 'numeric|is_natural');
 		if($this->form_validation->run() == FALSE){
 			//Si no cumplio alguna de las reglas
-			$this->edit($registro['id']);
+			$this->index();
 		}else{
 			$registro['updated'] = date('Y/m/d H:i');
 			$this->Model_Menu->update($registro);

@@ -12,7 +12,7 @@ $(function($){
 	dayNamesShort: ['Dom','Lun','Mar','Mi&eacute;','Juv','Vie','S&aacute;b'],
 	dayNamesMin: ['Do','Lu','Ma','Mi','Ju','Vi','S&aacute;'],
 	weekHeader: 'Sm',
-	dateFormat: 'yy/mm/dd',
+	dateFormat: 'dd/mm/yy',
 	firstDay: 1,
 	isRTL: false,
 	showMonthAfterYear: false,

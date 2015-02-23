@@ -1,4 +1,4 @@
-<?= form_open('index.php/facultades/insert', array('class'=>'form-horizontal jumbotron')); ?>
+<?= form_open('facultades/insert', array('class'=>'form-horizontal jumbotron')); ?>
 	<legend>Agregando un Registro</legend>
 
 	<?= my_validation_errors(validation_errors()); ?>

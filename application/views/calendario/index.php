@@ -35,7 +35,7 @@
 				<td><?= $registro->descripcion; ?></td>
 				<td><?= date("d/m/Y",strtotime($registro->desde)); ?></td>
 				<td><?= date("d/m/Y",strtotime($registro->hasta)); ?></td>
-				<td><?= anchor('calendario/detalle/'.$registro->year.'/'.$registro->month.'/'.$registro->id, ' ', array('class' => 'glyphicon glyphicon-search'));?></td>
+				<td><?= anchor('calendario/detalle/'.$registro->id, ' ', array('class' => 'glyphicon glyphicon-search'));?></td>
 			</tr>
 			<?php endforeach; ?>
 		</tbody>

@@ -90,6 +90,9 @@ fieldset {
   border-radius: 0.5em;
   padding: 0.5em;
 }
+h4#mensaje_exito{
+  text-align: left;
+}
 .mijumbotron label {
   background-color: #fff;
   border-radius: 0.5em;

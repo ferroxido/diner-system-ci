@@ -2,32 +2,30 @@
 
 class Calendario extends CI_Controller{	
 
+	protected $descripcion;
+	protected $desde;
+	protected $hasta;
+	protected $feriados = array();//feriados del calendario
+	protected $defaultTipo = 0;//Default tipo feriado.
 
 	//Constructor
 	function __construct(){
 		parent::__construct();
 
       	$this->load->model('Model_Calendario');
+      	$this->load->model('Model_Feriados');
       	$this->load->library('calendarioLib');
-      	$this->form_validation->set_message('descripcion', 'Debe ingresar un valor para %s');
+      	$this->form_validation->set_message('required', 'Debe ingresar un valor para %s');
       	$this->form_validation->set_message('my_validation', 'La fecha %s es mayor que %s, eso no es posible');
 	}
 
 	public function index(){
 		$data['contenido'] = 'calendario/index';
-		$data['titulo'] = 'Calendarios';
 		$data['registros'] = $this->Model_Calendario->all();
 		$this->load->view('template-admin', $data);
 	}
 
-	public function detalle($year = null, $month = null, $id = null){
-		$data['contenido'] = 'calendario/detalle';
-		$data['titulo'] = 'Calendario';
-		$data['calendario'] = $this->Model_Calendario->generate($year, $month);
-		$this->load->view('template-admin', $data);
-	}
-
-	public function variosmeses($id = null){
+	public function detalle($id = null){
 		if(isset($id) && is_numeric($id)){
 			$data['contenido'] = 'calendario/detalle';
 			$data['titulo'] = 'Calendario';
@@ -43,6 +41,10 @@ class Calendario extends CI_Controller{
 		}
 	}
 
+	/*
+	 * Muestra la informacion respecto a un dia determinado, cuya 
+	 * fecha se envia por ajax.
+	 */
 	public function mostrar_info(){
 		if($this->input->is_ajax_request()){
 			//Variables enviadas por ajax
@@ -63,62 +65,79 @@ class Calendario extends CI_Controller{
 		
 	}
 
-	public function mostrar_info_dia($year = null, $month = null, $id = null){
-		if($this->input->is_ajax_request()){
-
-			$year = (int) $year;
-
-			if(!$year && !is_numeric($year)){
-				$year = date('Y');
-			}
-
-			if(!$month){
-				$month = date('m');
-			}
-
-			if(!$id){
-				$id = 1;//No tiene sentido
-			}
-
-			if($this->input->post('dia') != null){
-				$dia = $this->input->post('dia');
-				$fecha = date('Y-m-d', strtotime($year.'-'.$month.'-'.$dia));
-				$query = $this->Model_Calendario->get_calendar_data($fecha, $id);
-
-				echo json_encode($query);
-			}
-		}else{
-			show_404();
-		}
-	}
-
 	public function create(){
 		$data['contenido'] = 'calendario/create';
-		$data['titulo'] = 'Agregando un calendario';
 		$this->load->view('template-admin', $data);
 	}
 
-	public function insert(){
-		if($this->input->post('descripcion')){
-			$registro = $this->input->post();
-			
-			$this->form_validation->set_rules('descripcion', 'Descripcion', 'required');
-			$this->form_validation->set_rules('desde', 'Desde', 'required|callback_my_validation[hasta]');
-			$this->form_validation->set_rules('hasta', 'Hasta', 'required');
+	public function feriados(){
+		//Guardamos los valores de las variables
+		$this->descripcion = $this->input->post('descripcion');
+		$this->desde = $this->input->post('desde');
+		$this->hasta = $this->input->post('hasta');
 
-			if($this->form_validation->run() == FALSE){
-				//Si no cumplio alguna de las reglas
-				$this->create();
-			}else{
-
-	 			$this->Model_Calendario->insert($registro);
-
-	 			$this->calendariolib->generar_dias($registro['desde'], $registro['hasta']);
-				redirect('calendario/index');
-				//echo date('Y', strtotime($registro['desde']));
-			}
+		$this->form_validation->set_rules('descripcion', 'Descripcion', 'required');
+		$this->form_validation->set_rules('desde', 'Desde', 'required|callback_my_validation[hasta]');
+		$this->form_validation->set_rules('hasta', 'Hasta', 'required');
+		
+		if($this->form_validation->run() == FALSE){
+			//Si no cumplio alguna de las reglas
+			$this->create();
 		}else{
-			show_404();
+			$data['contenido'] = 'calendario/feriados';
+			$data['desde'] = $this->desde;
+			$data['hasta'] = $this->hasta;
+			$data['feriados'] = $this->Model_Feriados->all_between($this->desde, $this->hasta);
+			$this->load->view('template-admin', $data);
+		}
+	}
+
+	public function agregar_feriados(){
+		$data['contenido'] = 'calendario/agregar_feriados';
+		$this->load->view('template-admin',$data);
+	}
+
+	public function validar_fecha(){
+		return true;
+	}
+
+	public function insert_feriado(){
+		$registro = $this->input->post();
+
+		$this->form_validation->set_rules('descripcion', 'Descripcion', 'required');
+		$this->form_validation->set_rules('fecha', 'Fecha', 'required|callback_validar_fecha');
+		if($this->form_validation->run() == FALSE){
+			//Si no cumplio alguna de las reglas
+			$this->agregar_feriados();
+		}else{
+			$registro['tipo'] = $this->defaultTipo;
+			$registro['created'] = date('Y/m/d H:i');
+			$registro['updated'] = date('Y/m/d H:i');
+ 			$this->Model_Feriados->insert($registro);
+			
+			$data['contenido'] = 'calendario/feriados';
+			$data['feriados'] = $this->Model_Feriados->all_between($this->desde, $this->hasta);
+			$this->load->view('template-admin', $data);
+		}
+	}
+
+	public function insert(){
+		$registro = $this->input->post();
+		
+		$this->form_validation->set_rules('descripcion', 'Descripcion', 'required');
+		$this->form_validation->set_rules('desde', 'Desde', 'required|callback_my_validation[hasta]');
+		$this->form_validation->set_rules('hasta', 'Hasta', 'required');
+
+		if($this->form_validation->run() == FALSE){
+			//Si no cumplio alguna de las reglas
+			$this->create();
+		}else{
+
+ 			$this->Model_Calendario->insert($registro);
+
+ 			$this->calendariolib->generar_dias($registro['desde'], $registro['hasta']);
+			redirect('calendario/index');
+			//echo date('Y', strtotime($registro['desde']));
 		}
 	}
 
@@ -132,7 +151,7 @@ class Calendario extends CI_Controller{
 		if($this->input->is_ajax_request()){
 			$registro = $this->input->post();
 			$this->Model_Calendario->update($registro);
-			echo 'Se actualizaron los datos';
+			echo 'Se actualizaron los datos ...';
 		}else{
 			show_404();
 		}
