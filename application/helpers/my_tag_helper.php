@@ -43,12 +43,6 @@ if ( ! function_exists('my_mensaje_error_upload'))
 			$salida = $salida."<h4>Mensaje de validación</h4>";
 			$salida = $salida."<strong>".$error."</strong>";
 			$salida = $salida."</div>";
-		}else{
-			$salida = "<div class='alert alert-dismissable alert-success'>";
-			$salida = $salida."<button type='button' class='close' data-dismiss='alert'>×</button>";
-			$salida = $salida."<h4>Mensaje de validación</h4>";
-			$salida = $salida."<strong>Se subió correctamente el archivo</strong>";
-			$salida = $salida."</div>";
 		}
 		return $salida;
 	}

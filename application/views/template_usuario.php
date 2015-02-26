@@ -40,7 +40,59 @@
 	<div class="container">
 		<div class="page-header">
 			<div class="row">
+				<!-- Información del alumno -->	
+				<div class="col-md-6">
+					<div id="info-perfil" class="jumbotron">
+						<div class="row">
+							<legend>Información personal</legend>
+							<fieldset>
+							<div class="col-xs-5">
+								<a href="#" class="thumbnail">
+									<?= form_open_multipart('usuarios/subir_foto', array('id'=>'form-foto')); ?>
+						      			<input type="file" name="userfile" style="visibility:hidden;position:absolute;top:0;"/>
+						      		<?= form_close(); ?>
+						      		<img class="img-subir" data-src="holder.js/100%x180" style="width: 100%;" src="<?= $registro->ruta_foto; ?>">
+								</a>
+							</div>
+							<div class="col-xs-7">
+								<div class="form-group">
+									<label>Nombre: </label>
+									<label class="mostrar-info"><?= $registro->nombre; ?></label>
+								</div>
+
+								<div class="form-group">
+									<label>DNI: </label>
+									<label class="mostrar-info"><?= $registro->dni; ?></label>
+								</div>
+
+								<div class="form-group">
+									<label>Facultad: </label>
+									<label class="mostrar-info"><?= $registro->facultad_nombre; ?></label>
+								</div>
+
+								<div class="form-group">
+									<label>Provincia: </label>
+									<label class="mostrar-info"><?= $registro->provincia_nombre; ?></label>
+								</div>
+
+								<div class="form-group">
+									<label>Categoría: </label>
+									<label class="mostrar-info"><?= $registro->categoria_nombre; ?></label>
+								</div>
+
+								<div class="form-group">
+									<label>Saldo: </label>
+									<label class="mostrar-info"><?= '$ '.$registro->saldo; ?></label>
+								</div>
+							</div>
+							</fieldset>
+						</div>
+					</div>
+				</div>
+				
+				<!-- Información variable -->
 				<?= $this->load->view($contenido); ?>
+				
 			</div>
 	      	<hr>
 
@@ -49,7 +101,5 @@
 	      	</footer>
 		</div>
 	</div>
-
-
 </body>
 </html>

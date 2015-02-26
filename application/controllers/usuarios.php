@@ -192,16 +192,27 @@ class Usuarios extends CI_Controller {
 		if($this->session->userdata('dni_usuario')){
 			$data['contenido'] = 'usuarios/admin';
 			$this->load->view('template-admin', $data);
-		}	
+		}
+	}
+
+	public function bloqueado(){
+		if($this->session->userdata('dni_usuario')){
+			$dni = $this->session->userdata('dni_usuario');
+			$data['contenido'] = 'usuarios/bloqueado';
+			$data['registro'] = $this->Model_Usuarios->find($dni);
+			$this->load->view('template_usuario', $data);
+		}
 	}
 
 	//Para el usuario alumnos
-	public function editar_perfil(){
+	public function editar_perfil($mostrar = false, $error = ""){
 		$dni = $this->session->userdata('dni_usuario');
 		$data['contenido'] = 'usuarios/editar_perfil';
 		$data['registro'] = $this->Model_Usuarios->find($dni);
 		$data['provincias'] = $this->Model_Usuarios->get_provincias();//Obtener lista de provincias
 		$data['facultades'] = $this->Model_Usuarios->get_facultades();//Obtener lista de facultades
+		$data['mostrar'] = $mostrar;//Variable booleana para mostrar mensaje de error
+		$data['error'] = $error;
 		$this->load->view('template_usuario', $data);
 	}
 
@@ -244,7 +255,10 @@ class Usuarios extends CI_Controller {
 		$this->load->library('upload', $config);
 
 		if (! $this->upload->do_upload()){
-			var_dump($this->upload->display_errors());
+			//Controlar error al subir archivo.
+			$mostrar = true;
+			$error = "No se pudo subir la imagen";
+			$this->editar_perfil($mostrar, $error);
 		}else{
 			//El registro está ok, entonces lo actualizamos en la tabla usuarios
 			$info = $this->upload->data();

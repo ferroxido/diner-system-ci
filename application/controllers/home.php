@@ -2,11 +2,18 @@
 
 class Home extends CI_Controller {
 
+	protected $estadoBloqueado = 0;
+	protected $estadoRegistrado = 1;
+	protected $estadoActivo = 2;
+	protected $estadoSuspendido = 3;
+
+
 	//Constructor
 	function __construct(){
 		parent::__construct();
 		$this->load->library('usuarioLib');
 		$this->load->model('Model_Usuarios');
+		$this->form_validation->set_message('validar_tabla', 'Usted no es alumno regular de la Universidad, diríjase a la Secretaría de Bienestar para su Control');
 		$this->form_validation->set_message('required', 'Debe ingresar un valor para %s');
 		$this->form_validation->set_message('loginok', 'Usuario o password incorrecto');
 		$this->form_validation->set_message('valid_email', 'El email %s no es válido');
@@ -46,10 +53,10 @@ class Home extends CI_Controller {
 		if($this->form_validation->run() == FALSE){
 			$this->ingreso();//No uso redirect para no perder el valor de los campos ingresados
 		}else{
-			if($this->session->userdata('estado_usuario') == 1){
+			if($this->session->userdata('estado_usuario') == $this->estadoRegistrado){
 				//El usuario aún no esta activo. Lo mando a cambiar su clave.
 				redirect('home/cambiar_clave');
-			}else if($this->session->userdata('estado_usuario') == 2){
+			}else if($this->session->userdata('estado_usuario') == $this->estadoActivo){
 				//Al ingresar lo mando a la página de inicio correspondiente a su perfil
 				if($this->session->userdata('perfil_nombre') === 'Alumno'){
 					redirect('usuarios/alumno');
@@ -59,7 +66,7 @@ class Home extends CI_Controller {
 					redirect('usuarios/control');
 				}
 			}else{
-				redirect('home/bloqueado');
+				redirect('usuarios/bloqueado');
 			}
 		}
 	}
@@ -165,13 +172,18 @@ class Home extends CI_Controller {
 		return $this->usuariolib->no_repetir_usuario($this->input->post(), 'insertar');
 	}
 
+	public function validar_tabla(){
+		$registro = $this->input->post();
+		return $this->usuariolib->validar_tabla($registro);
+	}
+
 	public function registrarse(){
 		$registro = $this->input->post();
 
-		$this->form_validation->set_rules('dni', 'Usuario', 'required|max_length[8]|numeric|callback_no_repetir_usuario');
 		$this->form_validation->set_rules('nombre', 'Nombre', 'required');
 		$this->form_validation->set_rules('email', 'Email', 'required|valid_email');
-		$this->form_validation->set_rules('lu', 'Libreta Universitaria', 'required|max_length[6]|numeric');
+		$this->form_validation->set_rules('dni', 'Usuario', 'required|max_length[8]|numeric|callback_no_repetir_usuario');
+		$this->form_validation->set_rules('lu', 'Libreta', 'required|max_length[6]|numeric|callback_validar_tabla');
 
 		if($this->form_validation->run() == FALSE){
 			//Fallo alguna validación
@@ -184,7 +196,9 @@ class Home extends CI_Controller {
 			$this->usuariolib->enviar_email($nombre, $email, $password_generada);//Intentamos enviar el mail. Si falla, lo registramos de todas formas.
 			//El registro está ok, entonces lo agregamos a la tabla usuarios
 			$registro['password'] = $this->usuariolib->encriptar($password_generada);
-			$registro['estado'] = 1;//0 = bloqueado, 1 = registrado, 2 = activo, 3 = suspendido
+			
+			$lu = $registro['lu'];
+			$registro['estado'] = $this->usuariolib->definir_estado($lu);//Define el estado según las materias aprobadas.
 			
 			$this->Model_Usuarios->insert($registro);
 			$dni = $this->input->post('dni');

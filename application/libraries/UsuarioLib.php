@@ -15,6 +15,7 @@ class UsuarioLib {
 		$this->CI->load->model('Model_Log_Usuarios');
 		$this->CI->load->model('Model_Tickets');
 		$this->CI->load->model('Model_Configuraciones');
+		$this->CI->load->model('Model_Alumnos');
 	}
 
 	/*
@@ -73,17 +74,6 @@ class UsuarioLib {
 		}else{
 			//No coincide su clave guardada en la BD con la que ingreso como actual
 			return FALSE;
-		}
-	}
-
-	//Función en observación!! CUIDADO
-	public function my_validation($registro){
-		$this->CI->db->where('nombre', $registro['nombre']);
-		$query = $this->CI->db->get('usuarios');
-		if($query->num_rows() > 0 AND (!isset($registro['dni']) OR ($registro['dni'] != $query->row('dni')))){
-			return FALSE;
-		}else{
-			return TRUE;
 		}
 	}
 
@@ -286,5 +276,56 @@ class UsuarioLib {
 	public function obtener_id_ticket($barcode){
 		return (int) (substr($barcode, 10));
 	}
+
+	/*
+	 * Funcion para validar que los datos del usuario, coinciden con lo de la tabla
+	 * de alumnos.
+	 */
+	public function validar_tabla($usuario){
+		$lu = $usuario['lu'];
+		$dni = $usuario['dni'];
+		$idFacultad = $usuario['id_facultad'];
+
+		$facultad = $this->CI->db->where('id',$idFacultad)->get('facultades')->row('nombre_canonico');
+
+		$queryExistencia = $this->CI->Model_Alumnos->find($lu, 'facultad', $facultad);
+
+		if($queryExistencia->num_rows() == 1){
+
+			$queryAsociado = $this->CI->Model_Alumnos->find($lu, 'dni', $dni);
+
+			if($queryAsociado->num_rows() == 1){
+
+				return true;
+
+			}else{
+
+				return false;
+
+			}
+		}else{
+			return false;
+		}
+	}
+
+	/*
+	 * Retorna el estado correspondiente, de acuerdo a cuantas materias tiene aprobada en el año
+	 * mayor ó igual 2 => estado activo
+	 * menor que 2 => bloqueado.
+	 */
+	public function definir_estado($lu){
+		$estadoRegistrado = 1;
+		$estadoBloqueado = 0;
+
+		$query = $this->CI->Model_Alumnos->get_materias_aprobadas($lu);
+		$numMaterias = (int) $query->row('materias_aprobadas');
+
+		if($numMaterias >= 2){
+			return $estadoRegistrado;
+		}else{
+			return $estadoBloqueado;
+		}
+	}
+
 
 }

@@ -9,17 +9,20 @@ class Model_Feriados extends CI_Model {
     }
 
     function all(){
+        $this->db->order_by('fecha', 'asc');
     	$query = $this->db->get('feriados');
     	return $query->result();
     }
 
     function all_filter($field, $value){
+        $this->db->order_by('fecha', 'asc');
         $this->db->like($field, $value);
         $query = $this->db->get('feriados');
         return $query->result();
     }
 
     function all_between($desde, $hasta){
+        $this->db->order_by('fecha', 'asc');
         $this->db->where('fecha >=', $desde);
         $this->db->where('fecha <=', $hasta);
         $query = $this->db->get('feriados');

@@ -8,9 +8,9 @@ class Feriados extends CI_Controller {
 	function __construct(){
 		parent::__construct();
 		$this->load->model('Model_Feriados');
+		$this->load->library('feriadosLib');
 		$this->form_validation->set_message('required', 'Debe ingresar un valor para %s');
-		$this->form_validation->set_message('valiadar_fecha', 'Formato de Fecha incorrecto');
-		//$this->load->library('feriadosLib');
+		$this->form_validation->set_message('validar_fecha', 'Formato de Fecha incorrecto');
 	}
 
 	public function index(){
@@ -47,7 +47,7 @@ class Feriados extends CI_Controller {
 	}
 
 	public function validar_fecha($fecha){
-		return true;
+		return $this->feriadoslib->validar_fecha($fecha);
 	}
 
 	public function insert(){

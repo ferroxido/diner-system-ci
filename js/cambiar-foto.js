@@ -4,7 +4,7 @@ $(document).ready(function(){
 	});
 	$("input[name=userfile]").change(function(){
 		$("#form-foto").submit();
-		alert('cambio!');
+		//alert('cambio!');
 	});
 
 });

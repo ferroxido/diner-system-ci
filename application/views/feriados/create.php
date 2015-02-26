@@ -1,5 +1,5 @@
 <?= form_open('feriados/insert', array('class'=>'form-horizontal jumbotron')); ?>
-	<legend>Agregando un Registro</legend>
+	<legend>Agregando un Día Feriado</legend>
 
 	<?= my_validation_errors(validation_errors()); ?>
 
