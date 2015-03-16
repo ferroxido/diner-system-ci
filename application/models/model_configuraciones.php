@@ -10,7 +10,7 @@ class Model_Configuraciones extends CI_Model {
 
     function all(){
     	$query = $this->db->get('configuraciones');
-    	return $query->result();
+    	return $query->row();
     }
     
     function find($id){

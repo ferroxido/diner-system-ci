@@ -8,12 +8,13 @@ class Model_Log_Usuarios extends CI_Model {
         parent::__construct();
     }
 
-    function all(){
+    function all($filasPorPagina, $posicion){
         $this->db->select('log_usuarios.*, acciones.nombre as accion, usuarios.nombre as nombre');
         $this->db->from('log_usuarios');
         $this->db->join('acciones', 'log_usuarios.id_accion = acciones.id');
         $this->db->join('usuarios', 'log_usuarios.dni = usuarios.dni');
         $this->db->order_by('fecha', 'desc');
+        $this->db->limit($filasPorPagina, $posicion);
     	$query = $this->db->get();
     	return $query->result();
     }
@@ -26,6 +27,7 @@ class Model_Log_Usuarios extends CI_Model {
             $this->db->join('usuarios', 'log_usuarios.dni = usuarios.dni');
             $this->db->like('log_usuarios.dni', $buscar_dni, 'after');
             $this->db->order_by('fecha', 'desc');
+            $this->db->limit(20);
             $query = $this->db->get();
             return $query->result();
         }else{
@@ -36,6 +38,7 @@ class Model_Log_Usuarios extends CI_Model {
             $this->db->where('id_accion', $accion);
             $this->db->like('log_usuarios.dni', $buscar_dni, 'after');
             $this->db->order_by('fecha', 'desc');
+            $this->db->limit(20);
             $query = $this->db->get();
             return $query->result();            
         }
@@ -84,5 +87,10 @@ class Model_Log_Usuarios extends CI_Model {
             $lista[$registro->id] = $registro->nombre;
         }
         return $lista;
+    }
+
+    function get_total_rows(){
+        $query = $this->db->query('SELECT COUNT(*) AS total_rows FROM log_usuarios');
+        return $query->row('total_rows');
     }
 }

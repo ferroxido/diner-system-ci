@@ -10,7 +10,7 @@
 	<script type="text/javascript">
 		base_url = '<?=base_url(); ?>';
 	</script>
-	<script src="<?= base_url('js/pruebaslocas.js'); ?>"></script>
+	<script src="<?= base_url('js/detalle-calendario.js'); ?>"></script>
 	<div id="contenedor_calendario" class="row">
 		<?php foreach ($calendario as $cal): ?>
 			<div class="meses">
@@ -40,14 +40,3 @@
     	</div>
   	</div>
 </div>
-
-<!--
-<div class="row">
-	<div class="form-group">
-  		<label class="col-md-offset-2 col-md-3 control-label">Marcar como: </label>
-  		<div id="radio_button_estado" class="col-md-4">
-
-  		</div>
-	</div>
-</div>
--->

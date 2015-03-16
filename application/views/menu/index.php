@@ -29,6 +29,7 @@
 			<th> Orden </th>
 			<th> Creado </th>
 			<th> Modificado </th>
+			<th> Estado </th>
 			<th> Edición </th>
 		</tr>
 	</thead>
@@ -41,6 +42,7 @@
 			<td><?= $registro->orden; ?></td>
 			<td><?= date("d/m/Y - H:i",strtotime($registro->created)); ?></td>
 			<td><?= date("d/m/Y - H:i",strtotime($registro->updated)); ?></td>
+			<td><?= ($registro->estado == 1)? 'Visible':'No Visible'; ?></td>
 			<td><a class="glyphicon glyphicon-pencil" data-toggle="modal" data-target="<?= "#myModal".$registro->id ?>"></a></td>
 		</tr>
 		<?php endforeach; ?>
@@ -109,6 +111,26 @@
 							<input class="form-control" type="text" name="updated" value="<?= date("d/m/Y - H:i",strtotime($registro->updated)); ?>" disabled/>
 							<?= form_hidden('updated', $registro->updated); ?>
 						</div>
+					</div>
+				</div>
+
+				<div class="row">
+					<div class="form-group">
+			      		<label class="col-md-3 control-label">Estado: </label>
+			      		<div class="col-md-4">
+			        		<div class="radio">
+			          			<label>
+			            		<input name="estado" id="visible" value="1" <?php if($registro->estado == 1){ echo 'checked';}?> type="radio">
+			            		Visible
+			          			</label>
+			        		</div>
+			        		<div class="radio">
+			          			<label>
+			           	 		<input name="estado" id="novisible" value="0" <?php if($registro->estado == 0){ echo 'checked';}?> type="radio">
+			            		No Visible
+			          			</label>
+			        		</div>
+			      		</div>
 					</div>
 				</div>
 

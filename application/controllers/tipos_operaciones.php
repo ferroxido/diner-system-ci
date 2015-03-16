@@ -21,11 +21,22 @@ class Tipos_Operaciones extends CI_Controller {
 	}
 
 	public function search(){
-		$data['contenido'] = 'tipos_operaciones/index';
-		$data['titulo'] = 'Tipos de Operaciones';
-		$valor = $this->input->post('buscar');
-		$data['registros'] = $this->Model_Tipos_Operaciones->allFilter('nombre', $valor);
-		$this->load->view('template-admin', $data);
+		if($this->session->userdata('dni_usuario') != null){
+			$data['contenido'] = 'tipos_operaciones/index';
+			$data['titulo'] = 'Tipos de Operaciones';
+			$valor = $this->input->post('buscar');
+			$data['registros'] = $this->Model_Tipos_Operaciones->allFilter('tipos_operaciones.nombre', $valor);
+			$data['menu'] = $this->Model_Tipos_Operaciones->get_menu();
+			$this->load->view('template-admin', $data);
+		}else{
+			//La session expiro, redireccionamos al ingreso.
+			$mensaje = "La sesión terminó, ingrese nuevamente";
+			$data['contenido'] = 'home/ingreso';
+			$data['mostrar_mensaje'] = TRUE;
+			$data['exito'] = false;//Variable para saber si el mensaje es bueno o malo.
+			$data['mensaje'] = $mensaje;
+			$this->load->view('template-index', $data);
+		}
 	}
 
 	public function my_validation(){

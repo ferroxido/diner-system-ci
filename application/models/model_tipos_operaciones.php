@@ -18,8 +18,11 @@ class Model_Tipos_Operaciones extends CI_Model {
     }
 
     function allFilter($campo, $valor){
+        $this->db->select('tipos_operaciones.*, menu.nombre as nombre_menu');
+        $this->db->from('tipos_operaciones');
+        $this->db->join('menu', 'tipos_operaciones.id_menu = menu.id', 'left');
         $this->db->like($campo, $valor);
-        $query = $this->db->get('tipos_operaciones');
+        $query = $this->db->get();
         return $query->result();
     }
 

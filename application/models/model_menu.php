@@ -20,7 +20,8 @@ class Model_Menu extends CI_Model {
     }
 
     function allForMenu(){
-        $this->db->where('nombre !=', 'No visible');
+        $estadoVisible = 1;
+        $this->db->where('estado', $estadoVisible);
         $this->db->order_by('orden', 'asc');//Opcionalmente usar desc
         $query = $this->db->get('menu');
         return $query->result();

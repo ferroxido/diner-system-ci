@@ -2,7 +2,7 @@
 	<h1>Tipos de Operaciones <small>mantenimiento de registros</small></h1>
 </div>
 
-<?= form_open('index.php/tipos_operaciones/search', array('class' => 'form-search')); ?>
+<?= form_open('tipos_operaciones/search', array('class' => 'form-search')); ?>
 	<div class="row" style="margin:1em 0;">
 		<div class="col-md-4">
 			<div class="input-group">
@@ -63,7 +63,7 @@
         	
       	</div>
       	<div class="modal-body">
-      		<?= form_open('index.php/tipos_operaciones/update', array('class'=>'form-horizontal')); ?>
+      		<?= form_open('tipos_operaciones/update', array('class'=>'form-horizontal')); ?>
 				<legend>Editando una Facultad</legend>
 
 				<?= my_validation_errors(validation_errors()); ?>

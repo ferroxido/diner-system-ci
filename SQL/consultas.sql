@@ -137,3 +137,25 @@ INNER JOIN log_usuarios ON log_usuarios.id = tickets_log_usuarios.id_log_usuario
 INNER JOIN usuarios ON log_usuarios.dni = usuarios.dni 
 WHERE tickets.estado <> 9) AS tabla
 ON tabla.id_dia = dias.id GROUP BY date_part('month',dias.fecha), date_part('year',dias.fecha)
+
+
+SELECT 
+    pg_terminate_backend(procpid) 
+FROM 
+    pg_stat_activity 
+WHERE 
+    -- don't kill my own connection!
+    procpid <> pg_backend_pid()
+    -- don't kill the connections to other databases
+    AND datname = 'comedorProduccionDB'
+    ;
+
+
+-- repetidos
+select count(dias.fecha) as repetidos, dni from tickets 
+inner join dias on dias.id = tickets.id_dia 
+inner join
+(SELECT distinct on(id_ticket) id_ticket, id_log_usuario FROM tickets_log_usuarios) AS tickets_log_usuarios ON tickets.id = tickets_log_usuarios.id_ticket
+inner join log_usuarios ON log_usuarios.id = tickets_log_usuarios.id_log_usuario
+group by dias.fecha, dni 
+having count(dias.fecha) = 2    

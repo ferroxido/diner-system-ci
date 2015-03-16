@@ -180,7 +180,7 @@ class Usuarios extends CI_Controller {
 
 	//Para el usuario alumnos
 	public function alumno(){
-		if($this->session->userdata('dni_usuario')){
+		if($this->session->userdata('dni_usuario') != null){
 			$dni = $this->session->userdata('dni_usuario');
 			$data['contenido'] = 'usuarios/alumno';
 			$data['registro'] = $this->Model_Usuarios->find($dni);
@@ -189,31 +189,22 @@ class Usuarios extends CI_Controller {
 	}
 
 	public function admin(){
-		if($this->session->userdata('dni_usuario')){
-			$data['contenido'] = 'usuarios/admin';
-			$this->load->view('template-admin', $data);
-		}
-	}
-
-	public function bloqueado(){
-		if($this->session->userdata('dni_usuario')){
-			$dni = $this->session->userdata('dni_usuario');
-			$data['contenido'] = 'usuarios/bloqueado';
-			$data['registro'] = $this->Model_Usuarios->find($dni);
-			$this->load->view('template_usuario', $data);
-		}
+		$data['contenido'] = 'usuarios/admin';
+		$this->load->view('template-admin', $data);
 	}
 
 	//Para el usuario alumnos
 	public function editar_perfil($mostrar = false, $error = ""){
-		$dni = $this->session->userdata('dni_usuario');
-		$data['contenido'] = 'usuarios/editar_perfil';
-		$data['registro'] = $this->Model_Usuarios->find($dni);
-		$data['provincias'] = $this->Model_Usuarios->get_provincias();//Obtener lista de provincias
-		$data['facultades'] = $this->Model_Usuarios->get_facultades();//Obtener lista de facultades
-		$data['mostrar'] = $mostrar;//Variable booleana para mostrar mensaje de error
-		$data['error'] = $error;
-		$this->load->view('template_usuario', $data);
+		if($this->session->userdata('dni_usuario') != null){
+			$dni = $this->session->userdata('dni_usuario');
+			$data['contenido'] = 'usuarios/editar_perfil';
+			$data['registro'] = $this->Model_Usuarios->find($dni);
+			$data['provincias'] = $this->Model_Usuarios->get_provincias();//Obtener lista de provincias
+			$data['facultades'] = $this->Model_Usuarios->get_facultades();//Obtener lista de facultades
+			$data['mostrar'] = $mostrar;//Variable booleana para mostrar mensaje de error
+			$data['error'] = $error;
+			$this->load->view('template_usuario', $data);
+		}
 	}
 
 	//Para el usuario admin y alumno
@@ -241,65 +232,63 @@ class Usuarios extends CI_Controller {
 	}
 
 	public function subir_foto(){
-		//Tratamos de subir la imagen al servidor.
-		$dni = $this->session->userdata('dni_usuario');
+		if($this->session->userdata('dni_usuario') != null){
+			//Tratamos de subir la imagen al servidor.
+			$dni = $this->session->userdata('dni_usuario');
 
-		$config['upload_path'] = './img/fotos-usuarios/';
-		$config['allowed_types'] = 'gif|jpg|png|jpeg';
-		$config['max_size']	= '2048';
-		$config['max_width']  = '1024';
-		$config['max_height']  = '768';
-		$config['overwrite'] = true;
-		$config['file_name'] = $dni;
+			$config['upload_path'] = './img/fotos-usuarios/';
+			$config['allowed_types'] = 'gif|jpg|png|jpeg';
+			$config['max_size']	= '2048';
+			$config['max_width']  = '1024';
+			$config['max_height']  = '768';
+			$config['overwrite'] = true;
+			$config['file_name'] = $dni;
 
-		$this->load->library('upload', $config);
+			$this->load->library('upload', $config);
 
-		if (! $this->upload->do_upload()){
-			//Controlar error al subir archivo.
-			$mostrar = true;
-			$error = "No se pudo subir la imagen";
-			$this->editar_perfil($mostrar, $error);
-		}else{
-			//El registro está ok, entonces lo actualizamos en la tabla usuarios
-			$info = $this->upload->data();
-			$registro['dni'] = $dni;
-			$registro['ruta_foto'] = base_url('img/fotos-usuarios/'.$info['file_name']);
-			$this->Model_Usuarios->update($registro);
-			redirect('usuarios/editar_perfil');
+			if (! $this->upload->do_upload()){
+				//Controlar error al subir archivo.
+				$mostrar = true;
+				$error = "No se pudo subir la imagen ".$this->upload->display_errors();
+				$this->editar_perfil($mostrar, $error);
+			}else{
+				//El registro está ok, entonces lo actualizamos en la tabla usuarios
+				$info = $this->upload->data();
+				$registro['dni'] = $dni;
+				$registro['ruta_foto'] = base_url('img/fotos-usuarios/'.$info['file_name']);
+				$this->Model_Usuarios->update($registro);
+				redirect('usuarios/editar_perfil');
+			}
 		}
 	}
 
 	public function anular(){
-		if($this->session->userdata('dni_usuario')){
+		if($this->session->userdata('dni_usuario') != null){
 			$dni = $this->session->userdata('dni_usuario');
 			$data['contenido'] = 'usuarios/anular';
 			$data['registro'] = $this->Model_Usuarios->find($dni);
-
 			$this->load->model('Model_Tickets');
 			$data['tickets_proximos'] = $this->Model_Tickets->get_tickets_proximos($dni);
-
 			$this->load->view('template_usuario', $data);
 		}
 	}
 	
 	public function anulando_ticket($id_ticket){
-		if($this->session->userdata('dni_usuario')){
+		if($this->session->userdata('dni_usuario') != null){
 			//Realizar anulación
 			$dni = $this->session->userdata('dni_usuario');
 			$this->usuariolib->realizar_anulacion($id_ticket,$dni);
+			redirect('usuarios/anular');
 		}
-		redirect('usuarios/anular');
 	}
 
 	public function imprimir(){
-		if($this->session->userdata('dni_usuario')){
+		if($this->session->userdata('dni_usuario') != null){
 			$dni = $this->session->userdata('dni_usuario');
 			$data['contenido'] = 'usuarios/imprimir';
 			$data['registro'] = $this->Model_Usuarios->find($dni);
-
 			$this->load->model('Model_Tickets');
 			$data['tickets_proximos'] = $this->Model_Tickets->get_tickets_proximos($dni);
-
 			$this->load->view('template_usuario', $data);
 		}	
 	}
@@ -329,17 +318,22 @@ class Usuarios extends CI_Controller {
 	public function procesar_barcode(){
 		if($this->input->is_ajax_request()){
 			$barcode = $this->input->post('barcode');
-			$id_ticket = $this->usuariolib->obtener_id_ticket($barcode);
-
+			if(strlen($barcode) <= 10 && is_numeric($barcode)){
+				$id_ticket = (int) $barcode;
+			}else{
+				$id_ticket = $this->usuariolib->obtener_id_ticket($barcode);	
+			}
 			//Obtener información del ticket en cuestión.
 			$query = $this->Model_Usuarios->get_tickets_control($id_ticket);
 
-			/*Cambiamos el estado del ticket a 3, una vez leido el código de barra.
-			 * 0 = anulado, 1 = activo, 2 = impreso , 3 = consumido
-			 */
-			if($query->row('estado') == 2){
+			$estadoImpreso = 2;
+			$estadoConsumido = 3;
+			$estadoVencido = 4;
+			$hoy = date('Y-m-d 00:00:00');
+
+			if($query->row('estado') == $estadoImpreso && $query->row('fecha') == $hoy){
 				$data['id'] = $id_ticket;
-				$data['estado'] = 3;//1 = No válido
+				$data['estado'] = $estadoConsumido;
 				$this->Model_Tickets->update($data);
 				//Cargamos el log de usuario para consumir
 				$dni = $query->row('dni');
@@ -351,6 +345,23 @@ class Usuarios extends CI_Controller {
 				$registro['id_ticket'] = $id_ticket;
 				$registro['id_log_usuario'] = $id_log;
 				$this->Model_Usuarios->add_tickets_log($registro);
+			}elseif($query->row('estado') == $estadoImpreso && $query->row('fecha') < $hoy){
+				$data['id'] = $id_ticket;
+				$data['estado'] = $estadoVencido;
+				$this->Model_Tickets->update($data);
+				//Cargamos el log de usuario para ticket vencido
+				$dni = $query->row('dni');
+				$fecha_log = date('Y/m/d H:i:s');
+				$id_log = $this->usuariolib->cargar_log_usuario($dni, $fecha_log, 'vencer');//Registrar el log
+
+				//Cargo la tabla tickets_log_usuarios
+				$registro = array();
+				$registro['id_ticket'] = $id_ticket;
+				$registro['id_log_usuario'] = $id_log;
+				$this->Model_Usuarios->add_tickets_log($registro);
+
+				//Cambiamos el valor del objeto query la propiedad estado
+				$query->row()->estado = $estadoVencido;
 			}
 			echo json_encode($query->result());
 		}else{

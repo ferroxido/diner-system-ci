@@ -59,7 +59,7 @@ class Reportes extends CI_Controller {
 			$data['registros'] = $this->Model_Facultades->clasificacion_usuarios();
 			$data['totales'] = $this->Model_Usuarios->total_usuarios();
 			$html = $this->load->view('reportes/reporte_pdf1', $data, true);
-			$this->converttopdf->doPDF('informe_usuarios',$html,true,'');
+			$this->converttopdf->doPDF('informe_usuarios',$html,false,'');
 		}else if($this->input->post('PDF2')){
 			if($this->input->post('filtro_radio') == 'filtrointervalo' && $this->input->post('desde') != '' && $this->input->post('hasta') != ''){
 				//Imprimo pdf según el intervalo.
@@ -79,7 +79,7 @@ class Reportes extends CI_Controller {
 			$data['desde'] = $desde;
 			$data['hasta'] = $hasta;
 			$html = $this->load->view('reportes/reporte_pdf2', $data, true);
-			$this->converttopdf->doPDF('informe_servicios',$html,true,'');
+			$this->converttopdf->doPDF('informe_servicios',$html,false,'');
 		}else if($this->input->post('PDF3')){
 			if($this->input->post('filtro_radio2') == 'filtrointervalo2' && $this->input->post('desde2') != '' && $this->input->post('hasta2') != ''){
 				//Imprimo pdf según el intervalo.
@@ -99,7 +99,7 @@ class Reportes extends CI_Controller {
 			$data['desde'] = $desde;
 			$data['hasta'] = $hasta;
 			$html = $this->load->view('reportes/reporte_pdf3', $data, true);
-			$this->converttopdf->doPDF('informe_tickets',$html,true,'');
+			$this->converttopdf->doPDF('informe_tickets',$html,false,'');
 		}
 	}
 

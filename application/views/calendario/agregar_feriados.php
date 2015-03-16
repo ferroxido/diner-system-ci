@@ -1,6 +1,9 @@
 <?= form_open('calendario/insert_feriado', array('class'=>'form-horizontal jumbotron')); ?>
-	<legend>Agregando Feriado</legend>
-
+	<?= form_hidden('descripcion_calendario', $descripcion); ?>
+	<?= form_hidden('desde', $desde); ?>
+	<?= form_hidden('hasta', $hasta); ?>
+	<legend>Agregue un feriado entre <?= date('d/m/Y',strtotime($desde))." y el ".date('d/m/Y',strtotime($hasta)); ?></legend>
+	
 	<?= my_validation_errors(validation_errors()); ?>
 
 	<div class="row">

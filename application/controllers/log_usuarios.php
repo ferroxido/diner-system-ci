@@ -2,6 +2,9 @@
 
 class Log_Usuarios extends CI_Controller {
 
+	protected $filasPorPagina = 1000;
+	protected $primeraPagina = 5;
+
 	//Constructor
 	function __construct(){
 		parent::__construct();
@@ -10,7 +13,9 @@ class Log_Usuarios extends CI_Controller {
 
 	public function index(){
 		$data['contenido'] = 'log_usuarios/index';
-		$data['registros'] = $this->Model_Log_Usuarios->all();
+		$totalRows = $this->Model_Log_Usuarios->get_total_rows();
+		$data['numeroPaginas'] = ceil($totalRows / $this->filasPorPagina);
+		$data['registros'] = $this->Model_Log_Usuarios->all($this->filasPorPagina, $this->primeraPagina);
 		$data['acciones'] = $this->Model_Log_Usuarios->get_acciones();
 		$this->load->view('template-admin', $data);
 	}

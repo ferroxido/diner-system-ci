@@ -22,11 +22,10 @@ if ( ! function_exists('autentificar'))
 			'home/registro',
 			'home/registrarse',
 			'home/cambiar_clave',
-			'home/cambiando_clave',
 			'home/salir'
 		);
 
-		if(in_array($url, $libres) || $CI->input->is_ajax_request()){
+		if(in_array($url, $libres) || $CI->input->is_ajax_request() || $CI->input->post()){
 			echo $CI->output->get_output();
 		}else{
 			//Si esta logueado le damos más acceso
@@ -37,7 +36,13 @@ if ( ! function_exists('autentificar'))
 					redirect('home/acceso_denegado');
 				}
 			}else{
-				redirect('home/acceso_denegado');
+				//La session expiro, redireccionamos al ingreso.
+				$mensaje = "La sesión terminó, ingrese nuevamente";
+				$data['contenido'] = 'home/ingreso';
+				$data['mostrar_mensaje'] = TRUE;
+				$data['exito'] = false;//Variable para saber si el mensaje es bueno o malo.
+				$data['mensaje'] = $mensaje;
+				$CI->load->view('template-index', $data);
 			}
 		}
 	}
@@ -46,8 +51,15 @@ if ( ! function_exists('autentificar'))
 function autorizar(){
 	$CI = & get_instance();
 
-	//El perfil del usuario ya está logueado
-	$id_perfil = $CI->session->userdata('id_perfil');//Ya tengo su perfil
+	$estadoBloqueado = 0;
+	if($CI->session->userdata('estado_usuario') == $estadoBloqueado){
+		//Si el usuario esta bloqueado, el id perfil será el de bloqueado.
+		$CI->load->model('Model_Perfiles');
+		$id_perfil = $CI->Model_Perfiles->findNombre('Bloqueado')->id;
+	}else{
+		//El perfil del usuario ya está logueado
+		$id_perfil = $CI->session->userdata('id_perfil');//Ya tengo su perfil
+	}
 
 	//Con el controlador buscar el tipo de operacion
 	$CI->load->library('TiposoperacionesLib');

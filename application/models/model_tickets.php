@@ -23,6 +23,7 @@ class Model_Tickets extends CI_Model {
     }
 
     function all_filter($buscar_nombre,$buscar_dni, $buscar_id, $buscar_fecha){
+        $buscar_nombre = strtolower($buscar_nombre);
         if($buscar_fecha === ''){            
             $query = $this->db->query("SELECT tickets.id AS id_ticket, dias.fecha AS fecha, tickets.importe AS importe_ticket, estados_tickets.nombre AS estado_ticket, usuarios.dni AS dni, usuarios.nombre AS nombre_usuario
                     FROM tickets
@@ -35,7 +36,7 @@ class Model_Tickets extends CI_Model {
                     INNER JOIN usuarios ON log_usuarios.dni = usuarios.dni
                     WHERE LOWER(usuarios.nombre) LIKE '%{$buscar_nombre}%' AND
                     usuarios.dni LIKE '{$buscar_dni}%' AND
-                    tickets.id::text LIKE '{$buscar_id}%'
+                    tickets.id::text LIKE '{$buscar_id}'
                     ORDER BY dias.fecha DESC");
         }else{
             $query = $this->db->query("SELECT tickets.id AS id_ticket, dias.fecha AS fecha, tickets.importe AS importe_ticket, estados_tickets.nombre AS estado_ticket, usuarios.dni AS dni, usuarios.nombre AS nombre_usuario
@@ -49,7 +50,7 @@ class Model_Tickets extends CI_Model {
                     INNER JOIN usuarios ON log_usuarios.dni = usuarios.dni
                     WHERE LOWER(usuarios.nombre) LIKE '%{$buscar_nombre}%' AND
                     usuarios.dni LIKE '{$buscar_dni}%' AND
-                    tickets.id::text LIKE '{$buscar_id}%' AND dias.fecha = '$buscar_fecha'
+                    tickets.id::text LIKE '{$buscar_id}' AND dias.fecha = '$buscar_fecha'
                     ORDER BY dias.fecha DESC");            
         }
         return $query->result();

@@ -51,6 +51,20 @@ class UsuarioLib {
 	}
 
 	/*
+	 * Verifica si el estado del usuario es bloqueado
+	 */
+	public function is_bloqueado($dni){
+		$estadoBloqueado = 0;
+		$this->CI->db->where('dni',$dni);
+		$estadoUsuario = $this->CI->db->get('usuarios')->row('estado');
+		if($estadoUsuario == $estadoBloqueado){
+			return FALSE;
+		}else{
+			return TRUE;
+		}
+	}
+
+	/*
 	 * Cambia la contraseña del usuario por una nueva que el ingresa.
 	 * Se realiza una encriptación a la nueva password y se la guarda en la DB.
 	 */
@@ -67,9 +81,6 @@ class UsuarioLib {
 
 		//Si la clave que ingreso como actual es igual a la que está en la BD
 		if($passwordDB == md5($actual)){
-			//Hacemos el cambio de clave, y seteamos el estado en 2 de activo.
-			$data = array('dni' => $dni, 'password' => $this->encriptar($nueva), 'estado' => 2);//Mandamos el dni porque la consulta necesita ubicar el registro que se va a modificar.
-			$this->CI->Model_Usuarios->update($data);
 			return TRUE;
 		}else{
 			//No coincide su clave guardada en la BD con la que ingreso como actual
@@ -120,12 +131,32 @@ class UsuarioLib {
 	    return $pass;
 	}
 
+	public function ofuscar($long){
+		$cadena = "ABCDEFabcdef0123456789";//Cadena de caracteres hexadecimales
+		$longitudCadena=strlen($cadena);
+	     
+	    //Se define la variable que va a contener la contraseña
+	    $pass = "";
+	    //Se define la longitud de la contraseña, en mi caso 10, pero puedes poner la longitud que quieras
+	    $longitudPass=$long;
+	     
+	    //Creamos la contraseña
+	    for($i=1 ; $i<=$longitudPass ; $i++){
+	        //Definimos numero aleatorio entre 0 y la longitud de la cadena de caracteres-1
+	        $pos=rand(0,$longitudCadena-1);
+	     
+	        //Vamos formando la contraseña en cada iteraccion del bucle, añadiendo a la cadena $pass la letra correspondiente a la posicion $pos en la cadena de caracteres definida.
+	        $pass .= substr($cadena,$pos,1);
+	    }
+	    return $pass;
+	}
+
 	/*
 	 * Encripta la contraseña que se pasa por parámetro. Para encriptar concatena cuatro valores
 	 * randómicos al inicio y al final, en el medio es un md5 tradicional.
 	 */
 	public function encriptar($password){
-		$resultado = $this->generarPassword(4).md5($password).$this->generarPassword(4);
+		$resultado = $this->ofuscar(4).md5($password).$this->ofuscar(4);
 		return $resultado;
 	}
 
@@ -135,7 +166,7 @@ class UsuarioLib {
 	public function cargar_log_usuario($dni, $fecha, $accion){
 		$query = $this->CI->Model_Log_Usuarios->find_accion($accion);
 		$registro['fecha'] = $fecha;
-		$registro['lugar'] = 1;//1 -> WEB, 2 -> Máquina
+		$registro['lugar'] = 0;//0 -> WEB, 1..6 -> Máquinas
 		$registro['id_accion'] = $query->row('id');
 		$registro['dni'] = $dni;
 		$registro['descripcion'] = $query->row('nombre');
@@ -222,8 +253,12 @@ class UsuarioLib {
 	/*
 	 * Verifica que exista el usuario de acuerdo al dni pasado como parámetro.
 	 */
-	public function existe_usuario($dni){
-		$query = $this->CI->Model_Usuarios->find_simple($dni);
+	public function existe_usuario($registro){
+		$dni = $registro['dni'];
+		$email = $registro['email'];
+		$lu = $registro['lu'];
+
+		$query = $this->CI->Model_Usuarios->find_simple($dni, $lu, $email);
 		if($query->num_rows() == 1){
 			return TRUE;
 		}else{
@@ -284,25 +319,11 @@ class UsuarioLib {
 	public function validar_tabla($usuario){
 		$lu = $usuario['lu'];
 		$dni = $usuario['dni'];
-		$idFacultad = $usuario['id_facultad'];
+			
+		$query = $this->CI->Model_Alumnos->find($lu, $dni);
 
-		$facultad = $this->CI->db->where('id',$idFacultad)->get('facultades')->row('nombre_canonico');
-
-		$queryExistencia = $this->CI->Model_Alumnos->find($lu, 'facultad', $facultad);
-
-		if($queryExistencia->num_rows() == 1){
-
-			$queryAsociado = $this->CI->Model_Alumnos->find($lu, 'dni', $dni);
-
-			if($queryAsociado->num_rows() == 1){
-
-				return true;
-
-			}else{
-
-				return false;
-
-			}
+		if($query->num_rows() == 1){
+			return true;
 		}else{
 			return false;
 		}
@@ -327,5 +348,13 @@ class UsuarioLib {
 		}
 	}
 
+	public function validar_caracteres_password($clave_nueva, $clave_repetida){
+		$expreg = '/[^A-Za-z0-9#$%&\?\.]/';
+		if (!preg_match($expreg, $clave_nueva) && !preg_match($expreg, $clave_repetida)){
+			return true;
+		}else{
+			return false;
+		}
+	}
 
 }

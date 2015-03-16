@@ -6,7 +6,7 @@ $(document).ready(function() {
 		var tokens = fecha.split('/');
 
 		var pathArray = window.location.pathname.split( '/' );
-		var idCalendario = pathArray[4];//
+		var idCalendario = pathArray[4];//3 en produccion
 
 		//Datos obtenidos del calendario	
 		var diaNum = $(this).find('.dia_num').html();
@@ -56,6 +56,7 @@ $(document).ready(function() {
 								contenidohtml = contenidohtml + '<label for="tickets_vendidos" class="col-md-offset-2 col-md-3 control-label">Tickets Vendidos: </label>'
 								contenidohtml = contenidohtml + '<div class="col-md-4">';
 								contenidohtml = contenidohtml + '<input name="tickets_vendidos" class="form-control" disabled value="' + val.tickets_vendidos + '">';
+								contenidohtml = contenidohtml + '<input type="hidden" name="tickets_vendidos" value="' + val.tickets_vendidos + '">';
 								contenidohtml = contenidohtml + '</div></div></div>';
 
 								//Evento
@@ -65,14 +66,22 @@ $(document).ready(function() {
 								contenidohtml = contenidohtml + '<textarea name="evento" class="form-control" rows="3">' + val.evento + '</textarea>';
 								contenidohtml = contenidohtml + '</div></div></div>';
 
+								//Radio button
+								contenidohtml = contenidohtml + '<div class="row"><div class="form-group">';
+								contenidohtml = contenidohtml + '<label class="col-md-offset-2 col-md-3 control-label">Marcar como: </label>';
+								contenidohtml = contenidohtml + '<div class="col-md-4">';
+								if (val.estado == 1){
+									contenidohtml = contenidohtml + '<div><label><input name="estado" value="1" type="radio" checked/> Habilitado</label></div>';
+									contenidohtml = contenidohtml + '<div><label><input name="estado" value="0" type="radio"/> Feriado</label></div>';
+								}else if (val.estado == 0){
+									contenidohtml = contenidohtml + '<div><label><input name="estado" value="1" type="radio"/> Habilitado</label></div>';
+									contenidohtml = contenidohtml + '<div><label><input name="estado" value="0" type="radio" checked/> Feriado</label></div>';
+								}
+								contenidohtml = contenidohtml + '</div></div></div>';
+
 								//Boton actualizar
 								contenidohtml = contenidohtml + '<div class="form-group"><div class="col-md-offset-9"><input type="submit" class="btn btn-success" value="Actualizar"></div></div>';
 
-								/*
-								$('#radio_button_estado').html("");
-								$('#radio_button_estado').append('<div><label><input name="estado" id="habilitado" value="habilitado" type="radio"/> Habilitado</label></div>');
-								$('#radio_button_estado').append('<div><label><input name="estado" id="feriado" value="feriado" type="radio"/> Feriado</label></div>');
-								*/
 								items.push(contenidohtml);
 							});	
 							$('#form_modal').append.apply($('#form_modal'), items);
@@ -85,7 +94,7 @@ $(document).ready(function() {
 					$('#myModal').modal('show');
 				},
 				error: function(){
-					alert('Error en la respuesta');
+					console.log('error en la respuesta');
 				}
 			});
 		}//fin del if
@@ -107,10 +116,40 @@ $(document).ready(function() {
 				$("#mensaje_exito").fadeOut(3000);
 			},
 			error: function(){						
-				alert('Error en la respuesta');
+				console.log('error en la respuesta');
 			}
 		});
 		event.preventDefault();
 	});
+});
 
+$(document).ready(function() {
+	var pathArray = window.location.pathname.split( '/' );
+	var idCalendario = pathArray[4];//En producción cambiar a 3.
+
+	$.ajax({
+		type: "POST",
+		url: base_url + "calendario/get_dias_feriados",
+		data: {
+			idCalendario:idCalendario
+		},
+		success: function(data){
+
+			var obj = JSON.parse(data);
+			if(obj.length > 0){
+				try{
+					var items = []; 	
+					$.each(obj, function(i,val){
+						cadena = 'td:contains('+ val.dia +')';
+						$(cadena).first().css('background', '#FFB9C4');
+					});			
+				}catch(e) {
+					console.log('error ajax');
+				}
+			}
+		},
+		error: function(){						
+			console.log('error en la respuesta');
+		}
+	});	
 });

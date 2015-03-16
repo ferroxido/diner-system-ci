@@ -101,6 +101,11 @@ class Model_Calendario extends CI_Model{
         $query = $this->db->get('calendario'); 
         return $query;     
     }
+
+    public function get_dias_feriados($id){
+        $query = $this->db->query("SELECT * ,extract(day FROM dias.fecha) AS dia FROM dias WHERE id_calendario = '$id' AND estado = 0");
+        return $query->result();
+    }
 }
 
 

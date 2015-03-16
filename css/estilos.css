@@ -28,9 +28,37 @@ body {
   padding-top: 60px;
   padding-bottom: 40px;
 }
+div#big_logo_unsa{
+  text-align: center;
+}
+div#big_logo_unsa img{
+  width: 100%;
+}
 div#contenedor_calendario{
   text-align: center;
 }
+div#home{
+  height: 100%
+}
+/* Estilos para la pantalla alumno */
+div#info-perfil .group-label{
+  background-color: #fff;
+  padding: .3em;
+  border-radius: .3em;
+}
+div#info-perfil .label-titulo{
+  color: #DD4814;
+  font-size: 1.15em;
+}
+div#info-perfil .mostrar-info{
+  font-size: 1.2em;
+}
+div#info-perfil .group-label:hover{
+  background-color: #eee;
+  padding: .3em;
+  border-radius: .3em; 
+}
+/* Fin de estilos para la pantalla alumno */
 div#menu_collapse:hover {
   background-color: #fff;
 }
@@ -48,30 +76,45 @@ div.navbar-fixed-top{
 div.par-botones {
   margin: 1em 0;
   text-align: center;
+  width: 100%;
 }
 div.par-botones input[type="button"] {
-  padding: 2em 2em;
-  margin: 0 0.5em;
-  display: inline-block;
-  width: 42%;
-  font-size: 1.8em;
   border-radius: 0.5em;
   background-color: #3498db;
   background-repeat: no-repeat;
   background-position: center;
   color: #fff;
+  display: inline-block;
+  font-size: 1.8em;
+  margin: 0 0.5em;
+  padding: 2em .3em;
+  text-align: center;
+  width: 41%;
 }
 div.par-botones input[type="button"]:hover {
-  padding: 2em 2em;
-  margin: 0 0.5em;
-  display: inline-block;
-  width: 42%;
-  font-size: 1.8em;
   border-radius: 0.5em;
   background-color: #fff;
   background-repeat: no-repeat;
   background-position: center;
   color: #3498db;
+  display: inline-block;
+  font-size: 1.8em;
+  margin: 0 0.5em;
+  padding: 2em .5em;
+  width: 41%;
+}
+div.par-botones input[type="button"].boton-disabled{
+  border-radius: 0.5em;
+  background-color: #9F9A9A;
+  background-repeat: no-repeat;
+  background-position: center;
+  color: #fff;
+  display: inline-block;
+  font-size: 1.8em;
+  margin: 0 0.5em;
+  padding: 2em .3em;
+  text-align: center;
+  width: 41%;
 }
 div.tablas-propias {
   overflow: auto;
@@ -109,9 +152,12 @@ table.calendario {
   padding: 2em;
   margin: 1em;
 }
+.info{
+  text-align: justify;
+}
 .mijumbotron {
   background-color: #eee;
-  padding: 1em;
+  padding: 2em;
   border-radius: 0.5em;
 }
 .sidebar-nav {
@@ -142,6 +188,22 @@ table.calendario {
 }
 .calendario .dias td:nth-child(7) {
   background-color: #ffb9c4;
+}
+.etiqueta-titulo{
+  background-color: #fff;
+  border-radius: .3em;
+  color: #DD4814;
+  padding: .3em;
+}
+.img-control {
+  text-align: center;
+
+}
+.img-control img{
+  border-radius: .5em;
+  border-width: .5em;
+  border-style: solid;
+  border-color: white;
 }
 .table-scroll thead,
 .table-scroll tbody {
@@ -214,6 +276,24 @@ table.calendario {
   }
 }
 /* Portrait tablet to landscape and desktop */
+@media (min-width: 980px) and (max-width: 1199px) {
+  body {
+    padding-top: 20px;
+    padding-bottom: 0;
+  }
+  .jumbotron h1 {
+    font-size: 2em;
+  }
+  div#info_perfil_foto{
+    padding: 1em 2em 0 2em;
+    width: 100%;
+  }
+  div#info_perfil_datos{
+    padding: 2em;
+    width: 100%;
+  }
+}
+/* Portrait tablet to landscape and desktop */
 @media (min-width: 768px) and (max-width: 979px) {
   body {
     padding-top: 20px;
@@ -241,5 +321,54 @@ table.calendario {
   }
   .jumbotron h1 {
     font-size: 2em;
+  }
+  div#info_perfil_foto{
+    padding: 1em 2em 0 2em;
+    width: 100%;
+  }
+  div#info_perfil_datos{
+    padding: 2em;
+    width: 100%;
+  }
+  div.par-botones{
+    margin: 0;
+  }
+  div.par-botones input[type="button"] {
+    border-radius: 0.5em;
+    background-color: #3498db;
+    background-repeat: no-repeat;
+    background-position: center;
+    color: #fff;
+    display: inline-block;
+    font-size: 1.8em;
+    margin: 0 0.5em;
+    padding: 2em .3em;
+    text-align: center;
+    width: 60%;
+  }
+  div.par-botones input[type="button"]:hover {
+    border-radius: 0.5em;
+    background-color: #fff;
+    background-repeat: no-repeat;
+    background-position: center;
+    color: #3498db;
+    display: inline-block;
+    font-size: 1.8em;
+    margin: 0 0.5em;
+    padding: 2em .5em;
+    width: 60%;
+  }
+  div.par-botones input[type="button"].boton-disabled{
+    border-radius: 0.5em;
+    background-color: #9F9A9A;
+    background-repeat: no-repeat;
+    background-position: center;
+    color: #fff;
+    display: inline-block;
+    font-size: 1.8em;
+    margin: 0 0.5em;
+    padding: 2em .3em;
+    text-align: center;
+    width: 60%;
   }
 }

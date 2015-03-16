@@ -9,7 +9,7 @@ if ( ! function_exists('my_validation_errors'))
 			$salida = "<div class='alert alert-dismissable alert-danger'>";
 			$salida = $salida."<button type='button' class='close' data-dismiss='alert'>×</button>";
 			$salida = $salida."<h4>Mensaje de validación</h4>";
-			$salida = $salida."<strong>".$errors."</strong>";
+			$salida = $salida."<h5>".$errors."</h5>";
 			$salida = $salida."</div>";
 		}
 		return $salida;
@@ -18,15 +18,25 @@ if ( ! function_exists('my_validation_errors'))
 
 if ( ! function_exists('my_mensaje_confirmacion'))
 {
-	function my_mensaje_confirmacion($mostrar_mensaje)
+	function my_mensaje_confirmacion($mensaje, $mostrar_mensaje, $exito)
 	{
 		$salida = "";
 		if($mostrar_mensaje){
-			$salida = "<div class='alert alert-dismissable alert-success'>";
-			$salida = $salida."<button type='button' class='close' data-dismiss='alert'>×</button>";
-			$salida = $salida."<h4>Mensaje de validación</h4>";
-			$salida = $salida."<strong>"."Registración exitosa, revise su correo para obtener la contraseña"."</strong>";
-			$salida = $salida."</div>";
+			if($exito){
+				//Mensaje amistoso.
+				$salida = "<div class='alert alert-dismissable alert-success'>";
+				$salida = $salida."<button type='button' class='close' data-dismiss='alert'>×</button>";
+				$salida = $salida."<h4>Mensaje de validación</h4>";
+				$salida = $salida."<strong>".$mensaje."</strong>";
+				$salida = $salida."</div>";
+			}else{
+				//Mensaje no amistoso.
+				$salida = "<div class='alert alert-dismissable alert-danger'>";
+				$salida = $salida."<button type='button' class='close' data-dismiss='alert'>×</button>";
+				$salida = $salida."<h4>Mensaje de validación</h4>";
+				$salida = $salida."<strong>".$mensaje."</strong>";
+				$salida = $salida."</div>";
+			}
 		}
 		return $salida;
 	}
@@ -52,15 +62,19 @@ if( ! function_exists('my_menu_principal'))
 {
 	function my_menu_principal()
 	{	
+		$estadoBloqueado = 0;
+		$estadoActivo = 2;
 		$opciones = '';
-		if(get_instance()->session->userdata('perfil_nombre') === 'Alumno'){
-			$opciones = '<li>'.anchor('usuarios/alumno', 'Inicio').'</li>';	
-		}else if(get_instance()->session->userdata('perfil_nombre') === 'Super Administrador' || get_instance()->session->userdata('perfil_nombre') === 'Administrador'){
-			$opciones = '<li>'.anchor('usuarios/admin', 'Inicio').'</li>';
-		}else if(get_instance()->session->userdata('perfil_nombre') === 'Control'){
-			$opciones = '<li>'.anchor('usuarios/control', 'Inicio').'</li>';
-		}else{
-			$opciones = '<li>'.anchor('home/index', 'Inicio').'</li>';
+		if(get_instance()->session->userdata('estado_usuario') == $estadoActivo){
+			if(get_instance()->session->userdata('perfil_nombre') === 'Alumno'){
+				$opciones = '<li>'.anchor('usuarios/alumno', 'Inicio').'</li>';	
+			}else if(get_instance()->session->userdata('perfil_nombre') === 'Super Administrador' || get_instance()->session->userdata('perfil_nombre') === 'Administrador'){
+				$opciones = '<li>'.anchor('usuarios/admin', 'Inicio').'</li>';
+			}else if(get_instance()->session->userdata('perfil_nombre') === 'Control'){
+				$opciones = '<li>'.anchor('usuarios/control', 'Inicio').'</li>';
+			}else{
+				$opciones = '<li>'.anchor('home/index', 'Inicio').'</li>';
+			}
 		}
 		return $opciones;
 	}

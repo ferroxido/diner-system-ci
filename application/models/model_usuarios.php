@@ -105,8 +105,10 @@ class Model_Usuarios extends CI_Model {
     	return $this->db->get()->row();//Equivale a SELECT * FROM usuarios WHERE id='$id'
     }
 
-    function find_simple($dni){
+    function find_simple($dni, $lu, $email){
         $this->db->where('dni', $dni);
+        $this->db->where('lu', $lu);
+        $this->db->where('email', $email);
         $query = $this->db->get('usuarios');
         return $query;
     }
@@ -143,7 +145,13 @@ class Model_Usuarios extends CI_Model {
         $registros = $this->Model_Perfiles->all();
 
         foreach($registros as $registro){
-            $lista[$registro->id] = $registro->nombre;
+            if($registro->nombre == 'Super Administrador'){
+                if($this->session->userdata('perfil_nombre') == 'Super Administrador'){
+                    $lista[$registro->id] = $registro->nombre;    
+                }
+            }else{
+                $lista[$registro->id] = $registro->nombre;
+            }
         }
         return $lista;
     }
@@ -210,7 +218,7 @@ class Model_Usuarios extends CI_Model {
         $this->db->join('facultades', 'facultades.id = usuarios.id_facultad');
         $this->db->join('categorias', 'categorias.id = usuarios.id_categoria');
         $this->db->where('tickets.id', $id_ticket);
-        $this->db->where('dias.fecha', date('Y-m-d'));//El ticket debe ser de la fecha de hoy
+        //$this->db->where('dias.fecha', date('Y-m-d'));//El ticket debe ser de la fecha de hoy
         $this->db->order_by('log_usuarios.fecha','desc');
         $this->db->limit(1);
         $query = $this->db->get();

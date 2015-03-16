@@ -34,8 +34,8 @@
 
 	<div class="row">
 		<div class="form-group">
-			<div class="col-md-offset-6">
-				<div class="col-md-6">
+			<div class="col-md-offset-4">
+				<div class="col-md-8">
 					<?= form_button(array('type'=>'submit', 'content'=>' Aceptar', 'class'=>'btn btn-success glyphicon glyphicon-ok')); ?>
 					<?= my_cambiar_clave_cancelar(); ?>	
 				</div>

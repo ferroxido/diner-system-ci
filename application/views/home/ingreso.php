@@ -1,8 +1,8 @@
-<?= form_open('index.php/home/ingresar', array('class'=>'form-horizontal jumbotron')); ?>
+<?= form_open('home/ingresar', array('class'=>'form-horizontal jumbotron')); ?>
 	<legend>Ingreso al sistema</legend>
 
 	<?= my_validation_errors(validation_errors()); ?>
-	<?= my_mensaje_confirmacion($mostrar_mensaje)?>
+	<?= my_mensaje_confirmacion($mensaje, $mostrar_mensaje, $exito)?>
 
 	<div class="row">
 		<div class="form-group">

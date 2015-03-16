@@ -55,4 +55,5 @@
 	</div>
 </div>
 
+<!-- Agregamos esta archivo para poder subir la foto -->
 <script src="<?= base_url('js/cambiar-foto.js'); ?>"></script>

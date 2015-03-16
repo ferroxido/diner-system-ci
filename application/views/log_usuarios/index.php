@@ -23,6 +23,15 @@
 						<input id="buscar_dni" name="buscar_dni" type="text" class="form-control" />
 						<span class="input-group-addon"><i class="glyphicon glyphicon-search"></i></span>
 					</div>
+					<ul class="pagination">
+					  	<li class="disabled"><a href="#">«</a></li>
+						<?php
+							for ($i = 0; $i < $numeroPaginas; $i++){
+								echo '<li><a href="#">'.$i.'</a></li>';
+							}
+						?>
+					  	 <li><a href="#">»</a></li>
+					</ul>
 				</div>
 			</div>
 		</div>
@@ -54,7 +63,7 @@
 				<td><?= $registro->nombre; ?></td>
 				<td><?= date("d/m/Y H:i:s",strtotime($registro->fecha)); ?></td>
 				<td><?= $registro->accion; ?></td>
-				<td><?= ($registro->lugar == 1)? 'Web':'Máquina'; ?></td>
+				<td><?= ($registro->lugar == 0)? 'Web':'Máquina '.$registro->lugar; ?></td>
 				<td><?= $registro->descripcion; ?></td>
 			</tr>
 			<?php endforeach; ?>

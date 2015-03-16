@@ -7,7 +7,7 @@ class CalendarioLib {
 		$this->CI->load->model('Model_Calendario');//Cargamos el modelo.
 	}
 
-	public function my_validation($desde, $hasta){
+	public function desde_menor_hasta($desde, $hasta){
 		$tokensDesde = explode("/", $desde);
 		$tokensHasta = explode("/", $hasta);
 
@@ -16,8 +16,8 @@ class CalendarioLib {
 		//Garantizar que el array tenga dia, mes y año.
 		if(sizeof($tokensDesde) == $numTokens && sizeof($tokensHasta) == $numTokens){
 			//Comparo los años
-			$yearDesde = (int) $tokensDesde[2];
-			$yearHasta = (int) $tokensHasta[2];
+			$yearDesde = (int) $tokensDesde[0];
+			$yearHasta = (int) $tokensHasta[0];
 			if($yearDesde <= $yearHasta){
 				//Por ahora son validas
 				if($yearDesde < $yearHasta){
@@ -35,8 +35,8 @@ class CalendarioLib {
 							return true;		
 						}else{
 							//Coinciden en mes. Debo comparar dias
-							$dayDesde = $tokensDesde[0];
-							$dayHasta = $tokensHasta[0];
+							$dayDesde = $tokensDesde[2];
+							$dayHasta = $tokensHasta[2];
 							if($dayDesde <= $dayHasta){
 								//Fecha valida
 								return true;
@@ -58,6 +58,25 @@ class CalendarioLib {
 			//Formato erroneo
 			return false;
 		}
+	}
+
+	public function validar_calendario_unico($desde, $hasta){
+		$desdeUnix = strtotime($desde);
+		$hastaUnix = strtotime($hasta);
+
+		$calendarios = $this->CI->db->get('calendario')->result();
+		foreach ($calendarios as $calendario) {
+			$desdeCalendario = strtotime($calendario->desde);
+			$hastaCalendario = strtotime($calendario->hasta);
+			if($desdeCalendario <= $desdeUnix && $desdeUnix <= $hastaCalendario){
+				return false;
+			}
+			if($desdeCalendario <= $hastaUnix && $hastaUnix <= $hastaCalendario){
+				return false;
+			}
+		}
+
+		return true;
 	}
 
 	//Generar calendario y mostrar todos los meses que necesitamos
@@ -143,17 +162,43 @@ class CalendarioLib {
 
 				//Nos saltamos los días domingo y sabado.
 				if(date('l', $i) != 'Sunday' && date('l', $i) != 'Saturday'){
-					$data['fecha'] = date('Y-m-d',$i);
-					$data['tickets_totales'] = 700;
+					$fecha = date('Y-m-d',$i);
+
+					//Controlamos si es un feriado
+					$this->CI->db->where('fecha', $fecha);
+					$query = $this->CI->db->get('feriados');
+					if($query->num_rows() == 1){
+						$data['evento'] = $query->row('descripcion');
+						$data['tickets_totales'] = 0;
+						$estadoFeriado = 0;
+						$data['estado'] = $estadoFeriado;
+					}else{
+						$estadoActivo = 1;
+						$data['estado'] = $estadoActivo;
+						$data['tickets_totales'] = 700;
+						$data['evento'] = 'Día Habilitado para la compra de tickets';
+					}
+					$data['fecha'] = $fecha;
 					$data['tickets_vendidos'] = 0;
 					$data['id_calendario'] = $id;
-					$data['evento'] = 'Día Hábil';
 					$this->CI->db->set($data);
-	    			$this->CI->db->insert('dias');					
-	    			//echo date('d-m-Y',$i).'</br>';
+	    			$this->CI->db->insert('dias');
 				}
 			}
 		}
+	}
+
+	public function validar_feriado($desde, $hasta, $fecha){
+		$desdeUnix = strtotime($desde);
+		$hastaUnix = strtotime($hasta);
+		$fechaUnix = strtotime($fecha);
+
+		if ($desdeUnix <= $fechaUnix && $fechaUnix <= $hastaUnix){
+			return true;
+		}else{
+			return false;
+		}
+
 	}
 
 }

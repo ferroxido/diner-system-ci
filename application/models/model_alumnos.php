@@ -13,9 +13,9 @@ class Model_Alumnos extends CI_Model {
     	return $query->result();
     }
 
-    function find($lu, $campo, $map){
+    function find($lu, $dni){
     	$this->db->where('lu',$lu);
-    	$this->db->where($campo, $map);
+    	$this->db->where('dni', $dni);
     	return $this->db->get('alumnos');
     }
 

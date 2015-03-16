@@ -8,13 +8,33 @@
 			<div id="barcode" class="mijumbotron">
 				<legend>Código de Barra</legend>
 				<fieldset>
-					<div class="form-group">
-						<label for="barcode">Código de Barra</label>
+					<label for="barcode">Código de Barra</label>
+					<div class="col-sm-8">
 						<input id="barcode" type="text" name="barcode" class="form-control">
-						<hr>
-						<button id="enviar-barcode" type="submit" class="btn btn-primary boton-grande">Enviar</button>
+					</div>
+					<div class="col-sm-2">
+					<button id="enviar_barcode" type="button" class="btn btn-primary boton-grande">Enviar</button>
 						
-					</div>				
+					</div>		
+				</fieldset>
+			</div>
+			<br>
+			<div id="historial-tickets" class="mijumbotron">
+				<legend>Últimos Tickets</legend>
+				<fieldset>
+				<div class="tablas-propias" style="height:250px;">
+					<table class="table table-bordered table-striped table-hover">
+						<thead>
+							<tr>
+								<th> Número Ticket </th>
+								<th> L.U </th>
+							</tr>
+						</thead>
+						<tbody id="historial_tickets">
+
+						</tbody>
+					</table>
+				</div>
 				</fieldset>
 			</div>
 		</div>

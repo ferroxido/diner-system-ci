@@ -46,7 +46,7 @@
 						<div class="row">
 							<legend>Información personal</legend>
 							<fieldset>
-							<div class="col-xs-5">
+							<div id="info_perfil_foto" class="col-xs-5">
 								<a href="#" class="thumbnail">
 									<?= form_open_multipart('usuarios/subir_foto', array('id'=>'form-foto')); ?>
 						      			<input type="file" name="userfile" style="visibility:hidden;position:absolute;top:0;"/>
@@ -54,34 +54,34 @@
 						      		<img class="img-subir" data-src="holder.js/100%x180" style="width: 100%;" src="<?= $registro->ruta_foto; ?>">
 								</a>
 							</div>
-							<div class="col-xs-7">
-								<div class="form-group">
-									<label>Nombre: </label>
+							<div id="info_perfil_datos" class="col-xs-7">
+								<div class="form-group group-label">
+									<label class="label-titulo">Nombre: </label>
 									<label class="mostrar-info"><?= $registro->nombre; ?></label>
 								</div>
 
-								<div class="form-group">
-									<label>DNI: </label>
+								<div class="form-group group-label">
+									<label class="label-titulo">DNI: </label>
 									<label class="mostrar-info"><?= $registro->dni; ?></label>
 								</div>
 
-								<div class="form-group">
-									<label>Facultad: </label>
+								<div class="form-group group-label">
+									<label class="label-titulo">Facultad: </label>
 									<label class="mostrar-info"><?= $registro->facultad_nombre; ?></label>
 								</div>
-
-								<div class="form-group">
-									<label>Provincia: </label>
+ 
+								<div class="form-group group-label">
+									<label class="label-titulo">Provincia: </label>
 									<label class="mostrar-info"><?= $registro->provincia_nombre; ?></label>
 								</div>
 
-								<div class="form-group">
-									<label>Categoría: </label>
+								<div class="form-group group-label">
+									<label class="label-titulo">Categoría: </label>
 									<label class="mostrar-info"><?= $registro->categoria_nombre; ?></label>
 								</div>
 
-								<div class="form-group">
-									<label>Saldo: </label>
+								<div class="form-group group-label">
+									<label class="label-titulo">Saldo: </label>
 									<label class="mostrar-info"><?= '$ '.$registro->saldo; ?></label>
 								</div>
 							</div>
@@ -97,7 +97,7 @@
 	      	<hr>
 
 	      	<footer>
-	      		<p><?= $this->session->userdata('nombre_usuario'); ?>&copy; Sistema de gestión de tickes UNSA 2014 - <?= date('d-m-Y H:i') ?> </p>
+	      		<p><?= $this->session->userdata('nombre_usuario'); ?>&copy; Sistema de gestión de tickes UNSA - <?= date('d-m-Y H:i') ?> </p>
 	      	</footer>
 		</div>
 	</div>

@@ -1,18 +1,25 @@
 <div class="page-header">	
 	<h3>Feriados entre <?= $desde." y el ".$hasta; ?></h3>
-	<h4>Paso 2: Agregar los feriados (algunos ya vienen por defecto cargados)</h4>
+	<h4>Paso 2: Agregar los feriados (algunos ya vienen por defecto cargados).Al confirmar se completa la operación y se genera un nuevo calendario.</h4>
 </div>
 
-
 <div class="row" style="margin:1em 0;">
-
-	<div class="col-md-offset-5 col-md-2">
-		<!-- Este insert es diferente a todos los demas, mirar el codigo de la clase calendario-->
-       	<?= my_boton_permisos('calendario/insert', ' Confirmar' ,'btn btn-success glyphicon glyphicon-ok'); ?>
+	<div class="col-md-offset-3 col-md-4">
+		<?= form_open('calendario/insert');?>
+			<?= form_hidden('descripcion', $descripcion); ?>
+			<?= form_hidden('desde', $desde); ?>
+			<?= form_hidden('hasta', $hasta); ?>
+			<?= form_button(array('type'=>'submit', 'content'=>' Confirmar Calendario', 'class'=>'btn btn-success glyphicon glyphicon-ok')); ?>
+		<?= form_close(); ?>
 	</div>
 
 	<div class="col-md-3">
-       	<?= my_boton_permisos('calendario/agregar_feriados', ' Agregar Feriado' ,'btn btn-primary glyphicon glyphicon-plus'); ?>
+		<?= form_open('calendario/agregar_feriados');?>
+			<?= form_hidden('descripcion', $descripcion); ?>
+			<?= form_hidden('desde', $desde); ?>
+			<?= form_hidden('hasta', $hasta); ?>
+			<?= form_button(array('type'=>'submit', 'content'=>' Agregar Feriado', 'class'=>'btn btn-primary glyphicon glyphicon-plus')); ?>
+		<?= form_close(); ?>
 	</div>
 	
 	<div class="col-md-2">
