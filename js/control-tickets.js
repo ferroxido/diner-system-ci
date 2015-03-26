@@ -56,6 +56,9 @@ function ajax_barcode(event){
 								if(val.estado == 2){
 									html_info_ticket = html_info_ticket + '<h1 class="valido">VÁLIDO</h1>';
 									$('#historial_tickets').append('<tr><td>'+ val.id_ticket +'</td><td>'+ val.usuario_lu +'</td></tr>');
+									//Incrementar contador
+									totalCosumidosHoy = parseInt($('span#total_tickets').html());
+									$('span#total_tickets').html(totalCosumidosHoy + 1);
 								}else if(val.estado == 3) {
 									html_info_ticket = html_info_ticket + '<div class="novalido"><h1>NO VÁLIDO</h1><h4>Consumido el '+ fecha +'</h4></div>';
 								}else if(val.estado == 0){
@@ -69,14 +72,14 @@ function ajax_barcode(event){
 						$('div#info-usuario').append(html_info_usuario);
 						
 					}catch(e) {
-						alert('Error');
+						console.log('Error try/catch');
 					}
 				}else{
 					
 				}
 			},
 			error: function(){
-				alert('Error en la respuesta');
+				console.log('Error en la respuesta');
 			}
 		});//fin ajax
 	}	

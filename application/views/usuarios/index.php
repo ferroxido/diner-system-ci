@@ -27,10 +27,10 @@
 						<input id="buscar_dni" name="buscar_dni" type="text" class="form-control" />
 						<span class="input-group-addon"><i class="glyphicon glyphicon-search"></i></span>
 					</div>
-				</div>	
+				</div>
 			</div>
 		</div>
-
+		
 		<br>
 
 		<div class="row filtro filtrolu">
@@ -49,6 +49,17 @@
 				</div>
 			</div>
 		</div>
+	
+		<br>	
+
+		<div class="row">
+			<div class="col-md-10">
+				<div id="paginacion">
+					<input id="numeroPaginas" type="hidden" value='<?= $numeroPaginas; ?>'>
+				</div>
+			</div>
+		</div>
+
 		</fieldset>
 	</div>
 </div>
@@ -75,8 +86,8 @@
 				<td><?= $registro->dni; ?></td>
 				<td><?= $registro->nombre; ?></td>
 				<td><?= $registro->lu; ?></td>
-				<td><?= $registro->facultad_nombre; ?></td>
-				<td><?= $registro->categoria_nombre; ?></td>
+				<td><?= $registro->facultad; ?></td>
+				<td><?= $registro->categoria; ?></td>
 				<td><?= '$ '.$registro->saldo; ?></td>
 				<td><?= anchor('usuarios/edit/'.$registro->dni, ' ', array('class' => 'glyphicon glyphicon-pencil')); ?></td>
 			</tr>
@@ -85,6 +96,7 @@
 	</table>
 </div>
 
+<script type="text/javascript" src="<?= base_url('js/jquery.bootpag.min.js'); ?>"></script>
 <script type="text/javascript">
 	base_url = '<?=base_url(); ?>';
 </script>

@@ -143,6 +143,11 @@ h4#mensaje_exito{
   font-weight: bold;
   font-size: 1.3em;
 }
+span#total_tickets{
+  background-color: #FFF;
+  padding: .1em .4em;
+  font-size: 1.4em;
+}
 table.calendario {
   margin: auto;
   border-collapse: collapse;

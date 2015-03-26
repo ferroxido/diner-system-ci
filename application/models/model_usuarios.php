@@ -3,92 +3,44 @@
 
 class Model_Usuarios extends CI_Model {
 
-    var $conf;
-
     function __construct()
     {
         parent::__construct();
-        $this->conf = array (
-            'start_day'    => 'monday',
-            'month_type'   => 'long',
-            'day_type'     => 'abr',
-            'show_next_prev' => true,
-            'next_prev_url' => base_url().'usuarios/comprar_tickets'
-        );
-
-        $this->conf['template'] = '
-
-               {table_open}<table border="0" cellpadding="0" cellspacing="0" class="calendario">{/table_open}
-
-               {heading_row_start}<tr>{/heading_row_start}
-
-               {heading_previous_cell}<th><a href="{previous_url}">&lt;&lt;</a></th>{/heading_previous_cell}
-               {heading_title_cell}<th colspan="{colspan}">{heading}</th>{/heading_title_cell}
-               {heading_next_cell}<th><a href="{next_url}">&gt;&gt;</a></th>{/heading_next_cell}
-
-               {heading_row_end}</tr>{/heading_row_end}
-
-               {week_row_start}<tr>{/week_row_start}
-               {week_day_cell}<td>{week_day}</td>{/week_day_cell}
-               {week_row_end}</tr>{/week_row_end}
-
-               {cal_row_start}<tr class="dias">{/cal_row_start}
-               {cal_cell_start}<td class="dia">{/cal_cell_start}
-
-               {cal_cell_content}
-                    <div class="dia_num">{day}</div>
-                    <div class="dia_contenido">{content}</div>
-               {/cal_cell_content}
-
-               {cal_cell_content_today}
-                    <div class="dia_num highlight">{day}</div>
-                    <div class="dia_contenido">{content}</div>
-               {/cal_cell_content_today}
-
-               {cal_cell_no_content}
-                    <div class="dia_num">{day}</div>
-                {/cal_cell_no_content}
-
-               {cal_cell_no_content_today}
-                    <div class="dia_num highlight">{day}</div>
-                {/cal_cell_no_content_today}
-
-               {cal_cell_blank}&nbsp;{/cal_cell_blank}
-
-               {cal_cell_end}</td>{/cal_cell_end}
-               {cal_row_end}</tr>{/cal_row_end}
-
-               {table_close}</table>{/table_close}
-            ';
     }
 
-    function all(){
-        $this->db->select('usuarios.*, perfiles.nombre as perfil_nombre');
-        $this->db->from('usuarios');
-        $this->db->join('perfiles', 'usuarios.id_perfil = perfiles.id', 'left');
-
-    	$query = $this->db->get();//Equivale a SELECT * FROM usuarios
-    	return $query->result();//Devuelve un array asociativo.
-    }
-
-    function allRecargado(){
-        $this->db->select('usuarios.*, perfiles.nombre as perfil_nombre, provincias.nombre as provincia_nombre, facultades.nombre as facultad_nombre, categorias.nombre as categoria_nombre');
+    function all($filasPorPagina, $posicion){
+        $this->db->select('usuarios.nombre, usuarios.dni, usuarios.lu, usuarios.saldo, usuarios.estado,facultades.nombre as facultad, categorias.nombre as categoria');
         $this->db->from('usuarios');
         $this->db->join('perfiles', 'usuarios.id_perfil = perfiles.id', 'left');
         $this->db->join('provincias', 'usuarios.id_provincia = provincias.id', 'left');
         $this->db->join('facultades', 'usuarios.id_facultad = facultades.id', 'left');
         $this->db->join('categorias', 'usuarios.id_categoria = categorias.id', 'left');
         $this->db->order_by('usuarios.nombre', 'asc');
+        $this->db->limit($filasPorPagina, $posicion);
         $query = $this->db->get();
         return $query->result();
     }
+
+    function all_filter($buscar_nombre, $buscar_dni, $buscar_lu, $filasPorPagina, $posicion){
+        $buscar_nombre = strtolower($buscar_nombre);
+        $this->db->select('usuarios.nombre, usuarios.dni, usuarios.lu, usuarios.saldo, usuarios.estado,facultades.nombre as facultad, categorias.nombre as categoria');
+        $this->db->from('usuarios');
+        $this->db->join('facultades', 'usuarios.id_facultad = facultades.id');
+        $this->db->join('categorias', 'usuarios.id_categoria = categorias.id');
+        $this->db->where("LOWER(usuarios.nombre) LIKE '%{$buscar_nombre}%'");
+        $this->db->like('dni', $buscar_dni, 'after');
+        $this->db->like('lu', $buscar_lu, 'after');
+        $this->db->order_by('usuarios.nombre', 'asc');
+        $this->db->limit($filasPorPagina, $posicion);
+        $query = $this->db->get();
+        return $query->result();
+    }    
 
     function allFilter($campo, $valor){
         $this->db->select('usuarios.*, perfiles.nombre as perfil_nombre');
         $this->db->from('usuarios');
         $this->db->join('perfiles', 'usuarios.id_perfil = perfiles.id', 'left');
         $this->db->like($campo,$valor);
-
         $query = $this->db->get();
         return $query->result();
     }
@@ -185,21 +137,6 @@ class Model_Usuarios extends CI_Model {
         return $lista;
     }
 
-    function get_ultimas_operaciones($dni){
-        $this->db->select('log_usuarios.*, acciones.nombre as nombre_accion');
-        $this->db->from('log_usuarios');
-        $this->db->join('acciones', 'log_usuarios.id_accion = acciones.id', 'left');
-        $this->db->where('dni', $dni);
-        $this->db->order_by('fecha','desc');
-        $this->db->limit(5);
-        return $query = $this->db->get()->row();
-    }
-
-    function generate($year, $month){
-        $this->load->library('calendar', $this->conf);
-        return $this->calendar->generate($year, $month);
-    }
-
     function total_usuarios(){
         $query = $this->db->query("SELECT COUNT(*) AS total_usuarios, 
             COUNT(CASE WHEN id_categoria = 1 THEN 1 END) AS becados, 
@@ -225,24 +162,20 @@ class Model_Usuarios extends CI_Model {
         return $query;
     }
 
-    function get_usuarios_filtrados($buscar_nombre, $buscar_dni, $buscar_lu){
-        $buscar_nombre = strtolower($buscar_nombre);
-        $this->db->select('usuarios.*, facultades.nombre as facultad, categorias.nombre as categoria');
-        $this->db->from('usuarios');
-        $this->db->join('facultades', 'usuarios.id_facultad = facultades.id');
-        $this->db->join('categorias', 'usuarios.id_categoria = categorias.id');
-        $this->db->where("LOWER(usuarios.nombre) LIKE '%{$buscar_nombre}%'");
-        $this->db->like('dni', $buscar_dni, 'after');
-        $this->db->like('lu', $buscar_lu, 'after');
-        $this->db->order_by('usuarios.nombre', 'asc');
-        $query = $this->db->get();
-        return $query->result();
-    }
-
-
     function add_tickets_log($registro){
         $this->db->set($registro);
         $this->db->insert('tickets_log_usuarios');
+    }
+
+    function get_total_rows($nombre, $dni, $lu){
+        $nombre = strtolower($nombre);
+        $this->db->select('COUNT(nombre) as total_rows');
+        $this->db->from('usuarios');
+        $this->db->where("LOWER(nombre) LIKE '%{$nombre}%'");
+        $this->db->like('dni', $dni, 'after');
+        $this->db->like('lu', $lu, 'after');
+        $query = $this->db->get();
+        return $query->row('total_rows');
     }
 
 }   

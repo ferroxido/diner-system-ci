@@ -2,6 +2,9 @@
 
 class Usuarios extends CI_Controller {
 
+	protected $filasPorPagina = 200;
+	protected $primeraPagina = 1;
+
 	//Constructor
 	function __construct(){
 		parent::__construct();
@@ -18,16 +21,32 @@ class Usuarios extends CI_Controller {
 	//Para el usuario administrador
 	public function index(){
 		$data['contenido'] = 'usuarios/index';
-		$data['registros'] = $this->Model_Usuarios->allRecargado();
+		$nombre = '';
+		$dni = '';
+		$lu = '';
+		$totalRows = $this->Model_Usuarios->get_total_rows($nombre, $dni, $lu);
+		$data['numeroPaginas'] = ceil($totalRows / $this->filasPorPagina);
+		$data['registros'] = $this->Model_Usuarios->all($this->filasPorPagina, $this->primeraPagina);
 		$this->load->view('template-admin', $data);
 	}
 
-	public function search(){
+	public function get_total_pages(){
+		if ($this->input->is_ajax_request()){
+			$nombre = $this->input->post('nombre');
+			$dni = $this->input->post('dni');
+			$lu = $this->input->post('lu');
+			$totalRows = $this->Model_Usuarios->get_total_rows($nombre, $dni, $lu);
+			echo ceil($totalRows / $this->filasPorPagina);
+		}
+	}
+
+	public function search($page_num){
 		if($this->input->is_ajax_request()){
-			$buscar_nombre = $this->input->post('buscar_nombre');
-			$buscar_dni = $this->input->post('buscar_dni');
-			$buscar_lu = $this->input->post('buscar_lu');
-			$query = $this->Model_Usuarios->get_usuarios_filtrados($buscar_nombre, $buscar_dni, $buscar_lu);
+			$nombre = $this->input->post('nombre');
+			$dni = $this->input->post('dni');
+			$lu = $this->input->post('lu');
+			$posicion = (($page_num - 1) * $this->filasPorPagina);
+			$query = $this->Model_Usuarios->all_filter($nombre, $dni, $lu, $this->filasPorPagina, $posicion);
 			echo json_encode($query);
 		}else{
 			show_404();
@@ -212,8 +231,8 @@ class Usuarios extends CI_Controller {
 		if($this->input->post('dni')){
 			$registro = $this->input->post();
 
-			$this->form_validation->set_rules('nombre', 'Nombre', 'required');
-			$this->form_validation->set_rules('email', 'Email', 'required|valid_email');
+			$this->form_validation->set_rules('nombre', 'Nombre', 'required|max_length[45]');
+			$this->form_validation->set_rules('email', 'Email', 'required|valid_email|max_length[64]');
 			$this->form_validation->set_rules('dni', 'DNI', 'required|callback_no_repetir_usuario_update');
 			if($this->form_validation->run() == FALSE){
 				//Si no cumplio alguna de las reglas
@@ -308,6 +327,8 @@ class Usuarios extends CI_Controller {
 	 */
 	public function control(){
 		$data['contenido'] = 'usuarios/control';
+		$hoy = date('Y-m-d 00:00:00');
+		$data['totalConsumidosHoy'] = $this->Model_Tickets->get_total_consumidos_hoy($hoy);
 		$this->load->view('template_control', $data);
 	}
 

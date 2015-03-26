@@ -3,7 +3,7 @@
 </div>
 
 <div class="col-md-offset-10">
-	<?= anchor('tickets/index', ' Volver', array('class' => 'btn btn-primary glyphicon glyphicon-arrow-left')); ?>
+	<a href="javascript:window.history.go(-1);" class="btn btn-primary glyphicon glyphicon-arrow-left"> Volver</a>
 </div>
 
 <br>

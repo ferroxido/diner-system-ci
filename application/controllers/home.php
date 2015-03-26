@@ -161,7 +161,6 @@ class Home extends CI_Controller {
 				//Actualizo password, estado y email en el usuario.
 				$registro['dni'] = $dni;
 				$registro['email'] = $email;
-				$registro['estado'] = 2;
 				$registro['password'] = $this->usuariolib->encriptar($password_generada);
 				$this->Model_Usuarios->update($registro);
 

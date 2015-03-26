@@ -19,7 +19,7 @@ class Model_Log_Usuarios extends CI_Model {
     	return $query->result();
     }
 
-    function all_filter($accion, $buscar_dni){
+    function all_filter($accion, $buscar_dni, $filasPorPagina, $posicion){
         if($accion == '0'){
             $this->db->select('log_usuarios.*, acciones.nombre as accion, usuarios.nombre as nombre');
             $this->db->from('log_usuarios');
@@ -27,7 +27,7 @@ class Model_Log_Usuarios extends CI_Model {
             $this->db->join('usuarios', 'log_usuarios.dni = usuarios.dni');
             $this->db->like('log_usuarios.dni', $buscar_dni, 'after');
             $this->db->order_by('fecha', 'desc');
-            $this->db->limit(20);
+            $this->db->limit($filasPorPagina, $posicion);
             $query = $this->db->get();
             return $query->result();
         }else{
@@ -38,7 +38,7 @@ class Model_Log_Usuarios extends CI_Model {
             $this->db->where('id_accion', $accion);
             $this->db->like('log_usuarios.dni', $buscar_dni, 'after');
             $this->db->order_by('fecha', 'desc');
-            $this->db->limit(20);
+            $this->db->limit($filasPorPagina, $posicion);
             $query = $this->db->get();
             return $query->result();            
         }
@@ -89,8 +89,12 @@ class Model_Log_Usuarios extends CI_Model {
         return $lista;
     }
 
-    function get_total_rows(){
-        $query = $this->db->query('SELECT COUNT(*) AS total_rows FROM log_usuarios');
+    function get_total_rows($accion, $dni){
+        if ($accion == '0') {
+            $query = $this->db->query("SELECT COUNT(*) AS total_rows FROM log_usuarios WHERE dni LIKE '{$dni}%'");    
+        }else{     
+            $query = $this->db->query("SELECT COUNT(*) AS total_rows FROM log_usuarios WHERE id_accion = '$accion' AND dni LIKE '{$dni}%'");
+        }
         return $query->row('total_rows');
     }
 }

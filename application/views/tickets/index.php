@@ -29,6 +29,18 @@
 					</div>	
 				</div>
 			</div>
+			<br>
+			<div class="row">
+				<div class="form-group">
+					<label for="estado" class="col-md-2">Estado: </label>
+					<div class="col-md-10">
+						<?= form_dropdown('estado', $estados, 5,"id='drop_down' class='form-control'"); ?>
+					</div>
+				</div>
+			</div>
+			<div id="paginacion">
+				<input id="numeroPaginas" type="hidden" value='<?= $numeroPaginas; ?>'>
+			</div>
 		</div>
 		
 		<div class="col-md-6">
@@ -56,7 +68,6 @@
 				</div>
 			</div>
 		</div>
-
 		</fieldset>
 	</div>
 </div>
@@ -93,6 +104,7 @@
 	</table>
 </div>
 
+<script type="text/javascript" src="<?= base_url('js/jquery.bootpag.min.js'); ?>"></script>
 <script type="text/javascript">
 	base_url = '<?=base_url(); ?>';
 </script>

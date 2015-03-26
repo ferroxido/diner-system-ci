@@ -8,8 +8,8 @@ class Model_Tickets extends CI_Model {
         parent::__construct();
     }
 
-    function all(){
-        $query = $this->db->query('SELECT tickets.id AS id_ticket, dias.fecha AS fecha, tickets.importe AS importe_ticket, estados_tickets.nombre AS estado_ticket, usuarios.dni AS dni, usuarios.nombre AS nombre_usuario
+    function all($filasPorPagina, $posicion){
+        $query = $this->db->query("SELECT tickets.id AS id_ticket, dias.fecha AS fecha, tickets.importe AS importe_ticket, estados_tickets.nombre AS estado_ticket, usuarios.dni AS dni, usuarios.nombre AS nombre_usuario
                 FROM tickets
                 INNER JOIN dias ON tickets.id_dia = dias.id
                 INNER JOIN estados_tickets on tickets.estado = estados_tickets.id
@@ -18,26 +18,29 @@ class Model_Tickets extends CI_Model {
                 ON tickets_log_usuarios.id_ticket = tickets.id
                 INNER JOIN log_usuarios ON tickets_log_usuarios.id_log_usuario = log_usuarios.id
                 INNER JOIN usuarios ON log_usuarios.dni = usuarios.dni
-                ORDER BY dias.fecha DESC');
+                ORDER BY tickets.id DESC LIMIT '$filasPorPagina' OFFSET '$posicion'");
         return $query->result();
     }
 
-    function all_filter($buscar_nombre,$buscar_dni, $buscar_id, $buscar_fecha){
-        $buscar_nombre = strtolower($buscar_nombre);
-        if($buscar_fecha === ''){            
+    function all_filter($nombre, $dni, $id, $fecha, $estado, $filasPorPagina, $posicion){
+        $nombre = strtolower($nombre);
+        $estado = ($estado == '5')? '':$estado;
+        if($fecha === ''){
             $query = $this->db->query("SELECT tickets.id AS id_ticket, dias.fecha AS fecha, tickets.importe AS importe_ticket, estados_tickets.nombre AS estado_ticket, usuarios.dni AS dni, usuarios.nombre AS nombre_usuario
                     FROM tickets
                     INNER JOIN dias ON tickets.id_dia = dias.id
                     INNER JOIN estados_tickets on tickets.estado = estados_tickets.id
-                    inner join 
+                    INNER JOIN
                         (SELECT DISTINCT ON(id_ticket) id_ticket, id_log_usuario FROM tickets_log_usuarios) AS tickets_log_usuarios 
                     ON tickets_log_usuarios.id_ticket = tickets.id
                     INNER JOIN log_usuarios ON tickets_log_usuarios.id_log_usuario = log_usuarios.id
                     INNER JOIN usuarios ON log_usuarios.dni = usuarios.dni
-                    WHERE LOWER(usuarios.nombre) LIKE '%{$buscar_nombre}%' AND
-                    usuarios.dni LIKE '{$buscar_dni}%' AND
-                    tickets.id::text LIKE '{$buscar_id}'
-                    ORDER BY dias.fecha DESC");
+                    WHERE LOWER(usuarios.nombre) LIKE '%{$nombre}%' AND
+                    usuarios.dni LIKE '{$dni}%' AND
+                    tickets.id::text LIKE '{$id}%'
+                    AND tickets.estado::text LIKE '{$estado}%'
+                    ORDER BY tickets.id DESC
+                    LIMIT '$filasPorPagina' OFFSET '$posicion'");
         }else{
             $query = $this->db->query("SELECT tickets.id AS id_ticket, dias.fecha AS fecha, tickets.importe AS importe_ticket, estados_tickets.nombre AS estado_ticket, usuarios.dni AS dni, usuarios.nombre AS nombre_usuario
                     FROM tickets
@@ -48,10 +51,14 @@ class Model_Tickets extends CI_Model {
                     ON tickets_log_usuarios.id_ticket = tickets.id
                     INNER JOIN log_usuarios ON tickets_log_usuarios.id_log_usuario = log_usuarios.id
                     INNER JOIN usuarios ON log_usuarios.dni = usuarios.dni
-                    WHERE LOWER(usuarios.nombre) LIKE '%{$buscar_nombre}%' AND
-                    usuarios.dni LIKE '{$buscar_dni}%' AND
-                    tickets.id::text LIKE '{$buscar_id}' AND dias.fecha = '$buscar_fecha'
-                    ORDER BY dias.fecha DESC");            
+                    WHERE LOWER(usuarios.nombre) LIKE '%{$nombre}%' AND
+                    usuarios.dni LIKE '{$dni}%' AND
+                    tickets.id::text LIKE '{$id}%'
+                    AND tickets.estado::text LIKE '{$estado}%'
+                    AND dias.fecha = '$fecha'
+                    ORDER BY tickets.id DESC
+                    LIMIT '$filasPorPagina' OFFSET '$posicion'");
+
         }
         return $query->result();
     }
@@ -190,6 +197,46 @@ class Model_Tickets extends CI_Model {
             GROUP BY dias.fecha
             ORDER BY dias.fecha");
         return $query->result();
+    }
+
+    function get_total_consumidos_hoy($hoy){
+        $estadoConsumido = 3;
+        $query = $this->db->query("SELECT COUNT(tickets.id) AS total_consumidos_hoy FROM tickets 
+            INNER JOIN dias ON tickets.id_dia = dias.id WHERE fecha = '$hoy' and tickets.estado = '$estadoConsumido'");
+        return $query->row('total_consumidos_hoy');
+    }
+
+    function get_estados(){
+        $lista = array();
+        $registros = $this->db->get('estados_tickets')->result();
+        $lista[5] = 'Todos';
+        foreach($registros as $registro){
+            $lista[$registro->id] = $registro->nombre;
+        }
+        return $lista;
+    }
+
+    function get_total_rows($nombre, $dni, $id, $fecha, $estado){
+        $nombre = strtolower($nombre);
+        $estado = ($estado == '5')? '':$estado;
+        if($fecha == ''){
+            $query = $this->db->query("SELECT COUNT(tickets.id) AS total_tickets 
+                FROM tickets
+                INNER JOIN dias ON tickets.id_dia = dias.id
+                INNER JOIN (SELECT distinct on(id_ticket) id_ticket, id_log_usuario FROM tickets_log_usuarios) AS tickets_log_usuarios ON tickets.id = tickets_log_usuarios.id_ticket
+                INNER JOIN log_usuarios ON log_usuarios.id = tickets_log_usuarios.id_log_usuario
+                INNER JOIN usuarios ON log_usuarios.dni = usuarios.dni
+                WHERE usuarios.nombre LIKE '%{$nombre}%' AND usuarios.dni LIKE '{$dni}%' AND tickets.id::text LIKE '{$id}%' AND tickets.estado::text LIKE '{$estado}%'");
+        }else{
+            $query = $this->db->query("SELECT COUNT(tickets.id) AS total_tickets 
+                FROM tickets
+                INNER JOIN dias ON tickets.id_dia = dias.id
+                INNER JOIN (SELECT distinct on(id_ticket) id_ticket, id_log_usuario FROM tickets_log_usuarios) AS tickets_log_usuarios ON tickets.id = tickets_log_usuarios.id_ticket
+                INNER JOIN log_usuarios ON log_usuarios.id = tickets_log_usuarios.id_log_usuario
+                INNER JOIN usuarios ON log_usuarios.dni = usuarios.dni
+                WHERE usuarios.nombre LIKE '%{$nombre}%' AND usuarios.dni LIKE '{$dni}%' AND tickets.id::text LIKE '{$id}%' AND tickets.estado::text LIKE '{$estado}%' AND dias.fecha = '$fecha'");
+        }
+        return $query->row('total_tickets');
     }
 
 }

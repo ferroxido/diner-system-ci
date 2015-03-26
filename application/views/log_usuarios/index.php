@@ -23,17 +23,11 @@
 						<input id="buscar_dni" name="buscar_dni" type="text" class="form-control" />
 						<span class="input-group-addon"><i class="glyphicon glyphicon-search"></i></span>
 					</div>
-					<ul class="pagination">
-					  	<li class="disabled"><a href="#">«</a></li>
-						<?php
-							for ($i = 0; $i < $numeroPaginas; $i++){
-								echo '<li><a href="#">'.$i.'</a></li>';
-							}
-						?>
-					  	 <li><a href="#">»</a></li>
-					</ul>
 				</div>
 			</div>
+		</div>
+		<div id="paginacion">
+			<input id="numeroPaginas" type="hidden" value='<?= $numeroPaginas; ?>'>
 		</div>
 		</fieldset>
 	</div>
@@ -70,8 +64,8 @@
 		</tbody>
 	</table>
 </div>
-
+<script type="text/javascript" src="<?= base_url('js/jquery.bootpag.min.js'); ?>"></script>
 <script type="text/javascript">
 	base_url = '<?=base_url(); ?>';
 </script>
-<script src="<?= base_url('js/log_usuarios.js')?>"></script>
+<script src="<?= base_url('js/log_usuarios.js'); ?>"></script>

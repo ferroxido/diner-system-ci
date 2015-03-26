@@ -20,7 +20,7 @@
 			</div>
 			<br>
 			<div id="historial-tickets" class="mijumbotron">
-				<legend>Últimos Tickets</legend>
+				<legend>Últimos Tickets. Total: <span id="total_tickets"><?= $totalConsumidosHoy; ?></span></legend>
 				<fieldset>
 				<div class="tablas-propias" style="height:250px;">
 					<table class="table table-bordered table-striped table-hover">
