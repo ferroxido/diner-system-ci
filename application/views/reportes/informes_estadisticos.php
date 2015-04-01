@@ -44,7 +44,7 @@
 					</tbody>
 				</table>
 				<div class="col-md-offset-9">
-					<?= form_open('index.php/reportes/generar_pdf'); ?>
+					<?= form_open('reportes/generar_pdf'); ?>
 						<input type="submit" class="btn btn-primary glyphicon glyphicon-print" value=" Descargar PDF" name="PDF1">
 					<?= form_close(); ?>
 				</div>
@@ -54,7 +54,7 @@
 				<br>
 				<div class="filtros">
 					<fieldset>
-						<?= form_open('index.php/reportes/generar_pdf', array('id'=>'form_reporte')); ?>
+						<?= form_open('reportes/generar_pdf', array('id'=>'form_reporte')); ?>
 						<div class="row">
 							<div class="form-group">
 								<div class="col-md-6">
@@ -153,7 +153,7 @@
 				<br>
 				<div class="filtros">
 					<fieldset>
-						<?= form_open('index.php/reportes/generar_pdf', array('id'=>'form_reporte2')); ?>
+						<?= form_open('reportes/generar_pdf', array('id'=>'form_reporte2')); ?>
 						<div class="row">
 							<div class="form-group">
 								<div class="col-md-6">

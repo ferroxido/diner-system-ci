@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+	<meta charset="utf-8">
 	<link rel="stylesheet" href="./css/estilos-pdf.css">
 </head>
 <body>
@@ -15,8 +16,8 @@
 			<h5>Tel. 54-0387-425521</h5>
 			<h5>Correo Electrónico: seccosu@unsa.edu.ar</h5>
 		</div>
-		<hr>
 	</header>
+	<hr>
 
 	<h3>Informe de cantidad  de usuarios por Facultad y categoría de comensal</h3>
 	<br />
@@ -53,4 +54,4 @@
 		</tbody>
 	</table>
 </body>
-</html>
+</html>	

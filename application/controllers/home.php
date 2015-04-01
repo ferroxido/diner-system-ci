@@ -158,7 +158,7 @@ class Home extends CI_Controller {
 			$nombre = $usuario->row('nombre');
 			$email = $usuario->row('email');
 			if($this->usuariolib->enviar_email($nombre, $email, $password_generada)){
-				//Actualizo password, estado y email en el usuario.
+				//Actualizo datos
 				$registro['dni'] = $dni;
 				$registro['email'] = $email;
 				$registro['password'] = $this->usuariolib->encriptar($password_generada);

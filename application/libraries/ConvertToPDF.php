@@ -6,7 +6,7 @@ class ConvertToPDF {
         $this->CI = & get_instance();//Obtener la instancia del objeto por referencia.
     }
 
-    public function doPDF($path='',$content='',$body=false,$style='',$mode=false,$paper_1='a4',$paper_2='portrait')
+    public function doPDF($path='', $content='', $body=false, $style='', $mode=false, $paper_1='a4', $paper_2='portrait')
     {    
         require_once("dompdf/dompdf_config.inc.php");
 
@@ -36,10 +36,10 @@ class ConvertToPDF {
             if( $paper_2=='' ) $paper_2='portrait';
                 
             $dompdf =  new DOMPDF();
-            $dompdf -> set_paper($paper_1,$paper_2);
-            $dompdf -> load_html(utf8_decode($content));//Importante el decode para las tildes y las ñ
+            $dompdf->set_paper($paper_1,$paper_2);
+            $dompdf->load_html(utf8_decode($content));//Importante el decode para las tildes y las ñ
             //ini_set("memory_limit","32M"); //opcional 
-            $dompdf -> render();
+            $dompdf->render();
             
             //Creamos el pdf
             if($mode==false)

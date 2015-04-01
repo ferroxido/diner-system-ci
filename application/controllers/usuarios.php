@@ -16,6 +16,7 @@ class Usuarios extends CI_Controller {
 		$this->form_validation->set_message('no_repetir_usuario_insertar', 'Existe otro registro con el mismo nombre');
 		$this->form_validation->set_message('max_length', '%s debe ser de a lo sumo %s números');
 		$this->form_validation->set_message('numeric', '%s debe ser un valor numérico');
+		$this->form_validation->set_message('caracteres_permitidos', 'El %s sólo debe contener letras.');
 	}
 
 	//Para el usuario administrador
@@ -231,7 +232,7 @@ class Usuarios extends CI_Controller {
 		if($this->input->post('dni')){
 			$registro = $this->input->post();
 
-			$this->form_validation->set_rules('nombre', 'Nombre', 'required|max_length[45]');
+			$this->form_validation->set_rules('nombre', 'Nombre', 'required|max_length[45]|callback_caracteres_permitidos');
 			$this->form_validation->set_rules('email', 'Email', 'required|valid_email|max_length[64]');
 			$this->form_validation->set_rules('dni', 'DNI', 'required|callback_no_repetir_usuario_update');
 			if($this->form_validation->run() == FALSE){
@@ -248,6 +249,11 @@ class Usuarios extends CI_Controller {
 		}else{
 			show_404();
 		}
+	}
+
+	public function caracteres_permitidos($campo){
+		$expreg = '/^[a-zA-Z áéíóúAÉÍÓÚÑñ]+$/';
+		return $this->usuariolib->caracteres_permitidos($campo, $expreg);
 	}
 
 	public function subir_foto(){
@@ -287,16 +293,18 @@ class Usuarios extends CI_Controller {
 			$data['contenido'] = 'usuarios/anular';
 			$data['registro'] = $this->Model_Usuarios->find($dni);
 			$this->load->model('Model_Tickets');
-			$data['tickets_proximos'] = $this->Model_Tickets->get_tickets_proximos($dni);
+			$data['tickets'] = $this->Model_Tickets->get_tickets_anulables($dni);
 			$this->load->view('template_usuario', $data);
 		}
 	}
 	
-	public function anulando_ticket($id_ticket){
+	public function anulando($id_ticket){
 		if($this->session->userdata('dni_usuario') != null){
 			//Realizar anulación
-			$dni = $this->session->userdata('dni_usuario');
-			$this->usuariolib->realizar_anulacion($id_ticket,$dni);
+			if(is_numeric($id_ticket) && $id_ticket != null){
+				$dni = $this->session->userdata('dni_usuario');
+				$this->usuariolib->anular($dni, $id_ticket);
+			}
 			redirect('usuarios/anular');
 		}
 	}

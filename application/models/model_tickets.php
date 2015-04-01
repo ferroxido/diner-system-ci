@@ -68,6 +68,19 @@ class Model_Tickets extends CI_Model {
         return $this->db->get('tickets')->row();
     }
 
+    function find_ticket($dni, $id_ticket){
+        $query = $this->db->query("SELECT tickets.id AS id_ticket
+                FROM tickets
+                INNER JOIN dias ON tickets.id_dia = dias.id
+                INNER JOIN estados_tickets on tickets.estado = estados_tickets.id
+                inner join 
+                    (SELECT DISTINCT ON(id_ticket) id_ticket, id_log_usuario FROM tickets_log_usuarios) AS tickets_log_usuarios
+                ON tickets_log_usuarios.id_ticket = tickets.id
+                INNER JOIN log_usuarios ON tickets_log_usuarios.id_log_usuario = log_usuarios.id
+                WHERE tickets.estado = 2 AND dni = '$dni' AND tickets.id = '$id_ticket'");
+        return $query;
+    }
+
     function get_ticket_detalle($id_ticket){
         $this->db->select('id_ticket, log_usuarios.id as id_log,log_usuarios.fecha as fecha, acciones.nombre as accion, log_usuarios.lugar as lugar');
         $this->db->from('tickets_log_usuarios');
@@ -108,8 +121,17 @@ class Model_Tickets extends CI_Model {
     }
 
     //Obtener los 5 tickets próximos al día de hoy si los tiene.
-    function get_tickets_proximos($dni){
-        $query = $this->db->query("SELECT tabla.*,dias.fecha AS fecha_ticket FROM (SELECT * FROM tickets WHERE estado = 1) tabla LEFT JOIN dias ON tabla.id_dia = dias.id LEFT JOIN tickets_log_usuarios ON tabla.id = tickets_log_usuarios.id_ticket LEFT JOIN log_usuarios ON log_usuarios.id = tickets_log_usuarios.id_log_usuario WHERE dni = '$dni' AND dias.fecha >= current_date ORDER BY dias.fecha LIMIT 5");
+    function get_tickets_anulables($dni){
+        $query = $this->db->query("SELECT tickets.id AS id_ticket, dias.fecha AS fecha, tickets.importe AS importe, estados_tickets.nombre AS estado
+                FROM tickets
+                INNER JOIN dias ON tickets.id_dia = dias.id
+                INNER JOIN estados_tickets on tickets.estado = estados_tickets.id
+                inner join 
+                    (SELECT DISTINCT ON(id_ticket) id_ticket, id_log_usuario FROM tickets_log_usuarios) AS tickets_log_usuarios
+                ON tickets_log_usuarios.id_ticket = tickets.id
+                INNER JOIN log_usuarios ON tickets_log_usuarios.id_log_usuario = log_usuarios.id
+                WHERE tickets.estado = 2 AND dni = '$dni'
+                ORDER BY tickets.id ASC");
         return $query->result();
     }
 

@@ -15,8 +15,8 @@
 			<h5>Tel. 54-0387-425521</h5>
 			<h5>Correo Electrónico: seccosu@unsa.edu.ar</h5>
 		</div>
-		<hr>
 	</header>
+	<hr>
 
 	<h3>Informe de cantidad  de tickets vendidos por Facultad y categoría de comensal</h3>
 	<h4><?= ($desde === $hasta)? "En el día $desde":"Desde: $desde hasta: $hasta" ?></h4>

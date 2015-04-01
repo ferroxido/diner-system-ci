@@ -15,15 +15,15 @@ header h3, header h5{
 }
 
 div#info-encabezado{
-	width: 35%;
+	width: 40%;
 	text-align: center;
 	display: inline-block;
 	
 }
 
 div#img-unsa-logo{
-	width: 60%;
-	height: 60px;
+	width: 55%;
+	height: 70px;
 	text-align: left;
 	display: inline-block;
 }

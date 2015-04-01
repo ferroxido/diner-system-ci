@@ -27,7 +27,7 @@
 				<td><?= $registro->id_log; ?></td>
 				<td><?= date("d/m/Y H:i:s",strtotime($registro->fecha)); ?></td>
 				<td><?= $registro->accion; ?></td>
-				<td><?= ($registro->lugar == 1)? 'Web':'Máquina'; ?></td>
+				<td><?= ($registro->lugar == 0)? 'Web':'Máquina '.$registro->lugar; ?></td>
 			</tr>
 			<?php endforeach; ?>
 		</tbody>

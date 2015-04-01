@@ -35,7 +35,7 @@ $(document).ready(function() {
 							$.each(obj, function(i,val){
 								//Formateamos la fecha
 								var string_fecha = val.fecha;
-								var fecha = string_fecha.substring(8,10) + '/' + string_fecha.substring(5,7) + '/' + string_fecha.substring(0,4);
+								var fecha = string_fecha.substring(8,10) + '-' + string_fecha.substring(5,7) + '-' + string_fecha.substring(0,4);
 
 								//Fecha
 								$('#encabezado_modal').append('Información del ' + fecha);
@@ -79,19 +79,21 @@ $(document).ready(function() {
 								}
 								contenidohtml = contenidohtml + '</div></div></div>';
 
-								//Boton actualizar
-								contenidohtml = contenidohtml + '<div class="form-group"><div class="col-md-offset-9"><input type="submit" class="btn btn-success" value="Actualizar"></div></div>';
+								//Boton actualizar y boton hidden
+								ruta = "'" + base_url + "calendario/anular/" + fecha +"'";
+								contenidohtml = contenidohtml + '<div class="form-group"><div class="col-md-offset-7"><a href='+ruta+' id="boton_anular" class="btn btn-primary" style="visibility:hidden;">Anular</a> <input type="submit" class="btn btn-success" value="Actualizar"></div></div>';
 
 								items.push(contenidohtml);
 							});	
 							$('#form_modal').append.apply($('#form_modal'), items);
 						}catch(e) {
-							alert('Error');
+							console.log('Error try/catch');
 						}
 					}else{
 						$('#form_modal').html($('<h3/>').text(" No hay información disponible"));
 					}
 					$('#myModal').modal('show');
+					//alert($('#myModal').hasClass('in'));
 				},
 				error: function(){
 					console.log('error en la respuesta');
@@ -152,4 +154,30 @@ $(document).ready(function() {
 			console.log('error en la respuesta');
 		}
 	});	
+});
+
+var lastKeyUpAt = 0;
+
+$(document).on('keydown', function(event) {
+
+	codeX = 88;
+	if(event.which == codeX){
+	    // Set key down time to the current time
+	    var keyDownAt = new Date();
+
+	    // Use a timeout with 1000ms (this would be your X variable)
+	    setTimeout(function() {
+	        // Compare key down time with key up time
+	        if (+keyDownAt > +lastKeyUpAt){
+	            // Key has been held down for x seconds
+	        	$('#boton_anular').css({"visibility":"visible"});
+	        }
+	    }, 3000);
+		
+	}
+});
+
+$(document).on('keyup', function() {
+    // Set lastKeyUpAt to hold the time the last key up event was fired
+    lastKeyUpAt = new Date();
 });

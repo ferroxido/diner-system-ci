@@ -234,20 +234,27 @@ class UsuarioLib {
 	/*
 	 * Realiza la anulación del ticket, segun el id pasado como parámetro.
 	 */
-	public function realizar_anulacion($id_ticket,$dni){
-		//Incrementar Saldo
-		$registro = $this->CI->Model_Usuarios->find($dni);
-		$data['dni'] = $dni;
-		$data['saldo'] = $registro->saldo + $registro->importe;
-		$this->CI->Model_Usuarios->update($data);
-		//Cambiar estado del ticket
-		$data = array();//Reinicio la variable data
-		$data['id'] = $id_ticket;
-		$data['estado'] = 0;
-		$this->CI->Model_Tickets->update($data);
-		//Registrar el nuevo log.
-		$fecha_log = date('Y/m/d H:i:s');
-		$this->cargar_log_usuario($dni, $fecha_log,'anular');
+	public function anular($dni, $id_ticket){
+		$query = $this->CI->Model_Tickets->find_ticket($dni, $id_ticket);
+		if ($query->num_rows() == 1){
+			//Incrementar Saldo
+			$registro = $this->CI->Model_Usuarios->find($dni);
+			$data['dni'] = $dni;
+			$data['saldo'] = $registro->saldo + $registro->importe;
+			$this->CI->Model_Usuarios->update($data);
+			//Cambiar estado del ticket
+			$data = array();//Reinicio la variable data
+			$data['id'] = $id_ticket;
+			$estadoAnulado = 0;
+			$data['estado'] = $estadoAnulado;
+			$this->CI->Model_Tickets->update($data);
+			//Registrar el nuevo log.
+			$fecha_log = date('Y/m/d H:i:s');
+			$this->cargar_log_usuario($dni, $fecha_log, 'anular');
+			return true;
+		}else{
+			return false;
+		}
 	}
 
 	/*
@@ -348,12 +355,33 @@ class UsuarioLib {
 		}
 	}
 
+	/*
+	 * Buscar una expresion regular no negada.
+	 */
 	public function validar_caracteres_password($clave_nueva, $clave_repetida){
 		$expreg = '/[^A-Za-z0-9#$%&\?\.]/';
 		if (!preg_match($expreg, $clave_nueva) && !preg_match($expreg, $clave_repetida)){
 			return true;
 		}else{
 			return false;
+		}
+	}
+
+	public function caracteres_permitidos($cadena, $expreg){
+		if(preg_match($expreg,$cadena)){
+		    return true; 
+		}else{
+		    return false;
+		}
+	}
+
+	public function validar_dni($dni){
+		$this->CI->db->where('dni', $dni);
+		$query = $this->CI->db->get('usuarios');
+		if($query->num_rows() == 1){
+			return TRUE;
+		}else{
+			return FALSE;
 		}
 	}
 

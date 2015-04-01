@@ -194,4 +194,19 @@ class Calendario extends CI_Controller{
 		}
 	}
 
+	/*
+	 * Anula todos los tickets del día seleccionado, Mucho cuidado con esta función!!
+	 */
+	public function anular($fecha){
+		if($this->session->userdata('dni_usuario') != null){
+			$data['contenido'] = 'calendario/anular';
+			$this->load->view('template-admin',$data);
+		}		
+	}
+
+	public function anulando(){
+		
+	}
+	
+
 }
