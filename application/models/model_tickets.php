@@ -69,7 +69,7 @@ class Model_Tickets extends CI_Model {
     }
 
     function find_ticket($dni, $id_ticket){
-        $query = $this->db->query("SELECT tickets.id AS id_ticket
+        $query = $this->db->query("SELECT tickets.id AS id_ticket, dias.fecha
                 FROM tickets
                 INNER JOIN dias ON tickets.id_dia = dias.id
                 INNER JOIN estados_tickets on tickets.estado = estados_tickets.id
@@ -144,7 +144,7 @@ class Model_Tickets extends CI_Model {
             COALESCE(SUM(tabla.importe),0) AS total_pesos FROM facultades
             LEFT JOIN (SELECT tickets.id AS id_tickets,id_facultad, id_categoria,tickets.importe AS importe
                 FROM tickets INNER JOIN dias ON tickets.id_dia = dias.id
-                INNER JOIN  tickets_log_usuarios ON tickets.id = tickets_log_usuarios.id_ticket
+                INNER JOIN  (SELECT distinct on(id_ticket) id_ticket, id_log_usuario FROM tickets_log_usuarios) AS tickets_log_usuarios ON tickets.id = tickets_log_usuarios.id_ticket
                 INNER JOIN log_usuarios ON log_usuarios.id = tickets_log_usuarios.id_log_usuario
                 INNER JOIN usuarios ON log_usuarios.dni = usuarios.dni
                 WHERE tickets.estado <> 0 AND dias.fecha BETWEEN '$desde' AND '$hasta') AS tabla ON tabla.id_facultad = facultades.id GROUP BY facultades.nombre");

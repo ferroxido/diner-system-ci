@@ -46,7 +46,7 @@ class Model_Usuarios extends CI_Model {
     }
 
     function find($dni){
-        $this->db->select('usuarios.nombre, usuarios.dni, usuarios.saldo, usuarios.lu, usuarios.ruta_foto, usuarios.email, usuarios.id_provincia, perfiles.nombre as perfil_nombre, provincias.nombre as provincia_nombre, facultades.nombre as facultad_nombre, categorias.nombre as categoria_nombre, categorias.importe as importe');
+        $this->db->select('usuarios.nombre, usuarios.dni, usuarios.saldo, usuarios.lu, usuarios.ruta_foto, usuarios.email, usuarios.id_provincia, usuarios.id_facultad, usuarios.id_perfil, usuarios.id_categoria, perfiles.nombre as perfil_nombre, usuarios.estado, provincias.nombre as provincia_nombre, facultades.nombre as facultad_nombre, categorias.nombre as categoria_nombre, categorias.importe as importe');
         $this->db->from('usuarios');
         $this->db->join('perfiles', 'usuarios.id_perfil = perfiles.id', 'left');
         $this->db->join('provincias', 'usuarios.id_provincia = provincias.id', 'left');

@@ -17,10 +17,10 @@
 					<thead>
 						<tr>
 							<th> Facultades </th>
-							<th> Total de Usuarios </th>
 							<th> Becados </th>
 							<th> Regulares </th>
 							<th> Gratuitos </th>
+							<th> Total de Usuarios </th>
 						</tr>
 					</thead>
 
@@ -28,18 +28,18 @@
 						<?php foreach ($registros as $registro): ?>
 						<tr>
 							<td><?= $registro->facultad; ?></td>
-							<td><?= $registro->total_usuarios; ?></td>
 							<td><?= $registro->becados; ?></td>
 							<td><?= $registro->regulares; ?></td>
 							<td><?= $registro->gratuitos; ?></td>
+							<td><?= $registro->total_usuarios; ?></td>
 						</tr>
 						<?php endforeach; ?>
 						<tr class="info">
 							<td>Totales: </td>
-							<td><?= $totales->total_usuarios; ?></td>
 							<td><?= $totales->becados; ?></td>
 							<td><?= $totales->regulares; ?></td>
 							<td><?= $totales->gratuitos; ?></td>
+							<td><?= $totales->total_usuarios; ?></td>
 						</tr>
 					</tbody>
 				</table>
@@ -115,10 +115,10 @@
 					<thead>
 						<tr>
 							<th> Facultades </th>
-							<th> Tickets Consumidos </th>
 							<th> Becados </th>
 							<th> Regulares </th>
 							<th> Gratuitos </th>
+							<th> Total Tickets </th>
 							<th> Total en $ </th>
 						</tr>
 					</thead>
@@ -126,19 +126,19 @@
 						<?php foreach ($registros2 as $registro2): ?>
 						<tr>
 							<td><?= $registro2->facultad; ?></td>
-							<td><?= $registro2->total_tickets; ?></td>
 							<td><?= $registro2->becados; ?></td>
 							<td><?= $registro2->regulares; ?></td>
 							<td><?= $registro2->gratuitos; ?></td>
+							<td><?= $registro2->total_tickets; ?></td>
 							<td><?= $registro2->total_pesos; ?></td>
 						</tr>
 						<?php endforeach; ?>
 						<tr class="info">
 							<td>Totales: </td>
-							<td><?= $totales2->total_tickets; ?></td>
 							<td><?= $totales2->becados; ?></td>
 							<td><?= $totales2->regulares; ?></td>
 							<td><?= $totales2->gratuitos; ?></td>
+							<td><?= $totales2->total_tickets; ?></td>
 							<td><?= $totales2->total_importe; ?></td>
 						</tr>
 					</tbody>
@@ -213,22 +213,22 @@
 					<thead>
 						<tr>
 							<th> Facultades </th>
-							<th> Total de Tickets </th>
 							<th> Anulados </th>
 							<th> Activos </th>
 							<th> Impresos </th>
 							<th> Consumidos </th>
+							<th> Total de Tickets </th>
 						</tr>
 					</thead>
 					<tbody id="resultado_tickets_tabla2">
 						<?php foreach ($registros3 as $registro3): ?>
 						<tr>
 							<td><?= $registro3->facultad; ?></td>
-							<td><?= $registro3->total_tickets; ?></td>
 							<td><?= $registro3->anulados; ?></td>
 							<td><?= $registro3->activos; ?></td>
 							<td><?= $registro3->impresos; ?></td>
 							<td><?= $registro3->consumidos; ?></td>
+							<td><?= $registro3->total_tickets; ?></td>
 						</tr>
 						<?php endforeach; ?>
 						<tr class="info">

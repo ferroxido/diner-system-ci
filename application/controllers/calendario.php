@@ -11,10 +11,12 @@ class Calendario extends CI_Controller{
       	$this->load->model('Model_Calendario');
       	$this->load->model('Model_Feriados');
       	$this->load->library('calendarioLib');
+      	$this->load->library('usuarioLib');
       	$this->form_validation->set_message('required', 'Debe ingresar un valor para %s');
       	$this->form_validation->set_message('desde_menor_hasta', 'La fecha %s es mayor que %s, eso no es posible');
       	$this->form_validation->set_message('validar_calendario_unico', 'Existe otro calendario que se solapa con este');
       	$this->form_validation->set_message('validar_feriado', 'El feriado debe estar entre las fechas indicadas');
+      	$this->form_validation->set_message('validar_anulacion', 'Clave incorrecta!');
 	}
 
 	public function index(){
@@ -200,12 +202,44 @@ class Calendario extends CI_Controller{
 	public function anular($fecha){
 		if($this->session->userdata('dni_usuario') != null){
 			$data['contenido'] = 'calendario/anular';
+			$data['fecha'] = $fecha;
 			$this->load->view('template-admin',$data);
 		}		
 	}
 
+	public function validar_anulacion(){
+		$clave = $this->input->post('clave');
+		$fecha = $this->input->post('fecha');
+		return $this->calendariolib->validar_anulacion($clave, $fecha);
+	}
+
 	public function anulando(){
-		
+		if($this->input->post()){
+			$clave = $this->input->post('clave');
+			$fecha = $this->input->post('fecha');
+			$dni = $this->session->userdata('dni_usuario');
+
+			$this->form_validation->set_rules('clave', 'Clave', 'required|callback_validar_anulacion');
+
+			if($this->form_validation->run() == FALSE){
+
+				$this->anular($fecha);
+
+			}else{
+				$fecha = $this->calendariolib->transformar_fecha($fecha, '-');
+
+				//Anulo los tickets
+				$this->calendariolib->anular($fecha);
+				
+				//Registro el log
+				$fechaLog = date('Y/m/d H:i:s');
+				$this->usuariolib->cargar_log_usuario($dni, $fechaLog, 'super anular');
+				
+				redirect('calendario/index');
+			}
+		}else{
+			show_404();
+		}		
 	}
 	
 

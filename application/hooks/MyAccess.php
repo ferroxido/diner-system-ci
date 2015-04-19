@@ -5,9 +5,10 @@ if ( ! function_exists('autentificar'))
 	function autentificar()
 	{
 		$CI = & get_instance();
-
 		$controlador = $CI->uri->segment(1);
+		$controlador = ($controlador == '')? 'home':$controlador;
 		$accion = $CI->uri->segment(2);
+		$accion = ($accion == '')? 'index':$accion;
 		$url = $controlador.'/'.$accion;
 
 		$libres = array(
@@ -64,7 +65,9 @@ function autorizar(){
 	//Con el controlador buscar el tipo de operacion
 	$CI->load->library('TiposoperacionesLib');
 	$controlador = $CI->uri->segment(1);
+	$controlador = ($controlador == '')? 'home':$controlador;
 	$accion = $CI->uri->segment(2);
+	$accion = ($accion == '')? 'index':$accion;
 	$id_tipo_operacion = $CI->tiposoperacioneslib->findByController($controlador, $accion)->id;
 
 	if(!$id_tipo_operacion) {

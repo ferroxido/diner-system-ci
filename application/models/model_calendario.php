@@ -106,6 +106,22 @@ class Model_Calendario extends CI_Model{
         $query = $this->db->query("SELECT * ,extract(day FROM dias.fecha) AS dia FROM dias WHERE id_calendario = '$id' AND estado = 0");
         return $query->result();
     }
+
+    public function get_tickets($fecha){
+        $estadoAnulado = 0;
+
+        $sql = "SELECT tickets.*, dias.fecha, usuarios.dni AS dni, usuarios.saldo
+                FROM tickets
+                INNER JOIN dias ON tickets.id_dia = dias.id
+                INNER JOIN
+                    (SELECT DISTINCT ON(id_ticket) id_ticket, id_log_usuario FROM tickets_log_usuarios) AS tickets_log_usuarios 
+                ON tickets_log_usuarios.id_ticket = tickets.id
+                INNER JOIN log_usuarios ON tickets_log_usuarios.id_log_usuario = log_usuarios.id
+                INNER JOIN usuarios ON log_usuarios.dni = usuarios.dni
+                WHERE dias.fecha = ? AND tickets.estado <> ?";
+        $query = $this->db->query($sql, array($fecha, $estadoAnulado));
+        return $query;
+    }
 }
 
 

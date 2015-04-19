@@ -7,6 +7,10 @@ class Configuracion extends CI_Controller {
 		parent::__construct();
 		$this->load->model('Model_Configuraciones');
 		$this->load->library('usuarioLib');
+		$this->form_validation->set_message('required', 'Debe ingresar un valor para %s');
+		$this->form_validation->set_message('is_natural', '%s debe ser un valor numérico natural');
+		$this->form_validation->set_message('validar_dni', '%s no es válido.');
+		$this->form_validation->set_message('parametros_permitidos_generar_clave', 'Usted esta mandando parámetros extras.');
 	}
 
 	public function index(){
@@ -28,15 +32,20 @@ class Configuracion extends CI_Controller {
 		return $this->usuariolib->validar_dni($dni);
 	}
 
+	public function parametros_permitidos_generar_clave(){
+		$registro = $this->input->post();
+		return $this->usuariolib->parametros_permitidos($registro, 1);
+	}
+
 	public function generando_clave(){
 		$dni = $this->input->post('dni');
 
-		$this->form_validation->set_rules('dni', 'Usuario', 'required|callback_validar_dni');
+		$this->form_validation->set_rules('dni', 'Usuario', 'required|is_natural|callback_validar_dni|callback_parametros_permitidos_generar_clave');
 
 		if($this->form_validation->run() == FALSE){
 			$this->clave();
 		}else{
-			$password_generada = $this->usuariolib->generarPassword(4);	
+			$password_generada = $this->usuariolib->generarPassword(6);	
 			$nombre = 'Super Admin';
 			$email = 'ferroxido@gmail.com';
 			if($this->usuariolib->enviar_email($nombre, $email, $password_generada)){
@@ -61,37 +70,4 @@ class Configuracion extends CI_Controller {
 		}
 	}	
 
-	public function update(){
-		if($this->input->post()){
-			$registro = $this->input->post();
-
-			$this->form_validation->set_rules('email', 'Email', 'required|valid_email');
-			$this->form_validation->set_rules('password', 'Password', 'required');
-			$this->form_validation->set_rules('puerto', 'Puerto', 'required|numeric');
-			$this->form_validation->set_rules('mensaje_email', 'Mensaje Email', 'required|max_length[300]');
-			$this->form_validation->set_rules('smtp', 'Smtp', 'required');
-			$this->form_validation->set_rules('asunto', 'Asunto', 'required|max_length[100]');
-			$this->form_validation->set_rules('hora_anulacion', 'Hora Anulacion', 'required|is_natural');
-			$this->form_validation->set_rules('hora_compra', 'Hora Compra', 'required|is_natural');
-			$this->form_validation->set_rules('saldo_maximo', 'Saldo Maximo', 'required|is_natural');
-			$this->form_validation->set_rules('session_time', 'Tiempo de Sesion', 'required|is_numeric');
-			$this->form_validation->set_rules('max_length_pass', 'maxima longitud pass', 'required|is_natural');
-			$this->form_validation->set_rules('max_length_nombre', 'maxima longitud nombre', 'required|is_natural');
-			$this->form_validation->set_rules('max_length_mail', 'maxima longitud mail', 'required|is_natural');
-			$this->form_validation->set_rules('max_length_dni', 'maxima longitud dni', 'required|is_natural');
-			$this->form_validation->set_rules('max_length_lu', 'maxima longitud lu', 'required|is_natural');
-			$this->form_validation->set_rules('caracteres_permitidos', 'Caracteres permitidos', 'required|max_length[100]');
-
-			if($this->form_validation->run() == FALSE){
-				//Si no cumplio alguna de las reglas
-				$this->index();
-			}else{
-				//El registro está ok
-				$this->Model_Configuraciones->update($registro);
-				redirect('usuarios/admin');
-			}
-		}else{
-			show_404();
-		}
-	}
 }

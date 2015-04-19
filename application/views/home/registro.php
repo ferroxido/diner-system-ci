@@ -57,18 +57,6 @@
 		</div>
 	</div>
 
-	<div class="row">
-		<div class="form-group">
-			<?= form_hidden('id_perfil', $perfil->id); ?>
-		</div>
-	</div>
-
-	<div class="row">
-		<div class="form-group">
-			<?= form_hidden('id_categoria', $categoria->id); ?>
-		</div>
-	</div>
-
 	<hr>
 
 	<div class="row">

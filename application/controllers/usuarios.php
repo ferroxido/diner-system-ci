@@ -16,7 +16,9 @@ class Usuarios extends CI_Controller {
 		$this->form_validation->set_message('no_repetir_usuario_insertar', 'Existe otro registro con el mismo nombre');
 		$this->form_validation->set_message('max_length', '%s debe ser de a lo sumo %s números');
 		$this->form_validation->set_message('numeric', '%s debe ser un valor numérico');
+		$this->form_validation->set_message('is_natural', '%s debe ser un valor numérico natural');
 		$this->form_validation->set_message('caracteres_permitidos', 'El %s sólo debe contener letras.');
+		$this->form_validation->set_message('parametros_permitidos_editar_perfil', 'Usted esta mandando parámetros extras.');
 	}
 
 	//Para el usuario administrador
@@ -79,10 +81,10 @@ class Usuarios extends CI_Controller {
 		if($this->input->post('dni')){
 			$registro = $this->input->post();
 
-			$this->form_validation->set_rules('nombre', 'Nombre', 'required');
-			$this->form_validation->set_rules('email', 'Email', 'required|valid_email');
-			$this->form_validation->set_rules('dni', 'Usuario', 'required|callback_no_repetir_usuario_update');
-			$this->form_validation->set_rules('lu', 'Libreta Universitaria', 'required|max_length[7]|numeric');
+			$this->form_validation->set_rules('nombre', 'Nombre', 'required|max_length[45]|callback_caracteres_permitidos');
+			$this->form_validation->set_rules('email', 'Email', 'required|max_length[64]|valid_email');
+			$this->form_validation->set_rules('dni', 'Usuario', 'required|is_natural|callback_no_repetir_usuario_update');
+			$this->form_validation->set_rules('lu', 'Libreta Universitaria', 'required|max_length[7]|is_natural');
 			if($this->form_validation->run() == FALSE){
 				//Si no cumplio alguna de las reglas
 				$this->edit($registro['dni']);
@@ -227,14 +229,21 @@ class Usuarios extends CI_Controller {
 		}
 	}
 
+	public function parametros_permitidos_editar_perfil(){
+		$registro = $this->input->post();
+		return $this->usuariolib->parametros_permitidos($registro, 4);
+	}
+
 	//Para el usuario admin y alumno
 	public function editando_perfil(){
 		if($this->input->post('dni')){
 			$registro = $this->input->post();
 
-			$this->form_validation->set_rules('nombre', 'Nombre', 'required|max_length[45]|callback_caracteres_permitidos');
+			$this->form_validation->set_rules('nombre', 'Nombre', 'required|max_length[45]|callback_caracteres_permitidos|callback_parametros_permitidos_editar_perfil');
 			$this->form_validation->set_rules('email', 'Email', 'required|valid_email|max_length[64]');
-			$this->form_validation->set_rules('dni', 'DNI', 'required|callback_no_repetir_usuario_update');
+			$this->form_validation->set_rules('dni', 'DNI', 'required|is_natural|callback_no_repetir_usuario_update');
+			$this->form_validation->set_rules('id_provincia', 'Provincia', 'required|is_natural');
+
 			if($this->form_validation->run() == FALSE){
 				//Si no cumplio alguna de las reglas
 				$this->editar_perfil();
@@ -292,7 +301,6 @@ class Usuarios extends CI_Controller {
 			$dni = $this->session->userdata('dni_usuario');
 			$data['contenido'] = 'usuarios/anular';
 			$data['registro'] = $this->Model_Usuarios->find($dni);
-			$this->load->model('Model_Tickets');
 			$data['tickets'] = $this->Model_Tickets->get_tickets_anulables($dni);
 			$this->load->view('template_usuario', $data);
 		}
@@ -301,9 +309,10 @@ class Usuarios extends CI_Controller {
 	public function anulando($id_ticket){
 		if($this->session->userdata('dni_usuario') != null){
 			//Realizar anulación
+			$data = array();
+			$dni = $this->session->userdata('dni_usuario');
 			if(is_numeric($id_ticket) && $id_ticket != null){
-				$dni = $this->session->userdata('dni_usuario');
-				$this->usuariolib->anular($dni, $id_ticket);
+				$respuesta = $this->usuariolib->anular($dni, $id_ticket);
 			}
 			redirect('usuarios/anular');
 		}

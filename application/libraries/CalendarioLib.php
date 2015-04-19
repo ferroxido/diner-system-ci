@@ -5,6 +5,9 @@ class CalendarioLib {
 	function __construct(){
 		$this->CI = & get_instance();//Obtener la instancia del objeto por referencia.
 		$this->CI->load->model('Model_Calendario');//Cargamos el modelo.
+		$this->CI->load->model('Model_Tickets');//Cargamos el modelo.
+		$this->CI->load->model('Model_Usuarios');//Cargamos el modelo.
+		$this->CI->load->model('Model_Dias');//Cargamos el modelo.
 	}
 
 	public function desde_menor_hasta($desde, $hasta){
@@ -212,7 +215,82 @@ class CalendarioLib {
 		}else{
 			return false;
 		}
-
 	}
 
+	/*
+	 * Transforma la fecha de dd/mm/yyyy o dd-mm-yyyy a yyyy-mm-dd
+	 */
+	public function transformar_fecha($fecha, $separador){
+		$tokensFecha = array_reverse(explode($separador, $fecha));
+		$nuevaFecha = implode('-', $tokensFecha);
+		return $nuevaFecha;
+	}
+
+	public function validar_clave($clave){
+		$this->CI->db->where('id', 0);//La única fila de configuraciones.
+		$query = $this->CI->db->get('configuraciones');
+		$claveDB = $query->row('clave');
+		$claveDB = substr($claveDB, 4, 32);
+
+		if(md5($clave) == $claveDB){
+			return true;				
+		}else{
+			return false;
+		}
+	}
+
+	/*
+	 * Valida una fecha dd/mm/yyyy
+	 */
+	public function validar_fecha($fecha, $separador){
+		$tokensFecha = explode($separador, $fecha);
+		$numTokens = 3;
+		if (sizeof($tokensFecha) == $numTokens){
+			return checkdate((int) $tokensFecha[1] , (int) $tokensFecha[0] , (int) $tokensFecha[2]);
+		}else{
+			return false;
+		}
+	}
+
+	public function validar_anulacion($clave, $fecha){
+		if ($this->validar_clave($clave) && $this->validar_fecha($fecha, '-')) {
+			return true;
+		}else {
+			return false;
+		}
+	}
+
+	public function anular($fecha){
+		//Comprobar que efectivamente hay tickets para anular
+		$estadoAnulado = 0;//Estado para el ticket
+		$estadoFeriado = 0;//Estado para el dia
+
+		$query = $this->CI->Model_Calendario->get_tickets($fecha);
+		if ($query->num_rows() > 0) {
+			$tickets = $query->result();
+			foreach ($tickets as $ticket) {
+				//Anular los tickets
+				$registro = array();
+				$registro['id'] = $ticket->id;
+				$registro['estado'] = $estadoAnulado;
+				$this->CI->Model_Tickets->update($registro);
+
+				//Devolver Saldo.
+				$registro = array();
+				$registro['dni'] = $ticket->dni;
+				$registro['saldo'] = $ticket->saldo + $ticket->importe;
+				$this->CI->Model_Usuarios->update($registro);
+			}
+			//Marcar el día como feriado
+			$registro = array();
+			$registro['fecha'] = $fecha;
+			$registro['estado'] = $estadoFeriado;
+			$registro['tickets_totales'] = 0;
+			$this->CI->Model_Dias->update($registro);
+
+			return true;
+		}else{
+			return false;
+		}
+	}
 }

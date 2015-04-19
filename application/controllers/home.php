@@ -10,6 +10,8 @@ class Home extends CI_Controller {
 	//Constructor
 	function __construct(){
 		parent::__construct();
+		//error_reporting(0);
+
 		$this->load->library('usuarioLib');
 		$this->load->model('Model_Usuarios');
 		$this->form_validation->set_message('validar_tabla', 'Usted no es alumno regular de la Universidad, diríjase a la Administración del Comedor');
@@ -19,11 +21,17 @@ class Home extends CI_Controller {
 		$this->form_validation->set_message('cambiook', 'No se pudo realizar el cambio de clave');
 		$this->form_validation->set_message('max_length', '%s debe tener como máximo %s números');
 		$this->form_validation->set_message('numeric', '%s debe ser un valor numérico');
-		$this->form_validation->set_message('no_repetir_usuario', 'Existe otro registro con el mismo nombre');
+		$this->form_validation->set_message('is_natural', '%s debe ser un valor numérico natural.');
+		$this->form_validation->set_message('no_repetir_usuario', 'Existe otro registro con tu mismo dni');
 		$this->form_validation->set_message('existe_usuario', 'Usted no esta registrado, dirijase a la Administración del Comedor.');
 		$this->form_validation->set_message('matches', '%s no coincide con %s');
 		$this->form_validation->set_message('is_bloqueado', 'Su cuenta esta bloqueada, dirijase a la Administración del Comedor.');
 		$this->form_validation->set_message('validar_caracteres', 'La contraseña que ingreso contiene caracteres no permitidos');
+		$this->form_validation->set_message('caracteres_permitidos', 'El %s sólo debe contener letras.');
+		$this->form_validation->set_message('parametros_permitidos_registro', 'Usted esta mandando parámetros extras.');
+		$this->form_validation->set_message('parametros_permitidos_ingreso', 'Usted esta mandando parámetros extras.');
+		$this->form_validation->set_message('parametros_permitidos_recordar', 'Usted esta mandando parámetros extras.');
+		$this->form_validation->set_message('parametros_permitidos_cambiar', 'Usted esta mandando parámetros extras.');
 	}
 
 	public function index(){
@@ -51,9 +59,14 @@ class Home extends CI_Controller {
 		$this->load->view('template-index', $data);//Cargamos la vista y el template
 	}
 
+	public function parametros_permitidos_ingreso(){
+		$registro = $this->input->post();
+		return $this->usuariolib->parametros_permitidos($registro, 2);
+	}
+
 	public function ingresar(){
-		$this->form_validation->set_rules('dni', 'Usuario', 'required|callback_loginok');
-		$this->form_validation->set_rules('password', 'Password', 'required|callback_is_bloqueado');
+		$this->form_validation->set_rules('dni', 'Usuario', 'required|callback_loginok|xss_clean|callback_parametros_permitidos_ingreso');
+		$this->form_validation->set_rules('password', 'Password', 'required|xss_clean|callback_is_bloqueado');
 		
 		if($this->form_validation->run() == FALSE){
 			$this->ingreso();//No uso redirect para no perder el valor de los campos ingresados
@@ -88,6 +101,11 @@ class Home extends CI_Controller {
 	}
 
 	public function salir(){
+		if ($this->session->userdata('dni_usuario') != null){
+			$fechaLog = date('Y/m/d H:i:s');
+			$dni = $this->session->userdata('dni_usuario');
+			$this->usuariolib->cargar_log_usuario($dni, $fechaLog, 'salir');
+		}
 		$this->session->sess_destroy();
 		redirect('home/index');
 	}
@@ -103,10 +121,15 @@ class Home extends CI_Controller {
 		return $this->usuariolib->validar_caracteres_password($clave_nueva, $clave_repetida);
 	}
 
+	public function parametros_permitidos_cambiar(){
+		$registro = $this->input->post();
+		return $this->usuariolib->parametros_permitidos($registro, 3);
+	}
+
 	public function cambiando_clave(){
-		$this->form_validation->set_rules('clave_nueva', 'Clave Nueva', 'required|matches[clave_repetida]');
-		$this->form_validation->set_rules('clave_actual', 'Clave Actual', 'required|callback_cambiook');
-		$this->form_validation->set_rules('clave_repetida', 'Repita Clave', 'required|callback_validar_caracteres');
+		$this->form_validation->set_rules('clave_nueva', 'Clave Nueva', 'required|xss_clean|matches[clave_repetida]|callback_parametros_permitidos_cambiar');
+		$this->form_validation->set_rules('clave_actual', 'Clave Actual', 'required|xss_clean|callback_cambiook');
+		$this->form_validation->set_rules('clave_repetida', 'Repita Clave', 'required|xss_clean|callback_validar_caracteres');
 		
 		if($this->form_validation->run() == FALSE){
 			//No se pudo realizar el cambio
@@ -140,14 +163,19 @@ class Home extends CI_Controller {
 		return $this->usuariolib->existe_usuario($registro);
 	}
 
+	public function parametros_permitidos_recordar(){
+		$registro = $this->input->post();
+		return $this->usuariolib->parametros_permitidos($registro, 3);
+	}
+
 	public function recordando_clave(){
 		$dni = $this->input->post('dni');
 		$email = $this->input->post('email');
 		$lu = $this->input->post('lu');
 
-		$this->form_validation->set_rules('dni', 'Usuario', 'required|callback_existe_usuario');
-		$this->form_validation->set_rules('lu', 'Libreta', 'required|max_length[6]|numeric');
-		$this->form_validation->set_rules('email', 'Email', 'required|valid_email');
+		$this->form_validation->set_rules('dni', 'Usuario', 'required|xss_clean|is_natural|callback_existe_usuario|callback_parametros_permitidos_recordar');
+		$this->form_validation->set_rules('lu', 'Libreta', 'required|xss_clean|max_length[6]|is_natural');
+		$this->form_validation->set_rules('email', 'Email', 'required|xss_clean|valid_email');
 
 		if($this->form_validation->run() == FALSE){
 			$this->recordar_clave();//No uso redirect para no perder el valor de los campos ingresados
@@ -208,14 +236,26 @@ class Home extends CI_Controller {
 		return $this->usuariolib->validar_tabla($registro);
 	}
 
+	public function caracteres_permitidos($campo){
+		$expreg = '/^[a-zA-Z áéíóúAÉÍÓÚÑñ]+$/';
+		return $this->usuariolib->caracteres_permitidos($campo, $expreg);
+	}
+
+	public function parametros_permitidos_registro(){
+		$registro = $this->input->post();
+		return $this->usuariolib->parametros_permitidos($registro, 6);
+	}
+
 	public function registrarse(){
 		$registro = $this->input->post();
 
-		$this->form_validation->set_rules('nombre', 'Nombre', 'required|max_length[45]');
-		$this->form_validation->set_rules('email', 'Email', 'required|valid_email|max_length[64]');
-		$this->form_validation->set_rules('dni', 'Usuario', 'required|max_length[10]|numeric|callback_no_repetir_usuario');
-		$this->form_validation->set_rules('lu', 'Libreta', 'required|max_length[8]|numeric|callback_validar_tabla');
-
+		$this->form_validation->set_rules('nombre', 'Nombre', 'required|xss_clean|max_length[45]|callback_caracteres_permitidos');
+		$this->form_validation->set_rules('email', 'Email', 'required|xss_clean|valid_email|max_length[64]|callback_parametros_permitidos_registro');
+		$this->form_validation->set_rules('dni', 'Usuario', 'required|xss_clean|max_length[10]|is_natural|callback_no_repetir_usuario');
+		$this->form_validation->set_rules('lu', 'Libreta', 'required|xss_clean|max_length[8]|is_natural|callback_validar_tabla');
+		$this->form_validation->set_rules('id_provincia', 'Provincia', 'required|is_natural');
+		$this->form_validation->set_rules('id_facultad', 'Facultad', 'required|is_natural');
+		
 		if($this->form_validation->run() == FALSE){
 			//Fallo alguna validación
 			$this->registro();
@@ -231,10 +271,13 @@ class Home extends CI_Controller {
 			if ($this->usuariolib->enviar_email($nombre, $email, $password_generada)){
 				//Registramos el usuario.
 				$registro['password'] = $this->usuariolib->encriptar($password_generada);
-				
+
 				$lu = $registro['lu'];
 				$registro['estado'] = $this->usuariolib->definir_estado($lu);//Define el estado según las materias aprobadas.
-				
+
+				$registro['id_perfil'] = 4;
+				$registro['id_categoria'] = 2;
+
 				$this->Model_Usuarios->insert($registro);
 				$dni = $this->input->post('dni');
 				//Registro el log de usuario para registro

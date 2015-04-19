@@ -37,6 +37,9 @@ class Tickets extends CI_Controller {
 		}
 	}
 
+	/*
+	 * Filtra los tickets de acuerdo a los parametros enviados por ajax
+	 */
 	public function filtrar($page_num){
 		if($this->input->is_ajax_request()){
 			$nombre = $this->input->post('nombre');
@@ -52,10 +55,23 @@ class Tickets extends CI_Controller {
 		}
 	}
 
+	/*
+	 * Muestra en detalle los estados por los que paso un ticket
+	 */
 	public function detalles($id_ticket){
 		$data['contenido'] = 'tickets/detalles';
 		$data['registros'] = $this->Model_Tickets->get_ticket_detalle($id_ticket);
 		$this->load->view('template-admin', $data);		
+	}
+
+	public function vencimiento_cron(){
+		if ($this->input->is_cli_request()) {
+			//Vencer los tickets de hoy
+			echo 'wget';
+		}else {
+			//navegador
+			echo 'navegador';
+		}
 	}
 
 }

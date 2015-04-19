@@ -22,7 +22,7 @@ class Model_Menu extends CI_Model {
     function allForMenu(){
         $estadoVisible = 1;
         $this->db->where('estado', $estadoVisible);
-        $this->db->order_by('orden', 'asc');//Opcionalmente usar desc
+        $this->db->order_by('nombre', 'asc');//Opcionalmente usar desc
         $query = $this->db->get('menu');
         return $query->result();
     }
