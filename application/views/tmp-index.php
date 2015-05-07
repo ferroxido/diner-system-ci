@@ -7,26 +7,22 @@
 	<title>Comedor</title>
     <link href="<?= base_url('css/bootstrap.min.css'); ?>" rel="stylesheet" />
     <link href="<?= base_url('css/estilos.css'); ?>" rel="stylesheet" />
-    <link href="<?= base_url('css/jquery-ui.css'); ?>" rel="stylesheet" />
-
+    
     <!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>-->
     <script src="<?= base_url('js/jquery.js'); ?>"></script>
-    <script src="<?= base_url('js/jquery-ui.min.js'); ?>"></script>
     <script src="<?= base_url('js/bootstrap.min.js'); ?>"></script>
-    
+   
 </head>
 <body>
-
 	<div class="navbar navbar-default navbar-fixed-top">
 	    <div class="container">
 	        <div class="navbar-header">
-	          	<a class="navbar-brand" href="#">ComedorUNSa</a>
+	        	<?= anchor('home/index', 'ComedorUNSa', array('class' => 'navbar-brand'));?>
 	          	<button class="navbar-toggle" type="button" data-toggle="collapse" data-target="#navbar-main">
 	            	<span class="icon-bar"></span>
 	            	<span class="icon-bar"></span>
 	            	<span class="icon-bar"></span>
 	          	</button>
-	          	
 	        </div>
 
 	        <div class="navbar-collapse collapse" id="navbar-main">
@@ -39,32 +35,11 @@
 	        </div>
 	    </div>
 	</div>
-
 	<div class="contenedor">
-		<div class="page-header">
-			<div class="row">
-
-				<!-- Menú del sistema -->
-		        <div class="col-md-3">
-		            <div class="well sidebar-nav list-group">
-		            		<h4 style="text-align: center;">Menú de Usuario</h4>
-		            		<div class="panel-group" id="accordion">
-		                  	<?= my_menu_collapse(); ?>
-		                </div>
-		            </div>
-		        </div>
-    	
-		        <!-- Contenido de la aplicación -->
-		        <div class="col-md-9">
-		        	<?= $this->load->view($contenido); ?>
-		        </div>
-      		</div>
-		    <hr>
-
-		    <footer>
-		    	<p><?= $this->session->userdata('nombre_usuario'); ?>&copy; Sistema de gestión de tickes UNSA - <?= date('d-m-Y H:i'); ?> </p>
-		    </footer>
-		</div>
+		<?= $this->load->view($contenido);?>
 	</div>
+	<footer>
+		<p><?= $this->session->userdata('nombre_usuario'); ?>&copy; Sistema de gestión de tickes UNSA - <?= date('d-m-Y H:i') ?> </p>
+	</footer>
 </body>
 </html>

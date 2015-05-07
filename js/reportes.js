@@ -18,7 +18,7 @@ $(function($){
 	showMonthAfterYear: false,
 	yearSuffix: ''};
 	$.datepicker.setDefaults($.datepicker.regional['es']);
-}); 
+});
 
 $(document).ready(function() {
 
@@ -95,11 +95,11 @@ $(document).ready(function() {
 						try{
 							var items = [];
 							$.each(obj.tickets, function(i,val){
-								cadena = '<tr>'+'<td>'+ val.facultad +'</td>'+'<td>'+ val.total_tickets +'</td>'+'<td>'+ val.becados +'</td>'+'<td>'+ val.regulares +'</td>' +'<td>'+ val.gratuitos +'</td>'+'<td>'+ val.total_pesos +'</td></tr>';
+								cadena = '<tr>'+'<td>'+ val.facultad +'</td>'+'<td>'+ val.becados +'</td>'+'<td>'+ val.regulares +'</td>' +'<td>'+ val.gratuitos +'</td>'+'<td>'+ val.total_tickets +'</td>'+'<td>'+ val.total_pesos +'</td></tr>';
 								items.push(cadena);	
 							});
 							$.each(obj.totales, function(i,val){
-								cadena = '<tr class="info">'+ '<td>Totales</td>' + '<td>'+ val.total_tickets +'</td>' + '<td>'+ val.becados +'</td>' + '<td>'+ val.regulares +'</td>' + '<td>'+ val.gratuitos +'</td>' + '<td>'+ val.total_importe +'</td>' + '</tr>';
+								cadena = '<tr class="info">'+ '<td>Totales</td>' + '<td>'+ val.becados +'</td>' + '<td>'+ val.regulares +'</td>' + '<td>'+ val.gratuitos +'</td>'+ '<td>'+ val.total_tickets +'</td>' + '<td>'+ val.total_importe +'</td>' + '</tr>';
 								items.push(cadena);
 							});
 							$('#resultado_tickets_tabla').append.apply($('#resultado_tickets_tabla'), items);
@@ -152,11 +152,11 @@ $(document).ready(function() {
 						try{
 							var items = [];
 							$.each(obj.tickets2, function(i,val){
-								cadena = '<tr>'+'<td>'+ val.facultad +'</td>'+'<td>'+ val.total_tickets +'</td>'+'<td>'+ val.anulados +'</td>'+'<td>'+ val.activos +'</td>' +'<td>'+ val.impresos +'</td>'+'<td>'+ val.consumidos +'</td></tr>';
+								cadena = '<tr>'+'<td>'+ val.facultad +'</td>'+'<td>'+ val.anulados +'</td>'+'<td>'+ val.activos +'</td>' +'<td>'+ val.impresos +'</td>'+'<td>'+ val.consumidos +'</td>'+'<td>'+ val.total_tickets +'</td>'+'</tr>';
 								items.push(cadena);	
 							});
 							$.each(obj.totales2, function(i,val){
-								cadena = '<tr class="info">'+ '<td>Totales</td>' + '<td>'+ val.total_tickets +'</td>' + '<td>'+ val.anulados +'</td>' + '<td>'+ val.activos +'</td>' + '<td>'+ val.impresos +'</td>' + '<td>'+ val.consumidos +'</td>' + '</tr>';
+								cadena = '<tr class="info">'+ '<td>Totales</td>' + '<td>'+ val.anulados +'</td>' + '<td>'+ val.activos +'</td>' + '<td>'+ val.impresos +'</td>' + '<td>'+ val.consumidos +'</td>' + '<td>'+ val.total_tickets +'</td>'+ '</tr>';
 								items.push(cadena);
 							});							
 							$('#resultado_tickets_tabla2').append.apply($('#resultado_tickets_tabla2'), items);

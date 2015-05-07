@@ -1,4 +1,4 @@
-	<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
 class Calendario extends CI_Controller{	
 
@@ -229,11 +229,7 @@ class Calendario extends CI_Controller{
 				$fecha = $this->calendariolib->transformar_fecha($fecha, '-');
 
 				//Anulo los tickets
-				$this->calendariolib->anular($fecha);
-				
-				//Registro el log
-				$fechaLog = date('Y/m/d H:i:s');
-				$this->usuariolib->cargar_log_usuario($dni, $fechaLog, 'super anular');
+				$this->calendariolib->anular($fecha, $dni);
 				
 				redirect('calendario/index');
 			}
@@ -241,6 +237,5 @@ class Calendario extends CI_Controller{
 			show_404();
 		}		
 	}
-	
 
 }

@@ -15,6 +15,7 @@ class UsuarioLib {
 		$this->CI->load->model('Model_Log_Usuarios');
 		$this->CI->load->model('Model_Tickets');
 		$this->CI->load->model('Model_Configuraciones');
+		$this->CI->load->model('Model_Calendario');
 		$this->CI->load->model('Model_Alumnos');
 	}
 
@@ -175,48 +176,6 @@ class UsuarioLib {
 	}
 
 	/*
-	 * Esta función realiza todos los pasos necesarios para la compra de tickets
-	 * esta es la función que utiliza el usuario con perfil de alumno para comprar los tickets.
-	 */
-	public function realizar_compra($dni, $fecha_log, $dias, $year, $month){
-		//No dejar comprar a un usuarios dos tickets para el mismo día
-		foreach ($dias as $dia) {
-			//Verificamos si el día existe
-			$fecha = $year.'-'.$month.'-'.$dia;
-			$query_dias = $this->CI->Model_Dias->find($fecha);
-			if($query_dias->num_rows() == 1){
-				//Si la siguiente consulta arroja exactamente 0 filas, entonces permitimos comprar.
-				$query_tickets = $this->CI->Model_Dias->consultar_dia_con_ticket($fecha, $dni);
-				if($query_tickets->num_rows() == 0){
-					//Actualizamos la cantidad de tickets vendidos para el día en particular
-					$registro_dia = $query_dias->row();
-					$tickets_vendidos = $registro_dia->tickets_vendidos + 1;
-					$data = array('fecha'=>$fecha, 'tickets_vendidos'=>$tickets_vendidos);
-					$this->CI->Model_Dias->update($data);
-
-					//Cargamos el registro en la tabla log_usuarios
-					$id_log = $this->cargar_log_usuario($dni, $fecha_log,'comprar');
-					
-					$usuario = $this->CI->Model_Usuarios->find($dni);//Necesito el usuario para saber el importe que paga ese usuario
-
-					//Cargo el ticket para el día en cuestión
-					$registro['id_dia'] = $query_dias->row('id');//Cargo el id del día.
-					$registro['unidad'] = 0;//por defecto...reveer esto.
-					$registro['importe'] = $usuario->importe;//Este importe depende de acuerto a la beca que tiene el usuario
-					$registro['estado'] = 1;//0 -> anulado, 1 -> activo
-					$registro['id_log_usuario'] = $id_log;
-					$id_ticket = $this->CI->Model_Tickets->add_ticket($registro);
-
-					$registro = array();
-					$registro['id'] = $id_ticket;
-					$registro['barcode'] = $this->generar_barcode($id_ticket, 10);
-					$this->CI->Model_Tickets->update($registro);
-				}
-			}
-		}
-	}
-
-	/*
 	 * Genera el código de barra de 20 caracteres. Se forma con la fecha acutal en formato unix,
 	 * concatenada con ceros y el id del ticket. El número de ceros + la longitud del id deben
 	 * sumar 10. Fecha unix (10) + (ceros + id) (10) = (20)
@@ -262,7 +221,14 @@ class UsuarioLib {
 				$this->CI->Model_Dias->update($data);
 				//Registrar el nuevo log.
 				$fecha_log = date('Y/m/d H:i:s');
-				$this->cargar_log_usuario($dni, $fecha_log, 'anular');
+				$id_log = $this->cargar_log_usuario($dni, $fecha_log, 'anular');
+				//Registrar la tabla tickets_log_usuarios.
+				$data = array();//Reinicio la variable data
+				$data['id_log_usuario'] = $id_log;
+				$data['id_ticket'] = $id_ticket;
+				$this->CI->db->set($data);
+    			$this->CI->db->insert('tickets_log_usuarios');
+
 			}elseif ($respuesta['resultado'] == 2) {
 				//vencer ticket
 				//Cambiar estado del ticket
@@ -273,7 +239,14 @@ class UsuarioLib {
 				$this->CI->Model_Tickets->update($data);
 				//Registrar el nuevo log.
 				$fecha_log = date('Y/m/d H:i:s');
-				$this->cargar_log_usuario($dni, $fecha_log, 'vencer');
+				$id_log = $this->cargar_log_usuario($dni, $fecha_log, 'vencer');
+				//Registrar la tabla tickets_log_usuarios.
+				$data = array();//Reinicio la variable data
+				$data['id_log_usuario'] = $id_log;
+				$data['id_ticket'] = $id_ticket;
+				$this->CI->db->set($data);
+    			$this->CI->db->insert('tickets_log_usuarios');
+    			
 			}
 			return $respuesta;
 		}
@@ -448,6 +421,13 @@ class UsuarioLib {
 		}else{
 			return FALSE;
 		}
+	}
+
+	public function get_calendario_informativo(){
+		$year = date('Y');
+		$month = date('m');
+		$data = $this->CI->Model_Dias->get_data_from_month($year, $month);//Array asociativo
+		return $this->CI->Model_Calendario->generate_data($year, $month, $data);
 	}
 
 }

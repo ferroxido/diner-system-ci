@@ -8,6 +8,7 @@ class CalendarioLib {
 		$this->CI->load->model('Model_Tickets');//Cargamos el modelo.
 		$this->CI->load->model('Model_Usuarios');//Cargamos el modelo.
 		$this->CI->load->model('Model_Dias');//Cargamos el modelo.
+		$this->CI->load->library('usuarioLib');
 	}
 
 	public function desde_menor_hasta($desde, $hasta){
@@ -141,18 +142,18 @@ class CalendarioLib {
 		//$monthNumber = date('m', strtotime($monthName));
 		//return $monthNumber;
 		switch ($monthName) {
-			case 'January':	return 01;
-			case 'February': return 02;
-			case 'March': return 03;
-			case 'April': return 04;
-			case 'May': return 05;
-			case 'June': return 06;
-			case 'July': return 07;
-			case 'August': return 08;
-			case 'September': return 09;
-			case 'October': return 10;
-			case 'November': return 11;
-			case 'December': return 12;
+			case 'Enero':	return 01;
+			case 'Febrero': return 02;
+			case 'Marzo': return 03;
+			case 'Abril': return 04;
+			case 'Mayo': return 05;
+			case 'Junio': return 06;
+			case 'Julio': return 07;
+			case 'Agosto': return 08;
+			case 'Septiembre': return 09;
+			case 'Octubre': return 10;
+			case 'Noviembre': return 11;
+			case 'Diciembre': return 12;
 		}
 	}
 
@@ -260,13 +261,17 @@ class CalendarioLib {
 		}
 	}
 
-	public function anular($fecha){
+	public function anular($fecha, $dni_responsable){
 		//Comprobar que efectivamente hay tickets para anular
 		$estadoAnulado = 0;//Estado para el ticket
 		$estadoFeriado = 0;//Estado para el dia
 
 		$query = $this->CI->Model_Calendario->get_tickets($fecha);
-		if ($query->num_rows() > 0) {
+		if ($query->num_rows() > 0) {			
+			//Registro el log
+			$fechaLog = date('Y/m/d H:i:s');
+			$id_log = $this->CI->usuariolib->cargar_log_usuario($dni_responsable, $fechaLog, 'super anular');
+
 			$tickets = $query->result();
 			foreach ($tickets as $ticket) {
 				//Anular los tickets
@@ -274,6 +279,13 @@ class CalendarioLib {
 				$registro['id'] = $ticket->id;
 				$registro['estado'] = $estadoAnulado;
 				$this->CI->Model_Tickets->update($registro);
+
+				//Registrar en la tabla tickets_log_usuarios
+				$data = array();//Reinicio la variable data
+				$data['id_log_usuario'] = $id_log;
+				$data['id_ticket'] = $ticket->id;
+				$this->CI->db->set($data);
+    			$this->CI->db->insert('tickets_log_usuarios');
 
 				//Devolver Saldo.
 				$registro = array();

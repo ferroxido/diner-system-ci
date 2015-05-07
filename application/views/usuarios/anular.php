@@ -1,5 +1,5 @@
-<div class="col-md-6">
-	<div id="tickets-anulables" class="jumbotron">
+<div class="col-md-8">
+	<div id="tickets_anulables">
 		<legend>Tickets Disponibles</legend>
 
 		<div class="tablas-propias">

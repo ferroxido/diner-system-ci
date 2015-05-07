@@ -1,5 +1,5 @@
-<div class="col-md-6">
-	<div id="botonera" class="jumbotron">
+<div id="col3" class="col-md-4">
+	<div id="botonera" class="">
 		<legend>Acciones Disponibles</legend>
 		<div class="par-botones">
 			<input class="boton-disabled" type="button" value="Comprar" style="background-image: url('../img/ticket.png');" onclick="location.href='<?php echo base_url();?>usuarios/comprar_tickets'" disabled>

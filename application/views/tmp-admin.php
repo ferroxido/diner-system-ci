@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>Comedor</title>
     <link href="<?= base_url('css/bootstrap.min.css'); ?>" rel="stylesheet" />
-    <link href="<?= base_url('css/estilos.css'); ?>" rel="stylesheet" />
+    <link href="<?= base_url('css/estilos-admin.css'); ?>" rel="stylesheet" />
     <link href="<?= base_url('css/jquery-ui.css'); ?>" rel="stylesheet" />
 
     <!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>-->
@@ -46,12 +46,18 @@
 
 				<!-- Menú del sistema -->
 		        <div class="col-md-3">
-		            <div class="well sidebar-nav list-group">
-		            		<h4 style="text-align: center;">Menú de Usuario</h4>
-		            		<div class="panel-group" id="accordion">
-		                  	<?= my_menu_collapse(); ?>
-		                </div>
-		            </div>
+		        	<div id="menu_usuario">
+		        		<h4>Menú de Usuario</h4>
+		            	<ul>
+		            		<li><a href="#">opcion 1</a></li>
+		            		<li><a href="#">opcion 2</a></li>
+		            		<li><a href="#">opcion 3</a></li>
+		            		<li><a href="#">opcion 4</a></li>
+		            		<li><a href="#">opcion 5</a></li>
+		            		<li><a href="#">opcion 6</a></li>
+		            		<li><a href="#">opcion 7</a></li>
+		            	</ul>
+		        	</div>
 		        </div>
     	
 		        <!-- Contenido de la aplicación -->

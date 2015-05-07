@@ -24,10 +24,102 @@
   font-style: normal;
 }
 
-body {
-  padding-top: 60px;
-  padding-bottom: 40px;
+body,html{
+  background-color: #FFF;
 }
+div#contenedor{
+  position: relative;
+}
+div#login{
+  left: 200px;
+  position: absolute;
+  top: 150px;
+  width: 30%;
+}
+div#form_registro{
+  left: 200px;
+  position: absolute;
+  top: 100px;
+  width: 40%;
+}
+div#form_recordar_clave{
+  left: 200px;
+  position: absolute;
+  top: 150px;
+  width: 40%;
+}
+div#form_cambiar_clave{
+  left: 200px;
+  position: absolute;
+  top: 150px;
+  width: 40%;  
+}
+div#info_unsa{
+  background-color: #FFF;
+  padding: 2em;
+}
+div#logo_unsa{
+  text-align: center;
+}
+div#texto_unsa{
+  text-align: justify;
+}
+div#logo_unsa img{
+  max-width: 30%;
+  height: auto;
+}
+div#info_sistema{
+  background-color: #DAD7D3;
+  font-size: 1.1em;
+  padding: 1em 3em;
+}
+div#obligatorio{
+  border-color: #FFF;
+  border-right-style: solid;
+  border-width: .1em;
+  padding-right: 2em;  
+  border-left-style: solid;
+  border-width: .1em;
+  padding-left: 2em;
+}
+div.image{
+  text-align: center;
+}
+.formulario input[type="text"], .formulario input[type="password"], .formulario input[type="email"], .formulario select{
+  opacity: .6;
+  background-color: #FFF;
+  color: #000;
+  font-size: 1.21em;
+}
+.formulario form{
+  border-color: #FFFFFF;
+  border-radius: .3em;
+  border-width: .1em;
+  border-style: solid;
+  font-size: 1.1em;
+  padding: 1em;  
+}
+div#fondo{
+  background: url('../img/fondo2.jpeg');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  height: 700px;
+  width: 100%;
+}
+form h3{
+  padding: 0px 0px .5em 0px;
+}
+footer{
+  background-color: #333;
+  color: #FFF;
+  padding: .5em;
+  text-align: center;
+}
+h4{
+  font-size: 1.4em;
+}
+
 div#big_logo_unsa{
   text-align: center;
 }
@@ -37,9 +129,7 @@ div#big_logo_unsa img{
 div#contenedor_calendario{
   text-align: center;
 }
-div#home{
-  height: 100%
-}
+
 /* Estilos para la pantalla alumno */
 div#info-perfil .group-label{
   background-color: #fff;
@@ -273,19 +363,37 @@ table.calendario {
   -o-transform: rotate(-10deg);
   -ms-transform: rotate(-10deg);
 }
+.contenedor-info{
+  text-align: justify;
+}
+.fondo-registro{
+  background: url('../img/fondo2.jpeg');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  height: 1200px;
+  width: 100%;  
+}
+.fondo{
+  background: url('../img/fondo2.jpeg');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  height: 900px;
+  width: 100%;
+}
+.titulos{
+  text-align: center;
+  color: #DD4814;
+}
+
+
 /* Large desktop */
 @media (min-width: 1200px) {
-  body {
-    padding-top: 50px;
-    padding-bottom: 40px;
-  }
+  
 }
 /* Portrait tablet to landscape and desktop */
 @media (min-width: 980px) and (max-width: 1199px) {
-  body {
-    padding-top: 20px;
-    padding-bottom: 0;
-  }
   .jumbotron h1 {
     font-size: 2em;
   }
@@ -297,33 +405,85 @@ table.calendario {
     padding: 2em;
     width: 100%;
   }
+  div#login{
+    left: 150px;
+    position: absolute;
+    top: 150px;
+    width: 35%;
+  }
+  div#form_registro{
+    left: 5em;
+    position: absolute;
+    top: 50px;
+    width: 60%;
+  }
+  div#form_registro form{
+    padding: 2em;
+  }  
 }
 /* Portrait tablet to landscape and desktop */
 @media (min-width: 768px) and (max-width: 979px) {
-  body {
-    padding-top: 20px;
-    padding-bottom: 0;
-  }
   .jumbotron h1 {
     font-size: 2em;
   }
+  div#login{
+    left: 100px;
+    position: absolute;
+    top: 140px;
+    width: 40%;
+  }
+  div#form_registro{
+    left: 5em;
+    position: absolute;
+    top: 50px;
+    width: 50%;
+  }
+  div#form_registro form{
+    padding: 2em;
+  }
+  div#obligatorio{
+    border-color: #FFF;
+    border-right-style: none;
+    border-top-style: solid;
+    border-left-style: none;
+    border-bottom-style: solid;
+    margin: .5em 0px;
+    padding: .5em  0px;
+  }
+
 }
 /* Landscape phone to portrait tablet */
 @media (max-width: 767px) {
-  body {
-    padding-top: 20px;
-    padding-bottom: 0;
-  }
   .jumbotron h1 {
     font-size: 2em;
+  }
+  div#login{
+    left: 2em;
+    position: absolute;
+    top: 140px;
+    width: 70%;
+  }
+  div#form_registro{
+    left: 5em;
+    position: absolute;
+    top: 50px;
+    width: 70%;
+  }
+  div#form_registro form{
+    padding: 2em;
+  }
+  div#obligatorio{
+    border-color: #FFF;
+    border-right-style: none;
+    border-top-style: solid;
+    border-left-style: none;
+    border-bottom-style: solid;
+    margin: .5em 0px;
+    padding: .5em  0px;
   }
 }
 /* Landscape phones and down */
 @media (max-width: 480px) {
-  body {
-    padding-top: 20px;
-    padding-bottom: 0;
-  }
   .jumbotron h1 {
     font-size: 2em;
   }
@@ -376,4 +536,28 @@ table.calendario {
     text-align: center;
     width: 60%;
   }
+  div#login{
+    left: 2em;
+    position: absolute;
+    top: 140px;
+    width: 85%;
+  }
+  div#form_registro{
+    left: 2em;
+    position: absolute;
+    top: 50px;
+    width: 85%;
+  }
+  div#form_registro form{
+    padding: 2em;
+  }
+  div#obligatorio{
+    border-color: #FFF;
+    border-right-style: none;
+    border-top-style: solid;
+    border-left-style: none;
+    border-bottom-style: solid;
+    margin: .5em 0px;
+    padding: .5em  0px;
+  }  
 }

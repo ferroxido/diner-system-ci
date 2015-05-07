@@ -1,0 +1,186 @@
+/* recursos de nuestra tipografía */
+@font-face {
+  font-family: "Chalet";
+  src: url("../fonts/Chalet.eot");
+  src: url("../fonts/Chalet.eot?#iefix") format(
+  "embedded-opentype"),
+      url("../fonts/Chalet.woff") format("woff"),
+      url("../fonts/Chalet.ttf") format("truetype"),
+      url("../fonts/Chalet.svg#Chalet") format("svg");
+  font-weight: normal;
+  font-style: normal;
+
+}
+
+@font-face {
+  font-family: "Pecita";
+  src: url("../fonts/Pecita.eot");
+  src: url("../fonts/Pecita.eot?#iefix") format(
+  "embedded-opentype"),
+      url("../fonts/Pecita.woff") format("woff"),
+      url("../fonts/Pecita.ttf") format("truetype"),
+      url("../fonts/Pecita.svg#Pecita") format("svg");
+  font-weight: normal;
+  font-style: normal;
+}
+
+body,html{
+  background-color: #FFF;
+}
+div#contenedor{
+  position: relative;
+}
+div.image{
+  text-align: center;
+}
+.formulario input[type="text"], .formulario input[type="password"], .formulario input[type="email"], .formulario select{
+  opacity: .6;
+  background-color: #FFF;
+  color: #000;
+  font-size: 1.21em;
+}
+
+div#fondo{
+  background: url('../img/fondo2.jpeg');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  height: 700px;
+  width: 100%;
+}
+div#menu_usuario{
+  background-color: #333333;
+  color: #FFF;
+}
+ul{
+  list-style: none;
+}
+form h3{
+  padding: 0px 0px .5em 0px;
+}
+footer{
+  background-color: #333;
+  color: #FFF;
+  padding: .5em;
+  text-align: center;
+}
+h4{
+  font-size: 1.4em;
+}
+div#contenedor_calendario{
+  text-align: center;
+}
+div#menu_collapse:hover {
+  background-color: #fff;
+}
+div#menu_collapse:hover h4 a:hover {
+  text-decoration: none;
+}
+div.meses{
+  display: inline-block;
+  margin: 1em;
+}
+div.navbar-fixed-top{
+  font-weight: bold;
+  font-family: "Chalet", Helvetica, Verdana;
+}
+div.tablas-propias {
+  overflow: auto;
+  height: 300px;
+  text-align: center;
+}
+div.tablas-propias a:hover {
+  cursor: pointer;
+  color: #3498db;
+  text-decoration: none;
+}
+fieldset {
+  border-width: 0.1em;
+  border-style: solid;
+  border-color: #3498db;
+  border-radius: 0.5em;
+  padding: 0.5em;
+}
+h4#mensaje_exito{
+  text-align: left;
+}
+.mijumbotron label {
+  background-color: #fff;
+  border-radius: 0.5em;
+  padding: 0.3em;
+  font-weight: bold;
+  font-size: 1.3em;
+}
+span#total_tickets{
+  background-color: #FFF;
+  padding: .1em .4em;
+  font-size: 1.4em;
+}
+table.calendario {
+  margin: auto;
+  border-collapse: collapse;
+}
+.botones a {
+  background-color: #aaa;
+  padding: 2em;
+  margin: 1em;
+}
+.info{
+  text-align: justify;
+}
+.sidebar-nav {
+  padding: 10px auto;
+}
+.calendario {
+  font-family: Arial;
+  font-size: 1.4em;
+}
+.calendario .dias td {
+  width: 10%;
+  height: 100%;
+  padding: 4px;
+  border: 1px solid #999;
+  vertical-align: top;
+  background-color: #def;
+}
+.calendario .dias td:hover{
+  background-color: #fff; 
+  cursor: pointer;
+}
+.calendario .highlight {
+  font-weight: bold;
+  color: #00f;
+}
+.calendario .dias td:nth-child(6) {
+  background-color: #ffb9c4;
+}
+.calendario .dias td:nth-child(7) {
+  background-color: #ffb9c4;
+}
+.etiqueta-titulo{
+  background-color: #fff;
+  border-radius: .3em;
+  color: #DD4814;
+  padding: .3em;
+}
+
+/* Large desktop */
+@media (min-width: 1200px) {
+  
+}
+/* Portrait tablet to landscape and desktop */
+@media (min-width: 980px) and (max-width: 1199px) {
+
+}
+/* Portrait tablet to landscape and desktop */
+@media (min-width: 768px) and (max-width: 979px) {
+
+}
+/* Landscape phone to portrait tablet */
+@media (max-width: 767px) {
+
+}
+/* Landscape phones and down */
+@media (max-width: 480px) {
+  
+}

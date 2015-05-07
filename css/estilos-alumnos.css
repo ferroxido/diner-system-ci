@@ -1,0 +1,323 @@
+/* recursos de nuestra tipografía */
+@font-face {
+  font-family: "Chalet";
+  src: url("../fonts/Chalet.eot");
+  src: url("../fonts/Chalet.eot?#iefix") format(
+  "embedded-opentype"),
+      url("../fonts/Chalet.woff") format("woff"),
+      url("../fonts/Chalet.ttf") format("truetype"),
+      url("../fonts/Chalet.svg#Chalet") format("svg");
+  font-weight: normal;
+  font-style: normal;
+
+}
+
+@font-face {
+  font-family: "Pecita";
+  src: url("../fonts/Pecita.eot");
+  src: url("../fonts/Pecita.eot?#iefix") format(
+  "embedded-opentype"),
+      url("../fonts/Pecita.woff") format("woff"),
+      url("../fonts/Pecita.ttf") format("truetype"),
+      url("../fonts/Pecita.svg#Pecita") format("svg");
+  font-weight: normal;
+  font-style: normal;
+}
+
+body,html{
+  background-color: #FFF;
+  overflow-x: hidden;
+}
+/* columnas de igual altura */
+div#info-perfil{
+  padding: 5em 1em 1em 1em;
+  text-align: center;
+}
+div#info_comedor{
+  padding: 5em 1em 1em 1em;
+  text-align: center;
+}
+div#botonera{
+  padding: 5em 1em 1em 1em;
+  text-align: center;
+}
+div#col1{
+  background-color: #333333;
+}
+div#col2{
+  background-color: #308ACC;
+}
+div#col3{
+  background-color: #FFF;
+}
+div#img_alumno{
+  margin: 0px auto 2em;
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+}
+div#img_alumno a{
+  border-radius: 50%;
+}
+div#img_alumno a img{
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+}
+div#datos_alumno{
+  text-align: left;
+}
+div#info-perfil .group-label{
+  background-color: #fff;
+  padding: .3em;
+  border-radius: .3em;
+}
+div#info-perfil .label-titulo{
+  color: #DD4814;
+  font-size: 1.15em;
+}
+div#info-perfil .mostrar-info{
+  font-size: 1.2em;
+}
+div#info-perfil .group-label:hover{
+  background-color: #eee;
+  padding: .3em;
+  border-radius: .3em; 
+}
+/* Fin de estilos para la pantalla alumno */
+
+div.navbar-fixed-top{
+  font-weight: bold;
+  font-family: "Chalet", Helvetica, Verdana;
+}
+div.par-botones {
+  margin: 1em 0;
+  text-align: center;
+  width: 100%;
+}
+div.par-botones input[type="button"] {
+  border-radius: 0.5em;
+  background-color: #3498db;
+  background-repeat: no-repeat;
+  background-position: center;
+  color: #fff;
+  display: inline-block;
+  font-size: 1.8em;
+  margin: 0 0.5em;
+  padding: 2em .3em;
+  text-align: center;
+  width: 41%;
+}
+div.par-botones input[type="button"]:hover {
+  border-radius: 0.5em;
+  background-color: #fff;
+  background-repeat: no-repeat;
+  background-position: center;
+  color: #3498db;
+  display: inline-block;
+  font-size: 1.8em;
+  margin: 0 0.5em;
+  padding: 2em .5em;
+  width: 41%;
+}
+div.par-botones input[type="button"].boton-disabled{
+  border-radius: 0.5em;
+  background-color: #9F9A9A;
+  background-repeat: no-repeat;
+  background-position: center;
+  color: #fff;
+  display: inline-block;
+  font-size: 1.8em;
+  margin: 0 0.5em;
+  padding: 2em .3em;
+  text-align: center;
+  width: 41%;
+}
+div.tablas-propias {
+  overflow: auto;
+  height: 300px;
+  text-align: center;
+}
+div.tablas-mis-tickets {
+  overflow: auto;
+  height: 160px;
+  text-align: center;
+}
+div.tablas-propias a:hover {
+  cursor: pointer;
+  color: #3498db;
+  text-decoration: none;
+}
+fieldset {
+  border-width: 0.1em;
+  border-style: solid;
+  border-color: #3498db;
+  border-radius: 0.5em;
+  padding: 0.5em;
+}
+footer{
+  background-color: #333;
+  color: #FFF;
+  padding: .5em;
+  text-align: center;
+}
+.botones a {
+  background-color: #aaa;
+  padding: 2em;
+  margin: 1em;
+}
+.sidebar-nav {
+  padding: 10px auto;
+}
+.calendario {
+  font-family: Helvetica;
+  font-size: 1em;
+  font-weight: bold;
+}
+.calendario .dias td {
+  width: 10%;
+  height: 100%;
+  padding: 4px;
+  border: 1px solid #999;
+  vertical-align: top;
+  background-color: #def;
+}
+.calendario .dias td:hover{
+  background-color: #fff; 
+  cursor: pointer;
+}
+.calendario .highlight {
+  font-weight: bold;
+  color: #00f;
+}
+.calendario .dias td:nth-child(6) {
+  background-color: #ffb9c4;
+}
+.calendario .dias td:nth-child(7) {
+  background-color: #ffb9c4;
+}
+.etiqueta-titulo{
+  background-color: #fff;
+  border-radius: .3em;
+  color: #DD4814;
+  padding: .3em;
+}
+/* Large desktop */
+@media (min-width: 1200px) {
+  
+}
+/* Portrait tablet to landscape and desktop */
+@media (min-width: 990px) and (max-width: 1199px) {
+  div.par-botones{
+    margin: 0;
+  }
+  div.par-botones input[type="button"] {
+    border-radius: 0.5em;
+    background-color: #3498db;
+    background-repeat: no-repeat;
+    background-position: center;
+    color: #fff;
+    display: inline-block;
+    font-size: 1.8em;
+    margin: 0 0.5em;
+    padding: 2em .3em;
+    text-align: center;
+    width: 60%;
+  }
+  div.par-botones input[type="button"]:hover {
+    border-radius: 0.5em;
+    background-color: #fff;
+    background-repeat: no-repeat;
+    background-position: center;
+    color: #3498db;
+    display: inline-block;
+    font-size: 1.8em;
+    margin: 0 0.5em;
+    padding: 2em .5em;
+    width: 60%;
+  }
+  div.par-botones input[type="button"].boton-disabled{
+    border-radius: 0.5em;
+    background-color: #9F9A9A;
+    background-repeat: no-repeat;
+    background-position: center;
+    color: #fff;
+    display: inline-block;
+    font-size: 1.8em;
+    margin: 0 0.5em;
+    padding: 2em .3em;
+    text-align: center;
+    width: 60%;
+  }  
+}
+/* Portrait tablet to landscape and desktop */
+@media (min-width: 768px) and (max-width: 989px) {
+  div#img_alumno{
+    display: inline-block;
+    margin: 0px 1em;
+    vertical-align: top;
+  }
+  div#datos_alumno, div#mis_tickets, div#calendario_actual{
+    display: inline-block;
+    margin: 0px 1em;
+    vertical-align: top;
+    width: 45%;
+  }
+}
+/* Landscape phone to portrait tablet */
+@media (max-width: 767px) {
+
+}
+/* Landscape phones and down */
+@media (max-width: 480px) {
+  div#info_perfil_foto{
+    padding: 1em 2em 0 2em;
+    width: 100%;
+  }
+  div#info_perfil_datos{
+    padding: 2em;
+    width: 100%;
+  }
+  div.par-botones{
+    margin: 0;
+  }
+  div.par-botones input[type="button"] {
+    border-radius: 0.5em;
+    background-color: #3498db;
+    background-repeat: no-repeat;
+    background-position: center;
+    color: #fff;
+    display: inline-block;
+    font-size: 1.8em;
+    margin: 0 0.5em;
+    padding: 2em .3em;
+    text-align: center;
+    width: 60%;
+  }
+  div.par-botones input[type="button"]:hover {
+    border-radius: 0.5em;
+    background-color: #fff;
+    background-repeat: no-repeat;
+    background-position: center;
+    color: #3498db;
+    display: inline-block;
+    font-size: 1.8em;
+    margin: 0 0.5em;
+    padding: 2em .5em;
+    width: 60%;
+  }
+  div.par-botones input[type="button"].boton-disabled{
+    border-radius: 0.5em;
+    background-color: #9F9A9A;
+    background-repeat: no-repeat;
+    background-position: center;
+    color: #fff;
+    display: inline-block;
+    font-size: 1.8em;
+    margin: 0 0.5em;
+    padding: 2em .3em;
+    text-align: center;
+    width: 60%;
+  }
+
+}

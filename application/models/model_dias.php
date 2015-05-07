@@ -45,9 +45,29 @@ class Model_Dias extends CI_Model {
     }
 
     //Devuelve todos los días con la fecha like $fecha.
-    public function get_dias($fecha){
+    function get_dias($fecha){
         $query = $this->db->query("SELECT *, extract(day FROM fecha) AS dia FROM dias WHERE fecha::text LIKE '$fecha' ORDER BY fecha");
         return $query->result();
     }
     
+    function get_data_from_month($year, $month){
+        $fecha = $year.'-'.$month;
+        $query = $this->db->query("SELECT extract(day FROM fecha) AS dia, (tickets_totales - tickets_vendidos) AS tickets_disponibles FROM dias WHERE fecha::text LIKE '{$fecha}%'");
+        $registros = $query->result();
+        $data = array();
+        $hoy = date('d');
+        foreach ($registros as $registro) {
+            if($registro->tickets_disponibles >= 0){
+                if ($registro->dia < $hoy){
+                    //El día ya paso
+                    $data[$registro->dia] = 'td: 0';
+                }else{
+                    $data[$registro->dia] = 'td: '.$registro->tickets_disponibles;
+                }
+            }else{
+                $data[$registro->dia] = 'td: 0';
+            }
+        }
+        return $data;
+    }   
 }

@@ -6,6 +6,8 @@ class Home extends CI_Controller {
 	protected $estadoRegistrado = 1;
 	protected $estadoActivo = 2;
 	protected $estadoSuspendido = 3;
+	protected $publickey = "6LeiigUTAAAAAEnYEG1X6Lb61xZMZk8EmqjQLRXb";
+	protected $privatekey = "6LeiigUTAAAAANYEHCkeNa3jGdSqzqMmKEoiy45O";
 
 	//Constructor
 	function __construct(){
@@ -14,6 +16,7 @@ class Home extends CI_Controller {
 
 		$this->load->library('usuarioLib');
 		$this->load->model('Model_Usuarios');
+		$this->load->helper('recaptchalib');
 		$this->form_validation->set_message('validar_tabla', 'Usted no es alumno regular de la Universidad, diríjase a la Administración del Comedor');
 		$this->form_validation->set_message('required', 'Debe ingresar un valor para %s');
 		$this->form_validation->set_message('loginok', 'Usuario o password incorrecto');
@@ -32,12 +35,15 @@ class Home extends CI_Controller {
 		$this->form_validation->set_message('parametros_permitidos_ingreso', 'Usted esta mandando parámetros extras.');
 		$this->form_validation->set_message('parametros_permitidos_recordar', 'Usted esta mandando parámetros extras.');
 		$this->form_validation->set_message('parametros_permitidos_cambiar', 'Usted esta mandando parámetros extras.');
+		$this->form_validation->set_message('validar_recaptcha', 'El valor de captcha es incorrecto');
 	}
 
 	public function index(){
 		$this->session->sess_destroy();//Destruimos cualquier session que haya quedado guardada.
-		$data['contenido'] = 'home/index';
-		$this->load->view('template-index', $data);
+		$data['mostrar_mensaje'] = false;
+		$data['exito'] = true;
+		$data['mensaje'] = "";		
+		$this->load->view('home/login', $data);
 	}
 
 	public function acerca_de(){
@@ -69,22 +75,31 @@ class Home extends CI_Controller {
 		$this->form_validation->set_rules('password', 'Password', 'required|xss_clean|callback_is_bloqueado');
 		
 		if($this->form_validation->run() == FALSE){
-			$this->ingreso();//No uso redirect para no perder el valor de los campos ingresados
+			$this->index();//No uso redirect para no perder el valor de los campos ingresados
 		}else{
 			if($this->session->userdata('estado_usuario') == $this->estadoRegistrado){
 				//El usuario aún no esta activo. Lo mando a cambiar su clave.
 				redirect('home/cambiar_clave');
 			}else if($this->session->userdata('estado_usuario') == $this->estadoActivo){
-				//Al ingresar lo mando a la página de inicio correspondiente a su perfil
-				if($this->session->userdata('perfil_nombre') === 'Alumno'){
-					redirect('usuarios/alumno');
-				}else if($this->session->userdata('perfil_nombre') === 'Administrador' || $this->session->userdata('perfil_nombre') === 'Super Administrador' || $this->session->userdata('perfil_nombre') === 'Consulta'){
-					redirect('usuarios/admin');
-				}else{
-					redirect('usuarios/control');
+				$perfil = $this->session->userdata('perfil_nombre');
+				switch ($perfil) {
+
+					case 'Alumno':
+						redirect('usuarios/alumno');	
+						break;
+
+					case 'Administrador':
+						redirect('usuarios/admin');	
+						break;
+
+					case 'Super Administrador':
+						redirect('usuarios/admin');
+						break;
+
+					case 'Control':
+						redirect('usuarios/control');
+						break;
 				}
-			}else{
-				redirect('usuarios/bloqueado');
 			}
 		}
 	}
@@ -112,7 +127,7 @@ class Home extends CI_Controller {
 
 	public function cambiar_clave(){		
 		$data['contenido'] = 'home/cambiar_clave';
-		$this->load->view('template-index', $data);
+		$this->load->view('tmp-index', $data);
 	}
 
 	public function validar_caracteres(){
@@ -142,12 +157,21 @@ class Home extends CI_Controller {
 			$data = array('dni' => $dni, 'password' => $nueva, 'estado' => 2);//Mandamos el dni porque la consulta necesita ubicar el registro que se va a modificar.
 			$this->Model_Usuarios->update($data);
 			
-			if($this->session->userdata('perfil_nombre') === 'Alumno'){
-				redirect('usuarios/alumno');
-			}else if($this->session->userdata('perfil_nombre') === 'Control'){
-				redirect('usuarios/control');
-			}else{
-				redirect('usuarios/admin');
+			$perfil = $this->session->userdata('perfil_nombre');
+			switch ($perfil) {
+				case 'Alumno':
+					redirect('usuarios/alumno');
+					break;
+				
+				case 'Control':
+					redirect('usuarios/control');
+					break;
+
+				case 'Super Administrador':
+				case 'Administrador':
+					redirect('usuarios/admin');
+					break;
+
 			}
 		}
 	}
@@ -155,7 +179,7 @@ class Home extends CI_Controller {
 	public function recordar_clave(){
 		$data['contenido'] = 'home/recordar_clave';
 		$data['mostrar_mensaje'] = FALSE;
-		$this->load->view('template-index', $data);//Cargamos la vista y el template
+		$this->load->view('tmp-index', $data);//Cargamos la vista y el template
 	}
 
 	public function existe_usuario(){
@@ -200,11 +224,10 @@ class Home extends CI_Controller {
 			}
 			
 			//Redireccionamos al ingreso.
-			$data['contenido'] = 'home/ingreso';
 			$data['mostrar_mensaje'] = TRUE;
 			$data['exito'] = $exito;
 			$data['mensaje'] = $mensaje;
-			$this->load->view('template-index', $data);//Cargamos la vista y el template
+			$this->load->view('home/login', $data);//Cargamos la vista y el template
 		}
 	}
 
@@ -223,8 +246,9 @@ class Home extends CI_Controller {
 		$data['facultades'] = $this->Model_Usuarios->get_facultades();
 		$data['perfil'] = $this->Model_Perfiles->findNombre('Alumno');
 		$data['categoria'] = $this->Model_Categorias->findNombre('Regular');
-
-		$this->load->view('template-index', $data);
+		$data['publickey'] = $this->publickey;
+		$data['error'] = null;
+		$this->load->view('tmp-index', $data);
 	}
 
 	public function no_repetir_usuario(){
@@ -243,7 +267,23 @@ class Home extends CI_Controller {
 
 	public function parametros_permitidos_registro(){
 		$registro = $this->input->post();
-		return $this->usuariolib->parametros_permitidos($registro, 6);
+		return $this->usuariolib->parametros_permitidos($registro, 8);
+	}
+
+	public function validar_recaptcha(){
+		# was there a reCAPTCHA response?
+		if ($this->input->post('recaptcha_response_field')) {
+		    $resp = recaptcha_check_answer ($this->privatekey,
+		                                    $_SERVER["REMOTE_ADDR"],
+		                                    $_POST["recaptcha_challenge_field"],
+		                                    $_POST["recaptcha_response_field"]);
+		    if ($resp->is_valid) {
+		            return true;
+		    } else {
+		            # set the error code so that we can display it
+		            return false;
+		    }
+		}
 	}
 
 	public function registrarse(){
@@ -255,7 +295,8 @@ class Home extends CI_Controller {
 		$this->form_validation->set_rules('lu', 'Libreta', 'required|xss_clean|max_length[8]|is_natural|callback_validar_tabla');
 		$this->form_validation->set_rules('id_provincia', 'Provincia', 'required|is_natural');
 		$this->form_validation->set_rules('id_facultad', 'Facultad', 'required|is_natural');
-		
+		$this->form_validation->set_rules('recaptcha_response_field', 'ReCaptcha', 'required|callback_validar_recaptcha');
+
 		if($this->form_validation->run() == FALSE){
 			//Fallo alguna validación
 			$this->registro();
@@ -277,7 +318,8 @@ class Home extends CI_Controller {
 
 				$registro['id_perfil'] = 4;
 				$registro['id_categoria'] = 2;
-
+				unset($registro['recaptcha_response_field']);
+				unset($registro['recaptcha_challenge_field']);
 				$this->Model_Usuarios->insert($registro);
 				$dni = $this->input->post('dni');
 				//Registro el log de usuario para registro
@@ -291,11 +333,11 @@ class Home extends CI_Controller {
 				$mensaje = "Lo sentimos, no se pudo registrar, intente de nuevo más tarde.";	
 				$exito = false;
 			}
-			$data['contenido'] = 'home/ingreso';
+			
 			$data['mostrar_mensaje'] = TRUE;
 			$data['exito'] = $exito;
 			$data['mensaje'] = $mensaje;
-			$this->load->view('template-index', $data);//Cargamos la vista y el template
+			$this->load->view('home/login', $data);
 		}
 	}
 

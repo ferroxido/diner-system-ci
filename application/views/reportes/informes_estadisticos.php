@@ -233,11 +233,11 @@
 						<?php endforeach; ?>
 						<tr class="info">
 							<td>Totales: </td>
-							<td><?= $totales3->total_tickets; ?></td>
 							<td><?= $totales3->anulados; ?></td>
 							<td><?= $totales3->activos; ?></td>
 							<td><?= $totales3->impresos; ?></td>
 							<td><?= $totales3->consumidos; ?></td>
+							<td><?= $totales3->total_tickets; ?></td>
 						</tr>
 					</tbody>
 				</table>

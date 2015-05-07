@@ -33,7 +33,7 @@
 	<div class="row">
 		<div class="form-group">
 			<div class="col-md-offset-3">
-				<div class="col-md-8 col-xs-12">
+				<div class="col-md-7 col-xs-12">
 					<?= form_button(array('type'=>'submit', 'content'=>' Ingresar', 'class'=>'btn btn-primary glyphicon glyphicon-log-in')); ?>
 			
 					<?= anchor('home/index', ' Cancelar',array('class'=>'btn btn-default glyphicon glyphicon-remove')); ?>
@@ -41,6 +41,4 @@
 			</div>
 		</div>
 	</div>
-	
-
 <?= form_close(); ?>

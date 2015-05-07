@@ -205,14 +205,16 @@ class Usuarios extends CI_Controller {
 		if($this->session->userdata('dni_usuario') != null){
 			$dni = $this->session->userdata('dni_usuario');
 			$data['contenido'] = 'usuarios/alumno';
+			$data['calendario'] = $this->usuariolib->get_calendario_informativo();
+			$data['tickets'] = $this->Model_Tickets->mis_tickets($dni);
 			$data['registro'] = $this->Model_Usuarios->find($dni);
-			$this->load->view('template_usuario', $data);
+			$this->load->view('tmp-alumnos', $data);
 		}
 	}
 
 	public function admin(){
 		$data['contenido'] = 'usuarios/admin';
-		$this->load->view('template-admin', $data);
+		$this->load->view('tmp-admin', $data);
 	}
 
 	//Para el usuario alumnos
@@ -225,7 +227,7 @@ class Usuarios extends CI_Controller {
 			$data['facultades'] = $this->Model_Usuarios->get_facultades();//Obtener lista de facultades
 			$data['mostrar'] = $mostrar;//Variable booleana para mostrar mensaje de error
 			$data['error'] = $error;
-			$this->load->view('template_usuario', $data);
+			$this->load->view('tmp-alumnos2', $data);
 		}
 	}
 
@@ -302,7 +304,7 @@ class Usuarios extends CI_Controller {
 			$data['contenido'] = 'usuarios/anular';
 			$data['registro'] = $this->Model_Usuarios->find($dni);
 			$data['tickets'] = $this->Model_Tickets->get_tickets_anulables($dni);
-			$this->load->view('template_usuario', $data);
+			$this->load->view('tmp-alumnos2', $data);
 		}
 	}
 	

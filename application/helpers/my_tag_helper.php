@@ -89,7 +89,6 @@ if( ! function_exists('my_menu_principal_derecha'))
 			$opciones = $opciones.'<li>'.anchor('home/cambiar_clave', 'Cambiar Clave').'</li>';
 			$opciones = $opciones.'<li>'.anchor('home/salir', 'Salir').'</li>';
 		}else{
-			$opciones = $opciones.'<li>'.anchor('home/ingreso', 'Ingreso').'</li>';
 			$opciones = $opciones.'<li>'.anchor('home/registro', 'Registrarse').'</li>';
 		}
 		return $opciones;

@@ -43,7 +43,7 @@ if ( ! function_exists('autentificar'))
 				$data['mostrar_mensaje'] = TRUE;
 				$data['exito'] = false;//Variable para saber si el mensaje es bueno o malo.
 				$data['mensaje'] = $mensaje;
-				$CI->load->view('template-index', $data);
+				$CI->load->view('home/login', $data);
 			}
 		}
 	}
