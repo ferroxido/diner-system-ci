@@ -15,7 +15,7 @@ class Reportes extends CI_Controller {
 	public function informes_contables(){
 		$data['contenido'] = 'reportes/informes_contables';
 		$data['registros'] = $this->Model_Tickets->get_tickets_por_dias($month,$year);
-		$this->load->view('template-admin', $data);		
+		$this->load->view('tmp-admin', $data);		
 	}
 
 	public function informes_estadisticos(){
@@ -33,7 +33,7 @@ class Reportes extends CI_Controller {
 		$data['registros3'] = $this->Model_Tickets->clasificacion_tickets($hoy, $hoy);//por defecto, el día actual.
 		$data['totales3'] = $this->Model_Tickets->get_total_tickets($hoy, $hoy)->row();
 
-		$this->load->view('template-admin', $data);
+		$this->load->view('tmp-admin', $data);
 	}
 
 	public function obtener_registros_tickets(){

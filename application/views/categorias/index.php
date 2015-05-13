@@ -4,7 +4,7 @@
 
 <?= form_open('index.php/categorias/search', array('class' => 'form-search')); ?>
 	<div class="row" style="margin:1em 0;">
-		<div class="col-md-4">
+		<div class="col-md-4 col-sm-4 col-xs-6">
 			<div class="input-group">
 	        <input type="text" class="form-control" placeholder="Buscar por nombre" name="buscar" id="buscar">
 	        <div class="input-group-btn">
@@ -12,7 +12,7 @@
 	        </div>
 	    </div>
 		</div>
-		<div class="col-md-4">
+		<div class="col-md-4 col-sm-4 col-xs-6">
 			<div class="input-group">
 	       		<?= my_boton_permisos('categorias/create', ' Agregar' ,'btn btn-primary glyphicon glyphicon-plus'); ?>
 	    	</div>

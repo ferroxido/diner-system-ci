@@ -1,4 +1,4 @@
-<?= form_open('feriados/insert', array('class'=>'form-horizontal jumbotron')); ?>
+<?= form_open('feriados/insert', array('class'=>'form-horizontal')); ?>
 	<legend>Agregando un Día Feriado</legend>
 
 	<?= my_validation_errors(validation_errors()); ?>

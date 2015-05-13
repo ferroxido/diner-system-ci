@@ -125,35 +125,18 @@ if( ! function_exists('my_menu_collapse'))
 	function my_menu_collapse()
 	{
 		$opciones = null;
-		get_instance()->load->model('Model_Menu');
 		get_instance()->load->model('Model_Tipos_Operaciones');
 		if(get_instance()->session->userdata('dni_usuario')){
-			$opciones = '';
-			$query = get_instance()->Model_Menu->allForMenu();			
 
-			foreach($query as $opcion){
-				
-				$contenido = '<ul>';
-
-				$operaciones = get_instance()->Model_Tipos_Operaciones->get_operaciones($opcion->id);
-				foreach ($operaciones as $operacion) {
-					$irA = $operacion->controlador.'/'.$operacion->accion;
-					$contenido = $contenido.'<li>'.anchor($irA, $operacion->nombre).'</li>';
-				}
-				$contenido = $contenido.'</ul>';
-				$opciones = $opciones.'<div class="panel panel-default">';
-				$opciones = $opciones.'<div id="menu_collapse" class="panel-heading">';
-				$opciones = $opciones.'<h4 class="panel-title">';
-				$opciones = $opciones.'<a data-toggle="collapse" data-parent="#accordion" href="#'.$opcion->id.'" >';
-				$opciones = $opciones.$opcion->nombre.'</a></h4></div>';
-				$opciones = $opciones.'<div id="'.$opcion->id.'" class="panel-collapse collapse">';
-				$opciones = $opciones.'<div class="panel-body">';
-				$opciones = $opciones.$contenido.'</div></div></div>';
+			$contenido = '<ul class="menu-list">';
+			$operaciones = get_instance()->Model_Tipos_Operaciones->get_operaciones_activas();
+			foreach ($operaciones as $operacion) {
+				$irA = $operacion->controlador.'/'.$operacion->accion;
+				$contenido = $contenido.'<li>'.anchor($irA, $operacion->nombre, array('class'=>'a-noactivo')).'</li>';
 			}
-		}else{
-
+			$contenido = $contenido.'</ul>';
 		}
-		return $opciones;
+		return $contenido;
 	}
 }
 

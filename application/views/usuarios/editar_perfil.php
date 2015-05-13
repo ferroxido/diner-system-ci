@@ -43,7 +43,7 @@
 			<div class="form-group">
 				<div class="col-sm-offset-7">
 					<?= form_button(array('type'=>'submit', 'content'=>'Aceptar', 'class'=>'btn btn-success glyphicon glyphicon-ok')); ?>
-					<?= anchor('usuarios/alumno', ' Volver',array('class'=>'btn btn-primary glyphicon glyphicon-arrow-left')); ?>
+					<a href="javascript:window.history.go(-1);" class="btn btn-primary glyphicon glyphicon-arrow-left"> Volver</a>
 				</div>
 			</div>
 		</div>

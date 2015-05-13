@@ -1,4 +1,4 @@
-<?= form_open('menu/insert', array('class'=>'form-horizontal jumbotron')); ?>
+<?= form_open('menu/insert', array('class'=>'form-horizontal')); ?>
 	<legend>Agregando un Registro</legend>
 
 	<?= my_validation_errors(validation_errors()); ?>

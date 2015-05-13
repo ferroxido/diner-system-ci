@@ -14,14 +14,14 @@ class Categorias extends CI_Controller {
 	public function index(){
 		$data['contenido'] = 'categorias/index';
 		$data['registros'] = $this->Model_Categorias->all();
-		$this->load->view('template-admin', $data);
+		$this->load->view('tmp-admin', $data);
 	}
 
 	public function search(){
 		$data['contenido'] = 'categorias/index';
 		$valor = $this->input->post('buscar');
 		$data['registros'] = $this->Model_Categorias->allFilter('nombre', $valor);
-		$this->load->view('template-admin', $data);
+		$this->load->view('tmp-admin', $data);
 	}
 
 	public function norepeat(){
@@ -44,7 +44,7 @@ class Categorias extends CI_Controller {
 
 	public function create(){
 		$data['contenido'] = 'categorias/create';
-		$this->load->view('template-admin',$data);
+		$this->load->view('tmp-admin',$data);
 	}
 
 	public function insert(){

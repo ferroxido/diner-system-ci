@@ -158,4 +158,8 @@ inner join
 (SELECT distinct on(id_ticket) id_ticket, id_log_usuario FROM tickets_log_usuarios) AS tickets_log_usuarios ON tickets.id = tickets_log_usuarios.id_ticket
 inner join log_usuarios ON log_usuarios.id = tickets_log_usuarios.id_log_usuario
 group by dias.fecha, dni 
-having count(dias.fecha) = 2    
+having count(dias.fecha) = 2
+
+select tickets_log_usuarios.* from tickets_log_usuarios 
+inner join log_usuarios on tickets_log_usuarios.id_log_usuario = log_usuarios.id
+where id_accion = 3 and dni = '38343421' order by id_ticket;

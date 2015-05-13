@@ -16,14 +16,14 @@ class Feriados extends CI_Controller {
 	public function index(){
 		$data['contenido'] = 'feriados/index';
 		$data['registros'] = $this->Model_Feriados->all();
-		$this->load->view('template-admin', $data);
+		$this->load->view('tmp-admin', $data);
 	}
 
 	public function search(){
 		$data['contenido'] = 'feriados/index';
 		$valor = $this->input->post('buscar');
 		$data['registros'] = $this->Model_Feriados->all_filter('descripcion', $valor);
-		$this->load->view('template-admin', $data);
+		$this->load->view('tmp-admin', $data);
 	}
 
 	public function update(){
@@ -43,7 +43,7 @@ class Feriados extends CI_Controller {
 
 	public function create(){
 		$data['contenido'] = 'feriados/create';
-		$this->load->view('template-admin',$data);
+		$this->load->view('tmp-admin',$data);
 	}
 
 	public function validar_fecha($fecha){

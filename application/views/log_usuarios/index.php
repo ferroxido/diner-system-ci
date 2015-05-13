@@ -6,8 +6,8 @@
 		<fieldset>
 		<div class="row">
 			<div class="form-group">
-				<label for="buscar_acciones" class="col-md-2">Por Acciones: </label>
-				<div class="col-md-4">
+				<label for="buscar_acciones" class="col-md-2 col-sm-2">Por Acciones: </label>
+				<div class="col-md-4 col-sm-4">
 					<?= form_dropdown('id_accion', $acciones, 0,"id='drop_down' class='form-control'"); ?>
 				</div>
 			</div>
@@ -17,8 +17,8 @@
 
 		<div class="row">
 			<div class="form-group">
-				<label for="buscar_dni" class="col-md-2">Por dni: </label>
-				<div class="col-md-4">
+				<label for="buscar_dni" class="col-md-2 col-sm-2">Por dni: </label>
+				<div class="col-md-4 col-sm-4">
 					<div class="input-group">
 						<input id="buscar_dni" name="buscar_dni" type="text" class="form-control" />
 						<span class="input-group-addon"><i class="glyphicon glyphicon-search"></i></span>

@@ -3,13 +3,13 @@
 </div>
 
 <div class="row" style="margin:1em 0;">
-	<div class="col-lg-4">
+	<div class="col-md-4">
 		<div class="input-group">
         <input id="buscar" type="text" class="form-control" placeholder="Buscar por nombre" name="buscar" id="buscar">
         <span class="input-group-addon"><i class="glyphicon glyphicon-search"></i></span>
     </div>
 	</div>
-	<div class="col-lg-4">
+	<div class="col-md-4">
 		<div class="input-group">
        		<?= my_boton_permisos('calendario/create', ' Agregar', 'btn btn-primary glyphicon glyphicon-plus'); ?>
     	</div>

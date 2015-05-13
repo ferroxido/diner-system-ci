@@ -22,7 +22,7 @@ class Tickets extends CI_Controller {
 		$data['numeroPaginas'] = ceil($totalRows / $this->filasPorPagina);
 		$data['registros'] = $this->Model_Tickets->all($this->filasPorPagina, $this->primeraPagina);
 		$data['estados'] = $this->Model_Tickets->get_estados();
-		$this->load->view('template-admin', $data);
+		$this->load->view('tmp-admin', $data);
 	}
 
 	public function get_total_pages(){
@@ -61,7 +61,7 @@ class Tickets extends CI_Controller {
 	public function detalles($id_ticket){
 		$data['contenido'] = 'tickets/detalles';
 		$data['registros'] = $this->Model_Tickets->get_ticket_detalle($id_ticket);
-		$this->load->view('template-admin', $data);		
+		$this->load->view('tmp-admin', $data);		
 	}
 
 	public function vencimiento_cron(){

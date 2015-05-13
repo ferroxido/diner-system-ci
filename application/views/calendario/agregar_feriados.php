@@ -1,4 +1,4 @@
-<?= form_open('calendario/insert_feriado', array('class'=>'form-horizontal jumbotron')); ?>
+<?= form_open('calendario/insert_feriado', array('class'=>'form-horizontal')); ?>
 	<?= form_hidden('descripcion_calendario', $descripcion); ?>
 	<?= form_hidden('desde', $desde); ?>
 	<?= form_hidden('hasta', $hasta); ?>

@@ -1,4 +1,4 @@
-<?= form_open('calendario/feriados', array('class'=>'form-horizontal jumbotron')); ?>
+<?= form_open('calendario/feriados', array('class'=>'form-horizontal')); ?>
 	<legend>Agregando un nuevo calendario Académico</legend>
 	<h4>Paso 1: Ingrese una descripción e indique un Inicio y un Final para su calendario</h4>
 

@@ -1,4 +1,4 @@
-<?= form_open('index.php/categorias/insert', array('class'=>'form-horizontal jumbotron')); ?>
+<?= form_open('categorias/insert', array('class'=>'form-horizontal')); ?>
 	<legend>Agregando un Registro</legend>
 
 	<?= my_validation_errors(validation_errors()); ?>
@@ -16,7 +16,7 @@
 
 	<div class="row">
 		<div class="form-group">
-			<div class="col-md-offset-1">
+			<div class="col-md-offset-2">
 				<div class="col-md-6">
 					<?= form_button(array('type'=>'submit', 'content'=>' Aceptar', 'class'=>'btn btn-success glyphicon glyphicon-ok')); ?>
 

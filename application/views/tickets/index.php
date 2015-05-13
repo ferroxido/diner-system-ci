@@ -5,11 +5,11 @@
 <div class="row">
 	<div class="filtros col-md-12">
 		<fieldset>
-		<div class="col-md-6">
+		<div class="col-md-6 col-sm-6">
 			<div class="row filtro filtronombre">
 				<div class="form-group">
-					<label for="buscar_nombre" class="col-md-2">Nombre: </label>
-					<div class="col-md-10">
+					<label for="buscar_nombre" class="col-md-3">Nombre: </label>
+					<div class="col-md-9">
 						<div class="input-group">
 							<input id="buscar_nombre" name="buscar_nombre" type="text" class="form-control" value="" placeholder="Filtrar por Nombre" />
 							<span class="input-group-addon"><i class="glyphicon glyphicon-search"></i></span>
@@ -20,8 +20,8 @@
 			<br>
 			<div class="row filtro filtrodni">
 				<div class="form-group">
-					<label for="buscar_dni" class="col-md-2">Dni: </label>
-					<div class="col-md-10">
+					<label for="buscar_dni" class="col-md-3">Dni: </label>
+					<div class="col-md-9">
 						<div class="input-group">						
 							<input id="buscar_dni" name="buscar_dni" type="text" class="form-control" placeholder="Filtrar por dni" />
 							<span class="input-group-addon"><i class="glyphicon glyphicon-search"></i></span>
@@ -32,8 +32,8 @@
 			<br>
 			<div class="row">
 				<div class="form-group">
-					<label for="estado" class="col-md-2">Estado: </label>
-					<div class="col-md-10">
+					<label for="estado" class="col-md-3">Estado: </label>
+					<div class="col-md-9">
 						<?= form_dropdown('estado', $estados, 5,"id='drop_down' class='form-control'"); ?>
 					</div>
 				</div>
@@ -43,11 +43,11 @@
 			</div>
 		</div>
 		
-		<div class="col-md-6">
+		<div class="col-md-6 col-sm-6">
 			<div class="row filtro filtrolu">
 				<div class="form-group">
-					<label for="buscar_id" class="col-md-2">ID: </label>
-					<div class="col-md-10">
+					<label for="buscar_id" class="col-md-3">ID: </label>
+					<div class="col-md-9">
 						<div class="input-group">						
 							<input id="buscar_id" name="buscar_id" type="text" class="form-control" placeholder="Filtrar por ID de ticket" />
 							<span class="input-group-addon"><i class="glyphicon glyphicon-search"></i></span>
@@ -58,8 +58,8 @@
 			<br>
 			<div class="row filtro filtrolu">
 				<div class="form-group">
-					<label for="buscar_fecha" class="col-md-2">Fecha: </label>
-					<div class="col-md-10">
+					<label for="buscar_fecha" class="col-md-3">Fecha: </label>
+					<div class="col-md-9">
 						<div class="input-group">						
 							<input id="buscar_fecha" name="buscar_fecha" type="text" class="form-control" placeholder="Filtrar por fecha" />
 							<span class="input-group-addon"><i class="glyphicon glyphicon-search"></i></span>

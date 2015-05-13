@@ -25,10 +25,9 @@
 }
 
 body,html{
-  background-color: #FFF;
-}
-div#contenedor{
-  position: relative;
+  background-color: #EEEDEB;
+  overflow-x: hidden;
+  height: 100%;
 }
 div.image{
   text-align: center;
@@ -39,21 +38,53 @@ div.image{
   color: #000;
   font-size: 1.21em;
 }
-
-div#fondo{
-  background: url('../img/fondo2.jpeg');
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-position: center;
-  height: 700px;
-  width: 100%;
+div#contenido{
+  margin: 0px auto;
+  padding: 2em;
+}
+div#contenedor_menu{
+  position: fixed;
 }
 div#menu_usuario{
   background-color: #333333;
   color: #FFF;
+  font-size: 1.5em;
+  padding-top: 3em;
+  text-align: left;
+  height: 100vh;
 }
-ul{
+div#menu_usuario ul{
   list-style: none;
+  padding: 0px;
+  margin: 0px;
+}
+div#menu_usuario li{
+  width: 100%;
+}
+div#menu_usuario ul a{
+  border-bottom-color: #FFF;
+  border-bottom-width: .06em;
+  border-bottom-style: dotted;
+  display: block;
+  text-decoration: none;
+  -ms-transition: all 1s ease-out;
+  -moz-transition: all 1s ease-out;
+  -o-transition: all 1s ease-out;
+  -webkit-transition: all 1s ease-out;
+  transition: all 1s ease-out;
+}
+div#menu_usuario ul a:hover{
+  background-color: #AEA79F;
+  color: #DD4814;
+  padding-left: 2em;
+}
+div#footer{
+  font-size: .7em;
+  margin-top: 7em;
+}
+div#footer p{
+  padding: .4em;
+  text-align: justify;
 }
 form h3{
   padding: 0px 0px .5em 0px;
@@ -163,24 +194,38 @@ table.calendario {
   color: #DD4814;
   padding: .3em;
 }
-
+.a-noactivo{
+  color: #FFF;
+  padding-left: 1em;
+}
+.a-activo{
+  background-color: #AEA79F;
+  padding-left: 2em;
+  color: #DD4814;
+}
 /* Large desktop */
 @media (min-width: 1200px) {
   
 }
 /* Portrait tablet to landscape and desktop */
 @media (min-width: 980px) and (max-width: 1199px) {
-
+  
 }
 /* Portrait tablet to landscape and desktop */
 @media (min-width: 768px) and (max-width: 979px) {
-
+  div#contenedor_menu{
+    position: static;
+  }  
 }
 /* Landscape phone to portrait tablet */
 @media (max-width: 767px) {
-
+  div#contenedor_menu{
+    position: static;
+  }
 }
 /* Landscape phones and down */
 @media (max-width: 480px) {
-  
+  div#contenedor_menu{
+    position: static;
+  }
 }

@@ -1,4 +1,4 @@
-<?= form_open('calendario/anulando', array('class'=>'form-horizontal jumbotron')); ?>
+<?= form_open('calendario/anulando', array('class'=>'form-horizontal')); ?>
 	<legend>Anular todos los tickets del día <?= $fecha;?></legend>
 
 	<?= my_validation_errors(validation_errors()); ?>

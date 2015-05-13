@@ -22,7 +22,7 @@ class Calendario extends CI_Controller{
 	public function index(){
 		$data['contenido'] = 'calendario/index';
 		$data['registros'] = $this->Model_Calendario->all();
-		$this->load->view('template-admin', $data);
+		$this->load->view('tmp-admin', $data);
 	}
 
 	public function detalle($id = null){
@@ -32,7 +32,7 @@ class Calendario extends CI_Controller{
 			$resultado = $this->calendariolib->calcular_meses($id);
 			if($resultado){
 				$data['calendario'] = $this->calendariolib->generar_calendario($resultado['year'],$resultado['month'],$resultado['total']);
-				$this->load->view('template-admin', $data);
+				$this->load->view('tmp-admin', $data);
 			}else{
 				show_404();
 			}
@@ -67,7 +67,7 @@ class Calendario extends CI_Controller{
 
 	public function create(){
 		$data['contenido'] = 'calendario/create';
-		$this->load->view('template-admin', $data);
+		$this->load->view('tmp-admin', $data);
 	}
 
 	public function feriados(){
@@ -89,7 +89,7 @@ class Calendario extends CI_Controller{
 			$data['desde'] = $desde;
 			$data['hasta'] = $hasta;
 			$data['feriados'] = $this->Model_Feriados->all_between($desde, $hasta);
-			$this->load->view('template-admin', $data);
+			$this->load->view('tmp-admin', $data);
 		}
 	}
 
@@ -99,7 +99,7 @@ class Calendario extends CI_Controller{
 			$data['desde'] = $this->input->post('desde');
 			$data['hasta'] = $this->input->post('hasta');
 			$data['contenido'] = 'calendario/agregar_feriados';
-			$this->load->view('template-admin',$data);
+			$this->load->view('tmp-admin',$data);
 		}
 	}
 
@@ -132,7 +132,7 @@ class Calendario extends CI_Controller{
 			$data['desde'] = $desde;
 			$data['hasta'] = $hasta;
 			$data['feriados'] = $this->Model_Feriados->all_between($desde, $hasta);
-			$this->load->view('template-admin', $data);
+			$this->load->view('tmp-admin', $data);
 		}
 	}
 
@@ -203,7 +203,7 @@ class Calendario extends CI_Controller{
 		if($this->session->userdata('dni_usuario') != null){
 			$data['contenido'] = 'calendario/anular';
 			$data['fecha'] = $fecha;
-			$this->load->view('template-admin',$data);
+			$this->load->view('tmp-admin',$data);
 		}		
 	}
 

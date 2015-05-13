@@ -30,7 +30,7 @@ class Usuarios extends CI_Controller {
 		$totalRows = $this->Model_Usuarios->get_total_rows($nombre, $dni, $lu);
 		$data['numeroPaginas'] = ceil($totalRows / $this->filasPorPagina);
 		$data['registros'] = $this->Model_Usuarios->all($this->filasPorPagina, $this->primeraPagina);
-		$this->load->view('template-admin', $data);
+		$this->load->view('tmp-admin', $data);
 	}
 
 	public function get_total_pages(){
@@ -66,14 +66,18 @@ class Usuarios extends CI_Controller {
 	}	
 
 	//Para el usuario administrador
-	public function edit($dni){
-		$data['contenido'] = 'usuarios/edit';
-		$data['registro'] = $this->Model_Usuarios->find($dni);
-		$data['provincias'] = $this->Model_Usuarios->get_provincias();//Obtener lista de provincias
-		$data['facultades'] = $this->Model_Usuarios->get_facultades();//Obtener lista de facultades
-		$data['perfiles'] = $this->Model_Usuarios->get_perfiles();//Obtener lista de perfiles
-		$data['categorias'] = $this->Model_Usuarios->get_categorias();//Obtener lista de categorías
-		$this->load->view('template-admin',$data);
+	public function edit($dni = null){
+		if($this->usuariolib->validar_dni($dni) && $dni != null){
+			$data['contenido'] = 'usuarios/edit';
+			$data['registro'] = $this->Model_Usuarios->find($dni);
+			$data['provincias'] = $this->Model_Usuarios->get_provincias();//Obtener lista de provincias
+			$data['facultades'] = $this->Model_Usuarios->get_facultades();//Obtener lista de facultades
+			$data['perfiles'] = $this->Model_Usuarios->get_perfiles();//Obtener lista de perfiles
+			$data['categorias'] = $this->Model_Usuarios->get_categorias();//Obtener lista de categorías
+			$this->load->view('tmp-admin',$data);
+		}else{
+			show_404();
+		}
 	}
 
 	//Para el usuario administrador
@@ -109,7 +113,7 @@ class Usuarios extends CI_Controller {
 		$data['facultades'] = $this->Model_Usuarios->get_facultades();//Obtener lista de facultades
 		$data['perfiles'] = $this->Model_Usuarios->get_perfiles();//Obtener lista de perfiles
 		$data['categorias'] = $this->Model_Usuarios->get_categorias();//Obtener lista de categorías
-		$this->load->view('template-admin',$data);
+		$this->load->view('tmp-admin',$data);
 	}
 
 	//Para el usuario administrador
@@ -205,12 +209,29 @@ class Usuarios extends CI_Controller {
 		if($this->session->userdata('dni_usuario') != null){
 			$dni = $this->session->userdata('dni_usuario');
 			$data['contenido'] = 'usuarios/alumno';
-			$data['calendario'] = $this->usuariolib->get_calendario_informativo();
-			$data['tickets'] = $this->Model_Tickets->mis_tickets($dni);
+			$estado = 5;//Traer todos los tickets
+			$data['tickets'] = $this->Model_Tickets->mis_tickets($dni, $estado);
 			$data['registro'] = $this->Model_Usuarios->find($dni);
+			$data['estados'] = $this->Model_Tickets->get_estados();
 			$this->load->view('tmp-alumnos', $data);
 		}
 	}
+
+	/*
+	 * Filtra los tickets de acuerdo a los parametros enviados por ajax
+	 */
+	public function filtrar_tickets_alumno(){
+		if($this->input->is_ajax_request()){
+			if($this->session->userdata('dni_usuario') != null){
+				$dni = $this->session->userdata('dni_usuario');
+				$estado = $this->input->post('estado');
+				$query = $this->Model_Tickets->mis_tickets($dni, $estado);
+				echo json_encode($query);
+			}
+		}else{
+			show_404();
+		}
+	}	
 
 	public function admin(){
 		$data['contenido'] = 'usuarios/admin';

@@ -1,4 +1,4 @@
-<?= form_open('index.php/provincias/insert', array('class'=>'form-horizontal jumbotron')); ?>
+<?= form_open('index.php/provincias/insert', array('class'=>'form-horizontal')); ?>
 	<legend>Agregando un Registro</legend>
 
 	<?= my_validation_errors(validation_errors()); ?>

@@ -13,7 +13,7 @@
     <script src="<?= base_url('js/jquery.js'); ?>"></script>
     <script src="<?= base_url('js/jquery-ui.min.js'); ?>"></script>
     <script src="<?= base_url('js/bootstrap.min.js'); ?>"></script>
-    
+    <script src="<?= base_url('js/tmp-admin.js'); ?>"></script>
 </head>
 <body>
 
@@ -45,31 +45,23 @@
 			<div class="row">
 
 				<!-- Menú del sistema -->
-		        <div class="col-md-3">
+		        <div id="contenedor_menu" class="col-md-3">
 		        	<div id="menu_usuario">
-		        		<h4>Menú de Usuario</h4>
-		            	<ul>
-		            		<li><a href="#">opcion 1</a></li>
-		            		<li><a href="#">opcion 2</a></li>
-		            		<li><a href="#">opcion 3</a></li>
-		            		<li><a href="#">opcion 4</a></li>
-		            		<li><a href="#">opcion 5</a></li>
-		            		<li><a href="#">opcion 6</a></li>
-		            		<li><a href="#">opcion 7</a></li>
-		            	</ul>
-		        	</div>
+		        		<?= my_menu_collapse(); ?>
+						<div id="footer">
+		            	<hr>
+		            	<p><?= $this->session->userdata('nombre_usuario'); ?>&copy; Sistema de gestión de tickes UNSA - <?= date('d-m-Y H:i'); ?> </p>							
+						</div>
+		        	</div> 	
 		        </div>
     	
 		        <!-- Contenido de la aplicación -->
-		        <div class="col-md-9">
-		        	<?= $this->load->view($contenido); ?>
+		        <div class="col-md-9 col-md-offset-3">
+		        	<div id="contenido" class="row">
+		        		<?= $this->load->view($contenido); ?>
+		        	</div>
 		        </div>
       		</div>
-		    <hr>
-
-		    <footer>
-		    	<p><?= $this->session->userdata('nombre_usuario'); ?>&copy; Sistema de gestión de tickes UNSA - <?= date('d-m-Y H:i'); ?> </p>
-		    </footer>
 		</div>
 	</div>
 </body>

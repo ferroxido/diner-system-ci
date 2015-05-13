@@ -1,4 +1,4 @@
-<?= form_open('index.php/usuarios/insert', array('class'=>'form-horizontal jumbotron')); ?>
+<?= form_open('usuarios/insert', array('class'=>'form-horizontal')); ?>
 	<legend>Editando un Registro</legend>
 
 	<?= my_validation_errors(validation_errors()); ?>

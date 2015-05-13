@@ -27,7 +27,7 @@ class Model_Tipos_Operaciones extends CI_Model {
     }
 
     function allForMenu(){
-        $this->db->order_by('orden', 'asc');//Opcionalmente usar desc
+        $this->db->order_by('nombre', 'asc');//Opcionalmente usar desc
         $query = $this->db->get('tipos_operaciones');
         return $query->result();
     }
@@ -42,6 +42,14 @@ class Model_Tipos_Operaciones extends CI_Model {
         $this->db->order_by('nombre', 'asc');
         $query = $this->db->get('tipos_operaciones');
         return $query->result();
+    }
+
+    function get_operaciones_activas(){
+        $estadoActivo = 1;
+        $this->db->where('estado', $estadoActivo);
+        $this->db->order_by('nombre', 'asc');
+        $query = $this->db->get('tipos_operaciones');
+        return $query->result();        
     }
 
     function insert($registro){

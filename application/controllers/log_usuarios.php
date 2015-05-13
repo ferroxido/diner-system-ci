@@ -19,7 +19,7 @@ class Log_Usuarios extends CI_Controller {
 		$data['numeroPaginas'] = ceil($totalRows / $this->filasPorPagina);
 		$data['registros'] = $this->Model_Log_Usuarios->all($this->filasPorPagina, $this->primeraPagina);
 		$data['acciones'] = $this->Model_Log_Usuarios->get_acciones();
-		$this->load->view('template-admin', $data);
+		$this->load->view('tmp-admin', $data);
 	}
 
 	public function get_total_pages(){

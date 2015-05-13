@@ -26,6 +26,12 @@
 
 body,html{
   background-color: #FFF;
+  background: url('../img/fondo2.jpeg');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  overflow-x: hidden;
+  height: 100%;
   overflow-x: hidden;
 }
 /* columnas de igual altura */
@@ -43,12 +49,6 @@ div#botonera{
 }
 div#col1{
   background-color: #333333;
-}
-div#col2{
-  background-color: #308ACC;
-}
-div#col3{
-  background-color: #FFF;
 }
 div#img_alumno{
   margin: 0px auto 2em;
@@ -140,7 +140,7 @@ div.tablas-propias {
 }
 div.tablas-mis-tickets {
   overflow: auto;
-  height: 160px;
+  height: 300px;
   text-align: center;
 }
 div.tablas-propias a:hover {

@@ -48,7 +48,7 @@
 				      			<input type="file" name="userfile" style="visibility:hidden;position:absolute;top:0;"/>
 				      		<?= form_close(); ?>
 				      		<img class="img-subir" data-src="holder.js/100%x180" src="<?= $registro->ruta_foto; ?>">
-						</a>								
+						</a>
 					</div>
 					<div id="datos_alumno">
 						<div class="form-group group-label">
@@ -87,29 +87,36 @@
 				<div id="info_comedor">
 					<div id="mis_tickets">
 						<legend>Mis Tickets</legend>
+						<div class="row">
+							<div class="form-group">
+								<label for="estado" class="col-md-2">Estado: </label>
+								<div class="col-md-10">
+									<?= form_dropdown('estado', $estados, 5,"id='drop_down' class='form-control'"); ?>
+								</div>
+							</div>
+						</div>
+						<br>
 						<div class="tablas-mis-tickets">
 							<table class="table table-bordered table-striped table-hover">
 								<thead>
 									<tr>
 										<th> Número </th>
 										<th> Fecha </th>
+										<th> Estado </th>
 									</tr>
 								</thead>
 
-								<tbody>
+								<tbody id="destino_resultado">
 									<?php foreach ($tickets as $ticket): ?>
 									<tr>
 										<td><?= $ticket->id_ticket; ?></td>
 										<td><?= date("d/m/Y",strtotime($ticket->fecha)); ?></td>
+										<td><?= $ticket->estado; ?></td>
 									</tr>
 									<?php endforeach; ?>
 								</tbody>
 							</table>
 						</div>
-					</div>
-					<div id="calendario_actual">
-						<?= $calendario; ?>
-						<h4>td = tickets disponibles</h4>
 					</div>
 				</div>
 			</div>
@@ -125,4 +132,7 @@
 	</div>
 </body>
 </html>
+<script type="text/javascript">
+	base_url = '<?=base_url(); ?>';
+</script>
 <script src="<?= base_url('js/alumnos.js'); ?>"></script>

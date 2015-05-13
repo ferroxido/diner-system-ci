@@ -1,4 +1,4 @@
-<div class="jumbotron">
+<div>
 	<div class="row">
 		<div class="col-md-8">
 			<h2>Calendario académico</h2>

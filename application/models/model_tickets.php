@@ -261,8 +261,9 @@ class Model_Tickets extends CI_Model {
         return $query->row('total_tickets');
     }
 
-    function mis_tickets($dni){
-        $query = $this->db->query("SELECT tickets.id AS id_ticket, dias.fecha AS fecha
+    function mis_tickets($dni, $estado){
+        $estado = ($estado == '5')? '':$estado;
+        $query = $this->db->query("SELECT tickets.id AS id_ticket, dias.fecha AS fecha, estados_tickets.nombre AS estado
                 FROM tickets
                 INNER JOIN dias ON tickets.id_dia = dias.id
                 INNER JOIN estados_tickets on tickets.estado = estados_tickets.id
@@ -270,9 +271,11 @@ class Model_Tickets extends CI_Model {
                     (SELECT DISTINCT ON(id_ticket) id_ticket, id_log_usuario FROM tickets_log_usuarios) AS tickets_log_usuarios
                 ON tickets_log_usuarios.id_ticket = tickets.id
                 INNER JOIN log_usuarios ON tickets_log_usuarios.id_log_usuario = log_usuarios.id
-                WHERE tickets.estado = 2 AND dni = '$dni'
+                WHERE dni = '$dni'
+                AND tickets.estado::text LIKE '{$estado}%'
                 ORDER BY tickets.id ASC");
         return $query->result();
     }
 
 }
+
