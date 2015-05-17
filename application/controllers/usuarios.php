@@ -296,8 +296,8 @@ class Usuarios extends CI_Controller {
 			$config['upload_path'] = './img/fotos-usuarios/';
 			$config['allowed_types'] = 'gif|jpg|png|jpeg';
 			$config['max_size']	= '2048';
-			$config['max_width']  = '1024';
-			$config['max_height']  = '768';
+			$config['max_width']  = '0';
+			$config['max_height']  = '0';
 			$config['overwrite'] = true;
 			$config['file_name'] = $dni;
 
@@ -307,14 +307,33 @@ class Usuarios extends CI_Controller {
 				//Controlar error al subir archivo.
 				$mostrar = true;
 				$error = "No se pudo subir la imagen ".$this->upload->display_errors();
+
 				$this->editar_perfil($mostrar, $error);
 			}else{
 				//El registro está ok, entonces lo actualizamos en la tabla usuarios
-				$info = $this->upload->data();
-				$registro['dni'] = $dni;
-				$registro['ruta_foto'] = base_url('img/fotos-usuarios/'.$info['file_name']);
-				$this->Model_Usuarios->update($registro);
-				redirect('usuarios/editar_perfil');
+				$info = $this->upload->data();//Información de la imagen subida
+				//Redimensionamos la imagen
+				$config['image_library'] = 'gd2';
+				$config['source_image'] = $info['full_path'];
+				$config['create_thumb'] = FALSE;
+				$config['maintain_ratio'] = TRUE;
+				$config['width']         = 640;
+				$config['height']       = 400;
+
+				$this->load->library('image_lib', $config);
+				
+				if(!$this->image_lib->resize()){
+					$mostrar = true;
+					$error = "No se pudo subir la imagen ".$this->image_lib->display_errors();
+					$this->editar_perfil($mostrar, $error);
+				}else{
+					//Guardamos la imagen en la DB				
+					$registro['dni'] = $dni;
+					$registro['ruta_foto'] = base_url('img/fotos-usuarios/'.$info['file_name']);
+					$this->Model_Usuarios->update($registro);
+					redirect('usuarios/editar_perfil');
+				}
+
 			}
 		}
 	}

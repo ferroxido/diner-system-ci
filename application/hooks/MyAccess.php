@@ -37,13 +37,7 @@ if ( ! function_exists('autentificar'))
 					redirect('home/acceso_denegado');
 				}
 			}else{
-				//La session expiro, redireccionamos al ingreso.
-				$mensaje = "La sesión terminó, ingrese nuevamente";
-				$data['contenido'] = 'home/ingreso';
-				$data['mostrar_mensaje'] = TRUE;
-				$data['exito'] = false;//Variable para saber si el mensaje es bueno o malo.
-				$data['mensaje'] = $mensaje;
-				$CI->load->view('home/login', $data);
+				redirect('home/index');
 			}
 		}
 	}
