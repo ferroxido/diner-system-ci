@@ -163,3 +163,60 @@ having count(dias.fecha) = 2
 select tickets_log_usuarios.* from tickets_log_usuarios 
 inner join log_usuarios on tickets_log_usuarios.id_log_usuario = log_usuarios.id
 where id_accion = 3 and dni = '38343421' order by id_ticket;
+
+
+select usuarios.nombre, usuarios.dni, usuarios.lu, usuarios.saldo, usuarios.estado,
+    facultades.nombre as facultad, categorias.nombre as categoria, sum(valor) as dinero
+from usuarios
+inner join perfiles on usuarios.id_perfil = perfiles.id
+inner join provincias on usuarios.id_provincia = provincias.id
+inner join facultades on usuarios.id_facultad = facultades.id
+inner join categorias on usuarios.id_categoria = categorias.id
+left join billetes on usuarios.dni = billetes.dni
+group by usuarios.nombre, usuarios.dni, usuarios.lu, usuarios.saldo, usuarios.estado, facultad, categoria
+order by usuarios.nombre asc;
+
+
+#consultas previas
+select count(tabla.id), fecha::timestamp::date from (select *
+from log_usuarios
+where dni = '32291647' and id_accion = 1) as tabla
+left join tickets_log_usuarios on  id_log_usuario = tabla.id
+group by fecha::timestamp::date
+order by fecha;
+
+SELECT dias.fecha, dinero, comprados, anulados FROM (SELECT fecha::date AS fecha FROM dias) AS dias
+LEFT JOIN 
+(select count(tabla.id) AS comprados, fecha::date AS fecha FROM (select *
+from log_usuarios
+where dni = '32291647' and id_accion = 1) as tabla
+left join tickets_log_usuarios on  id_log_usuario = tabla.id
+group by fecha::date
+order by fecha) AS compras
+ON compras.fecha = dias.fecha
+LEFT JOIN
+(select count(tabla.id) AS anulados, fecha::date AS fecha FROM (select *
+from log_usuarios
+where dni = '32291647' and id_accion = 2) as tabla
+left join tickets_log_usuarios on  id_log_usuario = tabla.id
+group by fecha::date
+order by fecha) AS anulaciones
+ON anulaciones.fecha = dias.fecha
+LEFT JOIN
+(select fecha::date as fecha, sum(valor) AS dinero from billetes where dni = '32291647' group by fecha::date) as dinero
+ON dinero.fecha = dias.fecha
+ORDER BY fecha;
+
+
+SELECT 
+    dias.fecha, 
+    COUNT(CASE WHEN estados_tickets.nombre = 'Anulado' THEN 1 END) AS anulados,
+    COUNT(CASE WHEN estados_tickets.nombre = 'Impreso' THEN 1 END) AS impresos,
+    COUNT(CASE WHEN estados_tickets.nombre = 'Vencido' THEN 1 END) AS vencidos,
+    COUNT(CASE WHEN estados_tickets.nombre = 'Consumido' THEN 1 END) AS consumidos
+FROM dias
+LEFT JOIN tickets ON dias.id = tickets.id_dia
+INNER JOIN estados_tickets ON tickets.estado = estados_tickets.id
+WHERE dias.fecha BETWEEN '2015-04-01' AND '2015-06-01'
+group by dias.fecha
+order by dias.fecha;

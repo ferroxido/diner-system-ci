@@ -296,8 +296,10 @@ class CalendarioLib {
 			//Marcar el día como feriado
 			$registro = array();
 			$registro['fecha'] = $fecha;
+			$registro['evento'] = 'No Habilitado para la compra';
 			$registro['estado'] = $estadoFeriado;
 			$registro['tickets_totales'] = 0;
+			$registro['tickets_vendidos'] = 0;
 			$this->CI->Model_Dias->update($registro);
 
 			return true;

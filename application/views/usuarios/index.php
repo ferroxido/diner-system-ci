@@ -77,6 +77,7 @@
 				<th> Categoría </th>
 				<th> Saldo </th>
 				<th> Edición </th>
+				<th> Movimientos </th>
 			</tr>
 		</thead>
 
@@ -90,6 +91,7 @@
 				<td><?= $registro->categoria; ?></td>
 				<td><?= '$ '.$registro->saldo; ?></td>
 				<td><?= anchor('usuarios/edit/'.$registro->dni, ' ', array('class' => 'glyphicon glyphicon-pencil')); ?></td>
+				<td><?= anchor('usuarios/movimientos/'.$registro->dni, ' ', array('class' => 'glyphicon glyphicon-search')); ?></td>
 			</tr>
 			<?php endforeach; ?>
 		</tbody>

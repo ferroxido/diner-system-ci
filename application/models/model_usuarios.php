@@ -69,6 +69,15 @@ class Model_Usuarios extends CI_Model {
     	$this->db->insert('usuarios');
     }
 
+    function insert_alumnos($registro){
+        $alumno['facultad'] = $this->db->select('nombre_canonico')->where('id', $registro['id_facultad'])->get('facultades')->row('nombre_canonico');
+        $alumno['lu'] = $registro['lu'];
+        $alumno['nombre'] = strtoupper($registro['nombre']);
+        $alumno['dni'] = $registro['dni'];
+        $this->db->set($alumno);
+        $this->db->insert('alumnos');
+    }
+
     function update($registro){
     	$this->db->set($registro);
     	$this->db->where('dni',$registro['dni']);
@@ -177,4 +186,73 @@ class Model_Usuarios extends CI_Model {
         return $query->row('total_rows');
     }
 
+    function get_info_maquinas($limit){
+        $this->db->select('maquinas.id, facultades.nombre_canonico AS facultad, estados_maquina.descripcion AS estado, maquinas.estado AS estado_num');
+        $this->db->from('maquinas');
+        $this->db->join('facultades', 'maquinas.ubicacion = facultades.id');
+        $this->db->join('estados_maquina', 'estados_maquina.id = maquinas.estado');
+        $this->db->order_by('maquinas.id', 'asc');
+        $this->db->limit($limit);
+        $query = $this->db->get();
+        return $query->result();
+    }
+
+    function get_categoria_importe($dni){
+        $this->db->select('importe');
+        $this->db->from('usuarios');
+        $this->db->join('categorias', 'usuarios.id_categoria = categorias.id');
+        $this->db->where('dni', $dni);
+        $query = $this->db->get();
+        return $query->row('importe');
+    }
+
+    function get_movimientos($dni, $fecha){
+        $idAccionCompra = 1;
+        $idAccionAnular = 2;
+        if ($fecha === ''){
+            $query = $this->db->query("SELECT dias.fecha, COALESCE(dinero,0) AS dinero, COALESCE(comprados,0) AS comprados, COALESCE(anulados,0) AS anulados 
+                FROM (SELECT fecha::date AS fecha FROM dias) AS dias
+                LEFT JOIN 
+                (SELECT COUNT(tabla.id) AS comprados, fecha::date AS fecha 
+                    FROM (SELECT * FROM log_usuarios WHERE dni = '$dni' AND id_accion = '$idAccionCompra') AS tabla
+                LEFT JOIN tickets_log_usuarios on  id_log_usuario = tabla.id
+                GROUP BY fecha::date
+                ORDER BY fecha) AS compras
+                ON compras.fecha = dias.fecha
+                LEFT JOIN
+                (SELECT COUNT(tabla.id) AS anulados, fecha::date AS fecha FROM 
+                    (SELECT * FROM log_usuarios WHERE dni = '$dni' AND id_accion = '$idAccionAnular') AS tabla
+                LEFT JOIN tickets_log_usuarios on  id_log_usuario = tabla.id
+                GROUP BY fecha::date
+                ORDER BY fecha) AS anulaciones
+                ON anulaciones.fecha = dias.fecha
+                LEFT JOIN
+                (SELECT fecha::date AS fecha, SUM(valor) AS dinero FROM billetes WHERE dni = '$dni' GROUP BY fecha::date) AS dinero
+                ON dinero.fecha = dias.fecha
+                ORDER BY fecha ASC");
+        }else{
+            $query = $this->db->query("SELECT dias.fecha, COALESCE(dinero,0) AS dinero, COALESCE(comprados,0) AS comprados, COALESCE(anulados,0) AS anulados 
+                FROM (SELECT fecha::date AS fecha FROM dias) AS dias
+                LEFT JOIN 
+                (SELECT COUNT(tabla.id) AS comprados, fecha::date AS fecha 
+                    FROM (SELECT * FROM log_usuarios WHERE dni = '$dni' AND id_accion = '$idAccionCompra') AS tabla
+                LEFT JOIN tickets_log_usuarios on  id_log_usuario = tabla.id
+                GROUP BY fecha::date
+                ORDER BY fecha) AS compras
+                ON compras.fecha = dias.fecha
+                LEFT JOIN
+                (SELECT COUNT(tabla.id) AS anulados, fecha::date AS fecha FROM 
+                    (SELECT * FROM log_usuarios WHERE dni = '$dni' AND id_accion = '$idAccionAnular') AS tabla
+                LEFT JOIN tickets_log_usuarios on  id_log_usuario = tabla.id
+                GROUP BY fecha::date
+                ORDER BY fecha) AS anulaciones
+                ON anulaciones.fecha = dias.fecha
+                LEFT JOIN
+                (SELECT fecha::date AS fecha, SUM(valor) AS dinero FROM billetes WHERE dni = '$dni' GROUP BY fecha::date) AS dinero
+                ON dinero.fecha = dias.fecha
+                WHERE dias.fecha = '$fecha'
+                ORDER BY fecha ASC");            
+        }
+        return $query->result();
+    }
 }   

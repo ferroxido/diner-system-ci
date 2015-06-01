@@ -170,6 +170,31 @@ if( ! function_exists('my_cambiar_clave_cancelar'))
 	}
 }
 
+if( ! function_exists('my_volver_editar_perfil'))
+{
+	function my_volver_editar_perfil()
+	{
+		$boton = "";
+		if(get_instance()->session->userdata('dni_usuario')){
+			$perfil = get_instance()->session->userdata('perfil_nombre');
+			switch ($perfil) {
+				case 'Alumno':
+					$boton .= anchor('usuarios/alumno', ' Volver',array('class'=>'btn btn-primary glyphicon glyphicon-arrow-left'));
+					break;
+				case 'Administrador':
+					$boton .= anchor('usuarios/admin', ' Volver',array('class'=>'btn btn-primary glyphicon glyphicon-arrow-left'));
+					break;
+				case 'Super Administrador':
+					$boton .= anchor('usuarios/admin', ' Volver',array('class'=>'btn btn-primary glyphicon glyphicon-arrow-left'));
+					break;	
+			}
+		}else{
+			$boton .= anchor('home/index', ' Volver',array('class'=>'btn btn-primary glyphicon glyphicon-arrow-left'));
+		}
+		return $boton;
+	}
+}
+
 if( ! function_exists('my_boton_permisos'))
 {
 	function my_boton_permisos($destino, $nombre_boton ,$claseHTML)

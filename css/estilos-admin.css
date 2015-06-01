@@ -29,6 +29,13 @@ body,html{
   overflow-x: hidden;
   height: 100%;
 }
+div#info_maquinas{
+  border-width: .1em;
+  border-style: solid;
+  border-color: #FFF;
+  border-radius: .3em;
+  padding: 2em;
+}
 div.image{
   text-align: center;
 }
@@ -202,6 +209,18 @@ table.calendario {
   background-color: #AEA79F;
   padding-left: 2em;
   color: #DD4814;
+}
+.info-maquinas{
+  background-color: #FFF;
+  border-radius: .5em;
+  -ms-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -o-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  height: 100px;
+  margin: .3em;
+  text-align: center;
 }
 /* Large desktop */
 @media (min-width: 1200px) {

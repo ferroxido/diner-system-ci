@@ -41,7 +41,7 @@ class UsuarioLib {
 				$dni = $this->CI->session->userdata('dni_usuario');
 				$this->cargar_log_usuario($dni, $fecha_log, 'ingresar');
 
-				return TRUE;				
+				return TRUE;
 			}else{
 				return FALSE;
 			}
@@ -246,7 +246,6 @@ class UsuarioLib {
 				$data['id_ticket'] = $id_ticket;
 				$this->CI->db->set($data);
     			$this->CI->db->insert('tickets_log_usuarios');
-    			
 			}
 			return $respuesta;
 		}
@@ -356,7 +355,7 @@ class UsuarioLib {
 	public function validar_tabla($usuario){
 		$lu = $usuario['lu'];
 		$dni = $usuario['dni'];
-			
+
 		$query = $this->CI->Model_Alumnos->find($lu, $dni);
 
 		if($query->num_rows() == 1){
@@ -430,4 +429,7 @@ class UsuarioLib {
 		return $this->CI->Model_Calendario->generate_data($year, $month, $data);
 	}
 
+	public function insert_alumnos($registro){
+		
+	}
 }

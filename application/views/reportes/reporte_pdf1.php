@@ -53,5 +53,8 @@
 			</tr>
 		</tbody>
 	</table>
+	<footer>
+		
+	</footer>
 </body>
 </html>	

@@ -32,7 +32,9 @@ function buscar_ajax(){
 							}
 							cadena = '<tr class="' + clase + '">'+'<td>'+ val.dni +'</td>'+'<td>'+ val.nombre +'</td>'+'<td>'+ val.lu +'</td>'+'<td>'+ val.facultad +'</td>'+'<td>'+ val.categoria +'</td>'+'<td>'+ val.saldo +'</td>';
 							ruta = "'"+base_url+ "usuarios/edit/" +val.dni +"'";
-							cadena = cadena + '<td><a class="glyphicon glyphicon-pencil" href='+ ruta +'"> </a></td>'+'</tr>';
+							rutaMovimientos = "'"+base_url+ "usuarios/movimientos/" +val.dni +"'";
+							cadena = cadena + '<td><a class="glyphicon glyphicon-pencil" href='+ ruta +'"> </a></td>';
+							cadena = cadena + '<td><a class="glyphicon glyphicon-search" href='+ rutaMovimientos +'"> </a></td>'+'</tr>';
 							items.push(cadena);
 						});	
 						$('#destino_resultado').append.apply($('#destino_resultado'), items);
@@ -123,7 +125,9 @@ $(document).ready(function() {
 							}
 							cadena = '<tr class="' + clase + '">'+'<td>'+ val.dni +'</td>'+'<td>'+ val.nombre +'</td>'+'<td>'+ val.lu +'</td>'+'<td>'+ val.facultad +'</td>'+'<td>'+ val.categoria +'</td>'+'<td>'+ val.saldo +'</td>';
 							ruta = "'"+base_url+ "usuarios/edit/" +val.dni +"'";
-							cadena = cadena + '<td><a class="glyphicon glyphicon-pencil" href='+ ruta +'"> </a></td>'+'</tr>';
+							rutaMovimientos = "'"+base_url+ "usuarios/movimientos/" +val.dni +"'";
+							cadena = cadena + '<td><a class="glyphicon glyphicon-pencil" href='+ ruta +'"> </a></td>';
+							cadena = cadena + '<td><a class="glyphicon glyphicon-search" href='+ rutaMovimientos +'"> </a></td>'+'</tr>';
 							items.push(cadena);
 						});	
 						$('#destino_resultado').append.apply($('#destino_resultado'), items);

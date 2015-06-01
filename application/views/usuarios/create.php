@@ -5,9 +5,9 @@
 
 	<div class="row">
 		<div class="form-group">
-			<?= form_label('Usuario: ', 'dni', array('class'=>'col-md-3 control-label')); ?>
+			<?= form_label('DNI: ', 'dni', array('class'=>'col-md-3 control-label')); ?>
 			<div class="col-md-4">
-				<?= form_input(array('class'=>'form-control','type'=>'text', 'name'=>'dni', 'id'=>'dni', 'placeholder'=>'Tu número de documento', 'value'=>set_value('dni'))); ?>
+				<?= form_input(array('class'=>'form-control','type'=>'text', 'name'=>'dni', 'id'=>'dni', 'placeholder'=>'Número de documento', 'value'=>set_value('dni'))); ?>
 			</div>
 		</div>
 	</div>
@@ -16,7 +16,7 @@
 		<div class="form-group">
 			<?= form_label('Nombre completo: ', 'nombre', array('class'=>'col-md-3 control-label')); ?>
 			<div class="col-md-4">
-				<?= form_input(array('class'=>'form-control','type'=>'text', 'name'=>'nombre', 'id'=>'nombre', 'placeholder'=>'Tu Nombre', 'value'=>set_value('nombre'))); ?>		
+				<?= form_input(array('class'=>'form-control','type'=>'text', 'name'=>'nombre', 'id'=>'nombre', 'placeholder'=>'Nombre Completo', 'value'=>set_value('nombre'))); ?>		
 			</div>	
 		</div>
 	</div>
@@ -25,8 +25,7 @@
 		<div class="form-group">
 			<?= form_label('Email: ', 'email', array('class'=>'col-md-3 control-label')); ?>
 			<div class="col-md-4">
-				<?= form_input(array('class'=>'form-control','type'=>'email', 'name'=>'email', 'id'=>'email', 'value'=>set_value('email'))); ?>
-				
+				<?= form_input(array('class'=>'form-control','type'=>'email', 'name'=>'email', 'id'=>'email', 'placeholder'=>'Email', 'value'=>set_value('email'))); ?>
 			</div>	
 		</div>
 	</div>
@@ -35,7 +34,7 @@
 		<div class="form-group">
 			<?= form_label('Libreta Universitaria: ', 'lu', array('class'=>'col-md-3 control-label')); ?>
 			<div class="col-md-4">
-				<?= form_input(array('class'=>'form-control','type'=>'text', 'name'=>'lu', 'id'=>'lu', 'placeholder'=>'Tu l.u', 'value'=>set_value('lu'))); ?>		
+				<?= form_input(array('class'=>'form-control','type'=>'text', 'name'=>'lu', 'id'=>'lu', 'placeholder'=>'Libreta Universitaria', 'value'=>set_value('lu'))); ?>		
 			</div>	
 		</div>
 	</div>

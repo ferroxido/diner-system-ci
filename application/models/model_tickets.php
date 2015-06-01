@@ -120,13 +120,12 @@ class Model_Tickets extends CI_Model {
         return $query->result();
     }
 
-    //Obtener los 5 tickets próximos al día de hoy si los tiene.
     function get_tickets_anulables($dni){
         $query = $this->db->query("SELECT tickets.id AS id_ticket, dias.fecha AS fecha, tickets.importe AS importe, estados_tickets.nombre AS estado
                 FROM tickets
                 INNER JOIN dias ON tickets.id_dia = dias.id
                 INNER JOIN estados_tickets on tickets.estado = estados_tickets.id
-                inner join 
+                INNER JOIN
                     (SELECT DISTINCT ON(id_ticket) id_ticket, id_log_usuario FROM tickets_log_usuarios) AS tickets_log_usuarios
                 ON tickets_log_usuarios.id_ticket = tickets.id
                 INNER JOIN log_usuarios ON tickets_log_usuarios.id_log_usuario = log_usuarios.id
@@ -273,7 +272,7 @@ class Model_Tickets extends CI_Model {
                 INNER JOIN log_usuarios ON tickets_log_usuarios.id_log_usuario = log_usuarios.id
                 WHERE dni = '$dni'
                 AND tickets.estado::text LIKE '{$estado}%'
-                ORDER BY tickets.id ASC");
+                ORDER BY tickets.id DESC");
         return $query->result();
     }
 

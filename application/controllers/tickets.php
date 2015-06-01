@@ -48,7 +48,7 @@ class Tickets extends CI_Controller {
 			$fecha = $this->input->post('fecha');
 			$estado = $this->input->post('estado');
 			$posicion = (($page_num - 1) * $this->filasPorPagina);
-			$query = $this->Model_Tickets->all_filter($nombre,$dni, $id, $fecha, $estado, $this->filasPorPagina, $posicion);
+			$query = $this->Model_Tickets->all_filter($nombre, $dni, $id, $fecha, $estado, $this->filasPorPagina, $posicion);
 			echo json_encode($query);
 		}else{
 			show_404();

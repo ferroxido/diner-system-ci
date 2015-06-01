@@ -19,6 +19,7 @@ class Usuarios extends CI_Controller {
 		$this->form_validation->set_message('is_natural', '%s debe ser un valor numérico natural');
 		$this->form_validation->set_message('caracteres_permitidos', 'El %s sólo debe contener letras.');
 		$this->form_validation->set_message('parametros_permitidos_editar_perfil', 'Usted esta mandando parámetros extras.');
+		$this->form_validation->set_message('parametros_permitidos_ingresar_usuario', 'Usted esta mandando parámetros extras.');
 	}
 
 	//Para el usuario administrador
@@ -116,31 +117,44 @@ class Usuarios extends CI_Controller {
 		$this->load->view('tmp-admin',$data);
 	}
 
+	public function parametros_permitidos_insertar_usuario(){
+		$registro = $this->input->post();
+		return $this->usuariolib->parametros_permitidos($registro, 8);
+	}
+
 	//Para el usuario administrador
 	public function insert(){
-		if($this->input->post('nombre')){
+		if($this->input->post()){
 			$registro = $this->input->post();
+			$this->form_validation->set_rules('nombre', 'Nombre', 'required|xss_clean|max_length[45]|callback_caracteres_permitidos');
+			$this->form_validation->set_rules('email', 'Email', 'required|xss_clean|valid_email|max_length[64]|callback_parametros_permitidos_ingresar_usuario');
+			$this->form_validation->set_rules('dni', 'Usuario', 'required|xss_clean|max_length[10]|is_natural|callback_no_repetir_usuario');
+			$this->form_validation->set_rules('lu', 'Libreta', 'required|xss_clean|max_length[8]|is_natural');
+			$this->form_validation->set_rules('id_provincia', 'Provincia', 'required|is_natural');
+			$this->form_validation->set_rules('id_facultad', 'Facultad', 'required|is_natural');
+			$this->form_validation->set_rules('id_perfil', 'Perfil', 'required|is_natural');
+			$this->form_validation->set_rules('id_categoria', 'categoria', 'required|is_natural');
 
-			$this->form_validation->set_rules('dni', 'Usuario', 'required|max_length[8]|numeric|callback_no_repetir_usuario');
-			$this->form_validation->set_rules('nombre', 'Nombre', 'required');
-			$this->form_validation->set_rules('email', 'Email', 'required|valid_email');
-			$this->form_validation->set_rules('lu', 'Libreta Universitaria', 'required|max_length[7]|numeric');
 			if($this->form_validation->run() == FALSE){
 				//Si no cumplio alguna de las reglas
 				$this->create();
 			}else{
-				//Los datos son correctos. Intentamos enviar en mail. Registramos el usuarios.
+				//Si no esta en la tabla alumnos lo agregamos
+				if(!$this->usuariolib->validar_tabla($registro)){
+					$this->Model_Usuarios->insert_alumnos($registro);
+				}
+				//Intentamos enviar el mail y registramos al usuario
 				$nombre = $this->input->post('nombre');
 				$email = $this->input->post('email');
-				$password_generada = $this->usuariolib->generarPassword(10);//Generamos un password aleatorio de 10 caracteres.
-				$this->usuariolib->enviar_email($nombre, $email, $password_generada);//Intentamos enviar el mail. Si falla, lo registramos de todas formas.
+				$password_generada = $this->usuariolib->generarPassword(10);//Generamos un password aleatorio de 10 caracteres
+				$this->usuariolib->enviar_email($nombre, $email, $password_generada);//Intentamos enviar el mail. Si falla, lo registramos de todas formas
 				//El registro está ok, entonces lo agregamos a la tabla usuarios
 				$registro['password'] = $this->usuariolib->encriptar($password_generada);
-				$registro['estado'] = 1;//0 = bloqueado, 1 = registrado, 2 = activo, 3 = suspendido
-				
+				$estadoRegistrado = 1;
+				$registro['estado'] = $estadoRegistrado;
 				$this->Model_Usuarios->insert($registro);
-				$dni = $this->input->post('dni');
 				//Registro el log de usuario para registro
+				$dni = $this->input->post('dni');
 				$fecha_log = date('Y/m/d H:i:s');
 				$this->usuariolib->cargar_log_usuario($dni, $fecha_log, 'registrar');
 
@@ -148,36 +162,6 @@ class Usuarios extends CI_Controller {
 			}
 		}else{
 			show_404();
-		}
-	}
-
-	//Para el usuario alumnos
-	public function comprar_tickets($year = null, $month = null){
-		if($this->session->userdata('dni_usuario') != null){
-			$dni = $this->session->userdata('dni_usuario');
-			$data['registro'] = $this->Model_Usuarios->find($dni);
-			$data['contenido'] = 'usuarios/comprar_tickets';
-			$data['calendario'] = $this->Model_Usuarios->generate($year, $month);
-			$this->load->view('template_usuario', $data);
-		}
-	}
-
-	public function realizar_compra(){
-		if($this->session->userdata('dni_usuario') != null){
-			$dni = $this->session->userdata('dni_usuario');
-			//Si estamos en este punto, es porque el hay días disponibles y el usuario realizó correctamente todo.
-			$dias = $this->input->post('datos');//$dias contiene todos los dias seleccionados por el usuario
-			$year = $this->input->post('year');
-			$month = $this->input->post('month');
-
-			$fecha_log = date('Y/m/d H:i:s');//Necesitaré la fecha para luego recuperar el id del log
-			
-			//La siguiente función realiza la compra de los tickets.
-			$this->usuariolib->realizar_compra($dni, $fecha_log, $dias, $year, $month);//Aquí necesito la fecha del log.
-
-			echo "Se enviaron los datos";
-		}else{
-			echo "Hubo un error";
 		}
 	}
 
@@ -231,10 +215,11 @@ class Usuarios extends CI_Controller {
 		}else{
 			show_404();
 		}
-	}	
+	}
 
 	public function admin(){
 		$data['contenido'] = 'usuarios/admin';
+		$data['maquinas'] = $this->Model_Usuarios->get_info_maquinas(6);
 		$this->load->view('tmp-admin', $data);
 	}
 
@@ -276,7 +261,15 @@ class Usuarios extends CI_Controller {
 				$dni = $this->input->post('dni');
 				$fecha_log = date('Y/m/d H:i:s');
 				$this->usuariolib->cargar_log_usuario($dni, $fecha_log, 'perfil');//Registrar el log
-				redirect('usuarios/alumno');
+
+				$perfil = $this->session->userdata('perfil_nombre');
+				if($perfil == 'Alumno'){
+					redirect('usuarios/alumno');
+				}elseif($perfil == 'Administrador' || $perfil == 'Super Administrador'){
+					redirect('usuarios/admin');
+				}else{
+					redirect('home/index');
+				}
 			}
 		}else{
 			show_404();
@@ -392,6 +385,33 @@ class Usuarios extends CI_Controller {
 	}
 
 	/*
+	 * Transacciones por día de los usuarios
+	 */
+	public function movimientos($dni = null){
+		if($this->usuariolib->validar_dni($dni) && $dni != null){
+			$data['contenido'] = 'usuarios/movimientos';
+			$data['categoria_importe'] = $this->Model_Usuarios->get_categoria_importe($dni);
+			$fecha = '';
+			$data['registros'] = $this->Model_Usuarios->get_movimientos($dni, $fecha);
+			$this->load->view('tmp-admin',$data);
+		}else{
+			show_404();
+		}
+	}
+
+	public function filtrar_movimientos(){
+		if($this->input->is_ajax_request()){
+			$dni = $this->input->post('dni');
+			$fecha = $this->input->post('fecha');
+			$data['registros'] = $this->Model_Usuarios->get_movimientos($dni, $fecha);
+			$data['categoria_importe'] = $this->Model_Usuarios->get_categoria_importe($dni);
+			echo json_encode($data);
+		}else{
+			show_404();
+		}
+	}	
+
+	/*
 	 * Procesa la petición producida al leer el código de barra de los tickets.
 	 * Devuelve los datos del ticket y del usuario que compró el ticket.
 	 */
@@ -449,4 +469,12 @@ class Usuarios extends CI_Controller {
 		}
 	}
 
+	//Compra de tickets del alumno
+	public function comprar_tickets(){
+
+	}
+
+	public function realizar_compra(){
+
+	}
 }

@@ -6,9 +6,9 @@
 		<li role="presentation" class="active"><a href="#informe1" aria-controls="informe1" role="tab" data-toggle="tab">Clasificación de Usuarios</a></li>
 		<li role="presentation"><a href="#informe2" aria-controls="informe2" role="tab" data-toggle="tab">Servicios por Facultad</a></li>
 		<li role="presentation"><a href="#informe3" aria-controls="informe3" role="tab" data-toggle="tab">Clasificación de Tickets</a></li>
+		<li role="presentation"><a href="#informe4" aria-controls="informe4" role="tab" data-toggle="tab">Control de Consumo</a></li>
 		</ul>
 
-		
 		<div class="tab-content">
 			<!-- Tabla para el primer reporte -->
 			<div role="tabpanel" class="tab-pane active" id="informe1">
@@ -245,7 +245,104 @@
 					<input form="form_reporte2" type="submit" class="btn btn-primary glyphicon glyphicon-download" value=" Descargar PDF" name="PDF3">
 				</div>
 			</div>
-		</div>
+			<!-- Tabla para el primer reporte -->
+			<div role="tabpanel" class="tab-pane active" id="informe1">
+				<br>
+				<table class="table table-bordered table-striped table-hover">
+					<thead>
+						<tr>
+							<th> Facultades </th>
+							<th> Becados </th>
+							<th> Regulares </th>
+							<th> Gratuitos </th>
+							<th> Total de Usuarios </th>
+						</tr>
+					</thead>
+
+					<tbody>
+						<?php foreach ($registros as $registro): ?>
+						<tr>
+							<td><?= $registro->facultad; ?></td>
+							<td><?= $registro->becados; ?></td>
+							<td><?= $registro->regulares; ?></td>
+							<td><?= $registro->gratuitos; ?></td>
+							<td><?= $registro->total_usuarios; ?></td>
+						</tr>
+						<?php endforeach; ?>
+						<tr class="info">
+							<td>Totales: </td>
+							<td><?= $totales->becados; ?></td>
+							<td><?= $totales->regulares; ?></td>
+							<td><?= $totales->gratuitos; ?></td>
+							<td><?= $totales->total_usuarios; ?></td>
+						</tr>
+					</tbody>
+				</table>
+				<div class="col-md-offset-9">
+					<?= form_open('reportes/generar_pdf'); ?>
+						<input type="submit" class="btn btn-primary glyphicon glyphicon-print" value=" Descargar PDF" name="PDF1">
+					<?= form_close(); ?>
+				</div>
+			</div>
+			<!-- Tabla para el cuarto reporte -->
+			<div role="tabpanel" class="tab-pane" id="informe4">
+				<br>
+				<div class="filtros">
+					<fieldset>
+						<?= form_open('reportes/generar_pdf', array('id'=>'form_reporte')); ?>
+						<div class="row">
+							<div class="form-group">
+								<div class="col-md-6">
+									<label for="radio_dia">Por Día</label>&nbsp;
+									<input type="radio" id="radio_dia" name="filtro_radio" value="filtrodia" checked="checked">&nbsp;
+									<label for="radio_intervalo">Por intervalo</label>&nbsp;	
+									<input type="radio" id="radio_intervalo" name="filtro_radio" value="filtrointervalo">
+								</div>
+							</div>
+						</div>
+						<?= form_close(); ?>
+					</fieldset>
+				</div>
+
+				<br>
+				
+				<table class="table table-bordered table-striped table-hover">
+					<thead>
+						<tr>
+							<th> Facultades </th>
+							<th> Becados </th>
+							<th> Regulares </th>
+							<th> Gratuitos </th>
+							<th> Total Tickets </th>
+							<th> Total en $ </th>
+						</tr>
+					</thead>
+					<tbody id="resultado_tickets_tabla">
+						<?php foreach ($registros2 as $registro2): ?>
+						<tr>
+							<td><?= $registro2->facultad; ?></td>
+							<td><?= $registro2->becados; ?></td>
+							<td><?= $registro2->regulares; ?></td>
+							<td><?= $registro2->gratuitos; ?></td>
+							<td><?= $registro2->total_tickets; ?></td>
+							<td><?= $registro2->total_pesos; ?></td>
+						</tr>
+						<?php endforeach; ?>
+						<tr class="info">
+							<td>Totales: </td>
+							<td><?= $totales2->becados; ?></td>
+							<td><?= $totales2->regulares; ?></td>
+							<td><?= $totales2->gratuitos; ?></td>
+							<td><?= $totales2->total_tickets; ?></td>
+							<td><?= $totales2->total_importe; ?></td>
+						</tr>
+					</tbody>
+				</table>
+				<div class="col-md-offset-9">
+					<input form="form_reporte" type="submit" class="btn btn-primary glyphicon glyphicon-print" value=" Descargar PDF" name="PDF2">
+				</div>
+			</div>			
+		</div><!-- tab content -->
 	</div>	
 </div>
 <script type="text/javascript">
