@@ -13,6 +13,11 @@ class Home extends CI_Controller {
 	function __construct(){
 		parent::__construct();
 		//error_reporting(0);
+		//Eliminar cache
+		$this->output->set_header('Last-Modified:'.gmdate('D, d M Y H:i:s').'GMT');
+		$this->output->set_header('Cache-Control: no-store, no-cache, must-revalidate');
+		$this->output->set_header('Cache-Control: post-check=0, pre-check=0',false);
+		$this->output->set_header('Pragma: no-cache');	
 
 		$this->load->library('usuarioLib');
 		$this->load->model('Model_Usuarios');
@@ -197,7 +202,7 @@ class Home extends CI_Controller {
 		$lu = $this->input->post('lu');
 
 		$this->form_validation->set_rules('dni', 'Usuario', 'required|xss_clean|is_natural|callback_existe_usuario|callback_parametros_permitidos_recordar');
-		$this->form_validation->set_rules('lu', 'Libreta', 'required|xss_clean|max_length[6]|is_natural');
+		$this->form_validation->set_rules('lu', 'Libreta', 'required|xss_clean|max_length[8]|is_natural');
 		$this->form_validation->set_rules('email', 'Email', 'required|xss_clean|valid_email');
 
 		if($this->form_validation->run() == FALSE){

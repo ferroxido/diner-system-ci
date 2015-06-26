@@ -4,6 +4,7 @@ function buscar_ajax(){
 		nombre = $("#buscar_nombre").val();
 		dni = $("#buscar_dni").val();
 		lu = $("#buscar_lu").val();
+		id_facultad = $("#drop_down").val();
 		num = 1;
 
 		$.ajax({
@@ -13,7 +14,8 @@ function buscar_ajax(){
 			data:{
 				nombre:nombre,
 				dni:dni,
-				lu:lu
+				lu:lu,
+				id_facultad: id_facultad
 			},
 			success: function(response){
 				$('#destino_resultado').html("");
@@ -58,6 +60,7 @@ function get_total_pages(){
 	nombre = $("#buscar_nombre").val();
 	dni = $("#buscar_dni").val();
 	lu = $("#buscar_lu").val();
+	id_facultad = $("#drop_down").val();
 	$.ajax({
 		type: "post",
 		url: base_url + "usuarios/get_total_pages",
@@ -65,7 +68,8 @@ function get_total_pages(){
 		data:{
 			nombre:nombre,
 			dni:dni,
-			lu:lu
+			lu:lu,
+			id_facultad:id_facultad
 		},
 		success: function(response){
 			$('#paginacion').bootpag({ total:response});
@@ -80,12 +84,16 @@ $(document).ready(function(){
 	$("#buscar_dni").keyup(get_total_pages);
 	$("#buscar_lu").keyup(buscar_ajax);
 	$("#buscar_lu").keyup(get_total_pages);
+	$('#drop_down').change(buscar_ajax);
+	$('#drop_down').change(get_total_pages);
+
 });
 
 window.onload = function () {
  	$("#buscar_nombre").val("");
     $("#buscar_dni").val("");
     $("#buscar_lu").val("");
+    $("#drop_down").val("20");
 }
 
 $(document).ready(function() {
@@ -99,15 +107,17 @@ $(document).ready(function() {
 		nombre = $("#buscar_nombre").val();
 		dni = $("#buscar_dni").val();
 		lu = $("#buscar_lu").val();
+		id_facultad = $("#drop_down").val();
 		
 		$.ajax({
 			type: "post",
 			url: base_url + "usuarios/search/" + num,
 			cache: false,				
 			data:{
-				nombre:nombre,
-				dni:dni,
-				lu:lu
+				nombre: nombre,
+				dni: dni,
+				lu: lu,
+				id_facultad: id_facultad
 			},
 			success: function(response){
 				$('#destino_resultado').html("");
@@ -145,3 +155,4 @@ $(document).ready(function() {
 		});
     });
 });
+	

@@ -17,7 +17,7 @@ class Tickets extends CI_Controller {
 		$dni = '';
 		$id = '';
 		$fecha = '';
-		$estado = 5;//todos los estados.
+		$estado = 10;//todos los estados.
 		$totalRows = $this->Model_Tickets->get_total_rows($nombre, $dni, $id, $fecha, $estado);
 		$data['numeroPaginas'] = ceil($totalRows / $this->filasPorPagina);
 		$data['registros'] = $this->Model_Tickets->all($this->filasPorPagina, $this->primeraPagina);

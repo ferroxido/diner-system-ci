@@ -7,9 +7,10 @@
 	<title>Comedor</title>
     <link href="<?= base_url('css/bootstrap.min.css'); ?>" rel="stylesheet" />
     <link href="<?= base_url('css/estilos-alumnos2.css'); ?>" rel="stylesheet" />
-
+	<link href="<?= base_url('css/jquery-ui.css'); ?>" rel="stylesheet" />
     <!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>-->
     <script src="<?= base_url('js/jquery.js'); ?>"></script>
+    <script src="<?= base_url('js/jquery-ui.min.js'); ?>"></script>
     <script src="<?= base_url('js/bootstrap.min.js'); ?>"></script>
 	   
 </head>

@@ -127,6 +127,10 @@ div.tablas-propias {
   height: 300px;
   text-align: center;
 }
+div.tabla-scroll{
+  overflow: auto;
+  height: 400px;
+}
 div.tablas-propias a:hover {
   cursor: pointer;
   color: #3498db;

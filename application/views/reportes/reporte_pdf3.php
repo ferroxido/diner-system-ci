@@ -22,7 +22,11 @@
 	<h4><?= ($desde === $hasta)? "En el día $desde":"Desde: $desde hasta: $hasta" ?></h4>
 	<br />
 	<br />
-
+	<div id="footer">
+		<hr>
+		<p><?= date('d-m-Y H:i'); ?> - <?= $this->session->userdata('nombre_usuario'); ?></p>
+	</div>
+	
 	<table class="table table-bordered table-striped table-hover">
 		<thead>
 			<tr>

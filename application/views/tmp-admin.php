@@ -50,7 +50,7 @@
 		        		<?= my_menu_collapse(); ?>
 						<div id="footer">
 		            	<hr>
-		            	<p><?= $this->session->userdata('nombre_usuario'); ?>&copy; Sistema de gestión de tickes UNSA - <?= date('d-m-Y H:i'); ?> </p>							
+		            	<p><?= $this->session->userdata('nombre_usuario'); ?>&copy; Sistema de gestión de tickes UNSA - <?= date('d-m-Y H:i'); ?> </p>
 						</div>
 		        	</div> 	
 		        </div>

@@ -38,8 +38,7 @@ function filtrar_ajax(){
 				$('#destino_resultado').html($('<tr/>').text(" No Se encontraron registros"));
 			}					
 		},
-		error: function(){						
-			alert('error respuesta');
+		error: function(){
 			console.log('Error en la respuesta');
 		}
 	});
@@ -119,7 +118,7 @@ window.onload = function () {
     $("#buscar_dni").val("");
     $("#buscar_id").val("");
     $("#buscar_fecha").val("");
-    $("#drop_down").val("5");
+    $("#drop_down").val("10");
 }
 
 $(document).ready(function() {

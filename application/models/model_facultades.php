@@ -49,4 +49,15 @@ class Model_Facultades extends CI_Model {
         $query = $this->db->query("SELECT facultades.nombre AS facultad, COUNT(usuarios.id_facultad) AS total_usuarios, COUNT(CASE WHEN id_categoria = 1 THEN 1 END) AS becados, COUNT(CASE WHEN id_categoria = 2 THEN 1 END) AS regulares, COUNT(CASE WHEN id_categoria = 3 THEN 1 END) AS gratuitos FROM facultades LEFT JOIN usuarios ON facultades.id = usuarios.id_facultad GROUP BY facultades.nombre");
         return $query->result();
     }
+
+    function get_facultades(){
+        $lista = array();
+        $this->load->model('Model_Facultades');
+        $registros = $this->Model_Facultades->all();
+        foreach($registros as $registro){
+            $lista[$registro->id] = $registro->nombre;
+        }
+        $lista[20] = 'Todas';
+        return $lista;
+    }    
 }

@@ -53,8 +53,9 @@
 			</tr>
 		</tbody>
 	</table>
-	<footer>
-		
-	</footer>
+	<div id="footer">
+		<hr>
+		<p><?= date('d-m-Y H:i'); ?> - <?= $this->session->userdata('nombre_usuario'); ?></p>
+	</div>
 </body>
 </html>	

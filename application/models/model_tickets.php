@@ -24,7 +24,7 @@ class Model_Tickets extends CI_Model {
 
     function all_filter($nombre, $dni, $id, $fecha, $estado, $filasPorPagina, $posicion){
         $nombre = strtolower($nombre);
-        $estado = ($estado == '5')? '':$estado;
+        $estado = ($estado == '10')? '':$estado;
         if($fecha === ''){
             $query = $this->db->query("SELECT tickets.id AS id_ticket, dias.fecha AS fecha, tickets.importe AS importe_ticket, estados_tickets.nombre AS estado_ticket, usuarios.dni AS dni, usuarios.nombre AS nombre_usuario
                     FROM tickets
@@ -230,7 +230,18 @@ class Model_Tickets extends CI_Model {
     function get_estados(){
         $lista = array();
         $registros = $this->db->get('estados_tickets')->result();
-        $lista[5] = 'Todos';
+        $lista[10] = 'Todos';
+        foreach($registros as $registro){
+            $lista[$registro->id] = $registro->nombre;
+        }
+        return $lista;
+    }
+
+    function get_estados_alumnos(){
+        $lista = array();
+        $this->db->where('id <>', 5);
+        $registros = $this->db->get('estados_tickets')->result();
+        $lista[10] = 'Todos';
         foreach($registros as $registro){
             $lista[$registro->id] = $registro->nombre;
         }
@@ -239,7 +250,7 @@ class Model_Tickets extends CI_Model {
 
     function get_total_rows($nombre, $dni, $id, $fecha, $estado){
         $nombre = strtolower($nombre);
-        $estado = ($estado == '5')? '':$estado;
+        $estado = ($estado == '10')? '':$estado;
         if($fecha == ''){
             $query = $this->db->query("SELECT COUNT(tickets.id) AS total_tickets 
                 FROM tickets
@@ -261,7 +272,8 @@ class Model_Tickets extends CI_Model {
     }
 
     function mis_tickets($dni, $estado){
-        $estado = ($estado == '5')? '':$estado;
+        $estadoCancelado = 5;
+        $estado = ($estado == '10')? '':$estado;
         $query = $this->db->query("SELECT tickets.id AS id_ticket, dias.fecha AS fecha, estados_tickets.nombre AS estado
                 FROM tickets
                 INNER JOIN dias ON tickets.id_dia = dias.id
@@ -271,8 +283,104 @@ class Model_Tickets extends CI_Model {
                 ON tickets_log_usuarios.id_ticket = tickets.id
                 INNER JOIN log_usuarios ON tickets_log_usuarios.id_log_usuario = log_usuarios.id
                 WHERE dni = '$dni'
+                AND tickets.estado <> $estadoCancelado
                 AND tickets.estado::text LIKE '{$estado}%'
                 ORDER BY tickets.id DESC");
+        return $query->result();
+    }
+
+    function consumo_tickets_por_dia($mes, $fecha){
+        $hoy = date('Y-m-d');
+        $todosLosMeses = 13;
+        $this->db->select("
+            dias.fecha, 
+            COUNT(CASE WHEN estados_tickets.nombre = 'Anulado' THEN 1 END) AS anulados,
+            COUNT(CASE WHEN estados_tickets.nombre = 'Impreso' THEN 1 END) AS impresos,
+            COUNT(CASE WHEN estados_tickets.nombre = 'Vencido' THEN 1 END) AS vencidos,
+            COUNT(CASE WHEN estados_tickets.nombre = 'Consumido' THEN 1 END) AS consumidos
+        ");
+        $this->db->from("dias");
+        $this->db->join("tickets", "dias.id = tickets.id_dia", "left");
+        $this->db->join("estados_tickets", "tickets.estado = estados_tickets.id");
+        $this->db->where("dias.fecha <=", $hoy);
+        if ($mes != $todosLosMeses){
+            $this->db->where("date_part('month',dias.fecha)", $mes);
+        }
+        if($fecha != ""){
+            $this->db->where('dias.fecha', $fecha);   
+        }
+        $this->db->group_by("dias.fecha");
+        $this->db->order_by("dias.fecha", 'desc');
+        $query = $this->db->get();
+        return $query->result();
+    }
+
+    function get_ausentismos($fecha, $filasPorPagina, $posicion){
+        $query = $this->db->query("SELECT tickets.id AS id_ticket, usuarios.nombre, usuarios.dni AS dni, usuarios.lu AS lu, facultades.nombre AS facultad, categorias.nombre AS categoria, dias.fecha
+            FROM tickets
+            INNER JOIN dias ON tickets.id_dia = dias.id
+            INNER JOIN estados_tickets ON estados_tickets.id = tickets.estado
+            INNER JOIN
+                (SELECT DISTINCT ON(id_ticket) id_ticket, id_log_usuario FROM tickets_log_usuarios) AS tickets_log_usuarios
+            ON tickets_log_usuarios.id_ticket = tickets.id
+            INNER JOIN log_usuarios ON tickets_log_usuarios.id_log_usuario = log_usuarios.id
+            INNER JOIN usuarios ON log_usuarios.dni = usuarios.dni
+            INNER JOIN facultades ON facultades.id = usuarios.id_facultad
+            INNER JOIN categorias ON categorias.id = usuarios.id_categoria
+            WHERE dias.fecha = '$fecha'
+            AND (estados_tickets.nombre = 'Impreso' 
+            OR estados_tickets.nombre = 'Vencido')
+            ORDER BY usuarios.nombre ASC LIMIT '$filasPorPagina' OFFSET '$posicion'");
+        return $query->result();
+    }
+
+    function get_total_ausentismos($fecha){
+        $query = $this->db->query("SELECT COUNT(*) AS total_rows 
+            FROM tickets
+            INNER JOIN dias ON tickets.id_dia = dias.id
+            INNER JOIN estados_tickets ON tickets.estado = estados_tickets.id
+            WHERE dias.fecha = '$fecha'
+            AND (estados_tickets.nombre = 'Impreso' 
+            OR estados_tickets.nombre = 'Vencido')");
+        return $query->row('total_rows'); 
+    }
+
+    function get_ranking_ausentismos(){
+        $query = $this->db->query("SELECT aux.cantidad_vencidos AS cantidad_ausentismos, COUNT(*) AS cantidad_personas FROM
+            (SELECT usuarios.nombre AS nombre, usuarios.dni AS dni, COUNT(estados_tickets.nombre) AS cantidad_vencidos
+            FROM tickets
+            INNER JOIN dias ON dias.id = tickets.id_dia
+            INNER JOIN estados_tickets ON tickets.estado = estados_tickets.id
+            INNER JOIN
+            (SELECT DISTINCT ON(id_ticket) id_ticket, id_log_usuario FROM tickets_log_usuarios) AS tickets_log_usuarios 
+            ON tickets_log_usuarios.id_ticket = tickets.id
+            INNER JOIN log_usuarios ON tickets_log_usuarios.id_log_usuario = log_usuarios.id
+            INNER JOIN usuarios ON log_usuarios.dni = usuarios.dni
+            WHERE estados_tickets.nombre = 'Vencido' OR (estados_tickets.nombre = 'Impreso' AND dias.fecha < current_date)
+            GROUP BY usuarios.nombre, usuarios.dni) AS aux
+            GROUP BY aux.cantidad_vencidos
+            ORDER BY cantidad_ausentismos DESC
+        ");
+        return $query->result();
+    }
+
+    function get_detalle_ranking($cantidadAusentismo){
+        $query = $this->db->query("SELECT usuarios.nombre, usuarios.dni, usuarios.lu, facultades.nombre AS facultad, categorias.nombre AS categoria
+            FROM tickets
+            INNER JOIN dias ON dias.id = tickets.id_dia
+            INNER JOIN estados_tickets ON tickets.estado = estados_tickets.id
+            INNER JOIN
+            (SELECT DISTINCT ON(id_ticket) id_ticket, id_log_usuario FROM tickets_log_usuarios) AS tickets_log_usuarios 
+            ON tickets_log_usuarios.id_ticket = tickets.id
+            INNER JOIN log_usuarios ON tickets_log_usuarios.id_log_usuario = log_usuarios.id
+            INNER JOIN usuarios ON log_usuarios.dni = usuarios.dni
+            INNER JOIN facultades ON facultades.id = usuarios.id_facultad
+            INNER JOIN categorias ON categorias.id = usuarios.id_categoria
+            WHERE estados_tickets.nombre = 'Vencido' 
+            OR (estados_tickets.nombre = 'Impreso' AND dias.fecha < current_date)
+            GROUP BY usuarios.nombre, usuarios.dni, usuarios.lu, facultades.nombre, categorias.nombre HAVING COUNT(estados_tickets.nombre) = '$cantidadAusentismo'
+            ORDER BY usuarios.nombre
+        ");
         return $query->result();
     }
 

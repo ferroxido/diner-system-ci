@@ -4,12 +4,21 @@ class Usuarios extends CI_Controller {
 
 	protected $filasPorPagina = 200;
 	protected $primeraPagina = 1;
+	protected $mensajeAnular = '';
 
 	//Constructor
 	function __construct(){
 		parent::__construct();
+
+		//Eliminar cache
+		$this->output->set_header('Last-Modified:'.gmdate('D, d M Y H:i:s').'GMT');
+		$this->output->set_header('Cache-Control: no-store, no-cache, must-revalidate');
+		$this->output->set_header('Cache-Control: post-check=0, pre-check=0',false);
+		$this->output->set_header('Pragma: no-cache');
+
 		$this->load->model('Model_Usuarios');
 		$this->load->model('Model_Tickets');
+		$this->load->model('Model_Facultades');
 		$this->load->library('usuarioLib');
 		$this->form_validation->set_message('required', 'Debe ingresar un valor para %s');
 		$this->form_validation->set_message('valid_email', '%s no es un email válido');
@@ -28,9 +37,11 @@ class Usuarios extends CI_Controller {
 		$nombre = '';
 		$dni = '';
 		$lu = '';
-		$totalRows = $this->Model_Usuarios->get_total_rows($nombre, $dni, $lu);
+		$id_facultad = 20;//Todas las facultades
+		$totalRows = $this->Model_Usuarios->get_total_rows($nombre, $dni, $lu, $id_facultad);
 		$data['numeroPaginas'] = ceil($totalRows / $this->filasPorPagina);
 		$data['registros'] = $this->Model_Usuarios->all($this->filasPorPagina, $this->primeraPagina);
+		$data['facultades'] = $this->Model_Facultades->get_facultades();//Obtener lista de facultades
 		$this->load->view('tmp-admin', $data);
 	}
 
@@ -39,7 +50,8 @@ class Usuarios extends CI_Controller {
 			$nombre = $this->input->post('nombre');
 			$dni = $this->input->post('dni');
 			$lu = $this->input->post('lu');
-			$totalRows = $this->Model_Usuarios->get_total_rows($nombre, $dni, $lu);
+			$id_facultad = $this->input->post('id_facultad');
+			$totalRows = $this->Model_Usuarios->get_total_rows($nombre, $dni, $lu, $id_facultad);
 			echo ceil($totalRows / $this->filasPorPagina);
 		}
 	}
@@ -49,8 +61,9 @@ class Usuarios extends CI_Controller {
 			$nombre = $this->input->post('nombre');
 			$dni = $this->input->post('dni');
 			$lu = $this->input->post('lu');
+			$id_facultad = $this->input->post('id_facultad');
 			$posicion = (($page_num - 1) * $this->filasPorPagina);
-			$query = $this->Model_Usuarios->all_filter($nombre, $dni, $lu, $this->filasPorPagina, $posicion);
+			$query = $this->Model_Usuarios->all_filter($nombre, $dni, $lu, $id_facultad, $this->filasPorPagina, $posicion);
 			echo json_encode($query);
 		}else{
 			show_404();
@@ -89,7 +102,7 @@ class Usuarios extends CI_Controller {
 			$this->form_validation->set_rules('nombre', 'Nombre', 'required|max_length[45]|callback_caracteres_permitidos');
 			$this->form_validation->set_rules('email', 'Email', 'required|max_length[64]|valid_email');
 			$this->form_validation->set_rules('dni', 'Usuario', 'required|is_natural|callback_no_repetir_usuario_update');
-			$this->form_validation->set_rules('lu', 'Libreta Universitaria', 'required|max_length[7]|is_natural');
+			$this->form_validation->set_rules('lu', 'Libreta Universitaria', 'required|max_length[8]|is_natural');
 			if($this->form_validation->run() == FALSE){
 				//Si no cumplio alguna de las reglas
 				$this->edit($registro['dni']);
@@ -128,7 +141,7 @@ class Usuarios extends CI_Controller {
 			$registro = $this->input->post();
 			$this->form_validation->set_rules('nombre', 'Nombre', 'required|xss_clean|max_length[45]|callback_caracteres_permitidos');
 			$this->form_validation->set_rules('email', 'Email', 'required|xss_clean|valid_email|max_length[64]|callback_parametros_permitidos_ingresar_usuario');
-			$this->form_validation->set_rules('dni', 'Usuario', 'required|xss_clean|max_length[10]|is_natural|callback_no_repetir_usuario');
+			$this->form_validation->set_rules('dni', 'Usuario', 'required|xss_clean|max_length[10]|is_natural|callback_no_repetir_usuario_insertar');
 			$this->form_validation->set_rules('lu', 'Libreta', 'required|xss_clean|max_length[8]|is_natural');
 			$this->form_validation->set_rules('id_provincia', 'Provincia', 'required|is_natural');
 			$this->form_validation->set_rules('id_facultad', 'Facultad', 'required|is_natural');
@@ -193,10 +206,10 @@ class Usuarios extends CI_Controller {
 		if($this->session->userdata('dni_usuario') != null){
 			$dni = $this->session->userdata('dni_usuario');
 			$data['contenido'] = 'usuarios/alumno';
-			$estado = 5;//Traer todos los tickets
+			$estado = 10;//Traer todos los tickets
 			$data['tickets'] = $this->Model_Tickets->mis_tickets($dni, $estado);
 			$data['registro'] = $this->Model_Usuarios->find($dni);
-			$data['estados'] = $this->Model_Tickets->get_estados();
+			$data['estados'] = $this->Model_Tickets->get_estados_alumnos();
 			$this->load->view('tmp-alumnos', $data);
 		}
 	}
@@ -337,6 +350,7 @@ class Usuarios extends CI_Controller {
 			$data['contenido'] = 'usuarios/anular';
 			$data['registro'] = $this->Model_Usuarios->find($dni);
 			$data['tickets'] = $this->Model_Tickets->get_tickets_anulables($dni);
+			$data['mensaje'] = $this->mensajeAnular;
 			$this->load->view('tmp-alumnos2', $data);
 		}
 	}
@@ -347,9 +361,10 @@ class Usuarios extends CI_Controller {
 			$data = array();
 			$dni = $this->session->userdata('dni_usuario');
 			if(is_numeric($id_ticket) && $id_ticket != null){
-				$respuesta = $this->usuariolib->anular($dni, $id_ticket);
+				$respuesta = $this->usuariolib->anularConTransaccion($dni, $id_ticket);
+				$this->mensajeAnular = my_mensaje_confirmacion($respuesta['mensaje'], true, $respuesta['exito']);
 			}
-			redirect('usuarios/anular');
+			$this->anular();
 		}
 	}
 

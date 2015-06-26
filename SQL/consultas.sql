@@ -220,3 +220,37 @@ INNER JOIN estados_tickets ON tickets.estado = estados_tickets.id
 WHERE dias.fecha BETWEEN '2015-04-01' AND '2015-06-01'
 group by dias.fecha
 order by dias.fecha;
+
+
+SELECT aux.cantidad_vencidos as cantidad_ausentismos, count(*) as cantidad_alumnos from
+(SELECT usuarios.nombre as nombre, usuarios.dni as dni, count(estados_tickets.nombre) as cantidad_vencidos
+FROM tickets
+INNER JOIN dias on dias.id = tickets.id_dia
+INNER JOIN estados_tickets on tickets.estado = estados_tickets.id
+INNER JOIN
+(SELECT DISTINCT ON(id_ticket) id_ticket, id_log_usuario FROM tickets_log_usuarios) AS tickets_log_usuarios 
+ON tickets_log_usuarios.id_ticket = tickets.id
+INNER JOIN log_usuarios ON tickets_log_usuarios.id_log_usuario = log_usuarios.id
+INNER JOIN usuarios ON log_usuarios.dni = usuarios.dni
+where estados_tickets.nombre = 'Vencido'or (estados_tickets.nombre = 'Impreso' and dias.fecha < current_date)
+group by usuarios.nombre, usuarios.dni) AS aux
+group by aux.cantidad_vencidos
+order by cantidad_ausentismos desc;
+
+
+
+SELECT usuarios.nombre as nombre, usuarios.dni, usuarios.lu, facultades.nombre, categorias.nombre as dni, count(estados_tickets.nombre) as cantidad_vencidos
+FROM tickets
+INNER JOIN dias on dias.id = tickets.id_dia
+INNER JOIN estados_tickets on tickets.estado = estados_tickets.id
+INNER JOIN
+(SELECT DISTINCT ON(id_ticket) id_ticket, id_log_usuario FROM tickets_log_usuarios) AS tickets_log_usuarios 
+ON tickets_log_usuarios.id_ticket = tickets.id
+INNER JOIN log_usuarios ON tickets_log_usuarios.id_log_usuario = log_usuarios.id
+INNER JOIN usuarios ON log_usuarios.dni = usuarios.dni
+INNER JOIN facultades ON facultades.id = usuarios.id_facultad
+INNER JOIN categorias ON categorias.id = usuarios.id_categoria
+where estados_tickets.nombre = 'Vencido' 
+or (estados_tickets.nombre = 'Impreso' and dias.fecha < current_date)
+group by usuarios.nombre, usuarios.dni, usuarios.lu, facultades.nombre, categorias.nombre having count(estados_tickets.nombre) = 1
+order by cantidad_vencidos desc;

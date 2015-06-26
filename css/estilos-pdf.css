@@ -17,8 +17,7 @@ header h3, header h5{
 div#info-encabezado{
 	width: 40%;
 	text-align: center;
-	display: inline-block;
-	
+	display: inline-block;	
 }
 
 div#img-unsa-logo{
@@ -32,13 +31,23 @@ div#img-unsa-logo img{
 	height: 100%;
 }
 
+div#footer{
+    position: fixed;
+    left: 0px;
+    bottom: -80px;
+    right: 0px;
+    height: 100px;
+}
+@page {
+    margin: 70px 50px 130px 50px; 
+}
 table { 
-  width: 100%; 
-  border-collapse: collapse; 
+  border-collapse: collapse;
+  width: 100%;
 }
 /* Zebra striping */
 tr:nth-of-type(odd) { 
-  background: #eee; 
+  background: #FFF; 
 }
 th { 
   background: #333; 

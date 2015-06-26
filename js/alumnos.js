@@ -58,6 +58,6 @@ $(document).ready(function(){
 });
 
 window.onload = function () {
-    $("#drop_down").val("5");
+    $("#drop_down").val("10");
 }
 

@@ -34,7 +34,7 @@
 				<div class="form-group">
 					<label for="estado" class="col-md-3">Estado: </label>
 					<div class="col-md-9">
-						<?= form_dropdown('estado', $estados, 5,"id='drop_down' class='form-control'"); ?>
+						<?= form_dropdown('estado', $estados, 10,"id='drop_down' class='form-control'"); ?>
 					</div>
 				</div>
 			</div>

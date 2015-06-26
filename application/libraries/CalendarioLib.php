@@ -267,7 +267,7 @@ class CalendarioLib {
 		$estadoFeriado = 0;//Estado para el dia
 
 		$query = $this->CI->Model_Calendario->get_tickets($fecha);
-		if ($query->num_rows() > 0) {			
+		if ($query->num_rows() > 0) {
 			//Registro el log
 			$fechaLog = date('Y/m/d H:i:s');
 			$id_log = $this->CI->usuariolib->cargar_log_usuario($dni_responsable, $fechaLog, 'super anular');

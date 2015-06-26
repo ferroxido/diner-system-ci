@@ -21,13 +21,16 @@ class Model_Usuarios extends CI_Model {
         return $query->result();
     }
 
-    function all_filter($buscar_nombre, $buscar_dni, $buscar_lu, $filasPorPagina, $posicion){
+    function all_filter($buscar_nombre, $buscar_dni, $buscar_lu, $id_facultad, $filasPorPagina, $posicion){
         $buscar_nombre = strtolower($buscar_nombre);
         $this->db->select('usuarios.nombre, usuarios.dni, usuarios.lu, usuarios.saldo, usuarios.estado,facultades.nombre as facultad, categorias.nombre as categoria');
         $this->db->from('usuarios');
         $this->db->join('facultades', 'usuarios.id_facultad = facultades.id');
         $this->db->join('categorias', 'usuarios.id_categoria = categorias.id');
         $this->db->where("LOWER(usuarios.nombre) LIKE '%{$buscar_nombre}%'");
+        if ($id_facultad != '20'){
+            $this->db->where('id_facultad', $id_facultad);
+        }        
         $this->db->like('dni', $buscar_dni, 'after');
         $this->db->like('lu', $buscar_lu, 'after');
         $this->db->order_by('usuarios.nombre', 'asc');
@@ -175,11 +178,14 @@ class Model_Usuarios extends CI_Model {
         $this->db->insert('tickets_log_usuarios');
     }
 
-    function get_total_rows($nombre, $dni, $lu){
+    function get_total_rows($nombre, $dni, $lu, $id_facultad){
         $nombre = strtolower($nombre);
         $this->db->select('COUNT(nombre) as total_rows');
         $this->db->from('usuarios');
         $this->db->where("LOWER(nombre) LIKE '%{$nombre}%'");
+        if ($id_facultad != '20'){
+            $this->db->where('id_facultad', $id_facultad);
+        }
         $this->db->like('dni', $dni, 'after');
         $this->db->like('lu', $lu, 'after');
         $query = $this->db->get();
@@ -254,5 +260,78 @@ class Model_Usuarios extends CI_Model {
                 ORDER BY fecha ASC");            
         }
         return $query->result();
+    }
+
+    public function transactionAnular($id_ticket, $dni){
+        //Variables de ayuda
+        $estadoAnulado = 0;
+        $lugarWeb = 0;
+        $ticket = $this->db->where('id', $id_ticket)->get('tickets')->row();
+        $importe = $ticket->importe;
+        $idDia = $ticket->id_dia;
+        $saldo = $this->db->where('dni', $dni)->get('usuarios')->row('saldo');
+        $ticketsVendidos = $this->db->where('id', $idDia)->get('dias')->row('tickets_vendidos');
+        $accion = $this->db->where('nombre_canonico', 'anular')->get('acciones')->row();
+        $datosLog = array(
+            'fecha'       => date('Y/m/d H:i:s'),
+            'lugar'       => $lugarWeb,
+            'id_accion'   => $accion->id,
+            'dni'         => $dni,
+            'descripcion' => $accion->nombre
+        );
+
+        //Comienzo transaccion
+        $this->db->trans_start();
+        //Cambio de estado el ticket
+        $this->db->update('tickets', array('estado' => $estadoAnulado), array('id' => $id_ticket));
+        //Incremento saldo
+        $this->db->update('usuarios', array('saldo' => $saldo + $importe), array('dni' => $dni));
+        //Decremento en uno tickets vendidos
+        $this->db->update('dias', array('tickets_vendidos' => $ticketsVendidos-1), array('id' => $idDia));
+        //Inserto log
+        $this->db->insert('log_usuarios', $datosLog);
+        $idLog = $this->db->insert_id();
+        //Inserto relacion tickets_log_usuarios
+        $this->db->insert('tickets_log_usuarios', array('id_log_usuario' => $idLog, 'id_ticket' => $id_ticket));
+        $this->db->trans_complete();
+
+        if ($this->db->trans_status() === FALSE)
+        {
+            return false;
+        }else{
+            return true;
+        }
+    }
+
+    public function transactionVencer($id_ticket, $dni){
+        //Variables de ayuda
+        $estadoVencido = 4;
+        $lugarWeb = 0;
+        $accion = $this->db->where('nombre_canonico', 'vencer')->get('acciones')->row();
+        $datosLog = array(
+            'fecha'       => date('Y/m/d H:i:s'),
+            'lugar'       => $lugarWeb,
+            'id_accion'   => $accion->id,
+            'dni'         => $dni,
+            'descripcion' => $accion->nombre
+        );
+
+        //Comienzo transaccion
+        $this->db->trans_start();
+        //Cambio de estado el ticket
+        $this->db->update('tickets', array('estado' => $estadoVencido), array('id' => $id_ticket));
+        //Inserto log
+        $this->db->insert('log_usuarios', $datosLog);
+        $idLog = $this->db->insert_id();
+        //Inserto relacion tickets_log_usuarios
+        $this->db->insert('tickets_log_usuarios', array('id_log_usuario' => $idLog, 'id_ticket' => $id_ticket));
+        $this->db->trans_complete();
+
+        if ($this->db->trans_status() === FALSE)
+        {
+            return false;
+        }else{
+            return true;
+        }
     }
 }   
