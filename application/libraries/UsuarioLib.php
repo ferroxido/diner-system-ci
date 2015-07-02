@@ -190,68 +190,6 @@ class UsuarioLib {
 		return $barcode;
 	}
 
-	/*
-	 * Realiza la anulación del ticket, segun el id pasado como parámetro.
-	 */
-	// public function anular($dni, $id_ticket){
-	// 	$data = array();
-	// 	$query = $this->CI->Model_Tickets->find_ticket($dni, $id_ticket);
-	// 	//Controlo que efectivamente sea su ticket
-	// 	if ($query->num_rows() == 1){
-	// 		//validar fecha de anulacion
-	// 		$fecha = $query->row('fecha');
-	// 		$respuesta = $this->validar_fecha_anulacion($fecha);
-	// 		if ($respuesta['resultado'] == 0) {
-	// 			//Anulo tranquilamente
-	// 			//Incrementar Saldo
-	// 			$registro = $this->CI->Model_Usuarios->find($dni);
-	// 			$data['dni'] = $dni;
-	// 			$data['saldo'] = $registro->saldo + $registro->importe;
-	// 			$this->CI->Model_Usuarios->update($data);
-	// 			//Cambiar estado del ticket
-	// 			$data = array();//Reinicio la variable data
-	// 			$data['id'] = $id_ticket;
-	// 			$estadoAnulado = 0;
-	// 			$data['estado'] = $estadoAnulado;
-	// 			$this->CI->Model_Tickets->update($data);
-	// 			//decremento en uno los tickets vendidos.
-	// 			$query_dias = $this->CI->Model_Dias->find($fecha);
-	// 			$registro_dia = $query_dias->row();
-	// 			$tickets_vendidos = $registro_dia->tickets_vendidos - 1;
-	// 			$data = array('fecha'=>$fecha, 'tickets_vendidos'=>$tickets_vendidos);
-	// 			$this->CI->Model_Dias->update($data);
-	// 			//Registrar el nuevo log.
-	// 			$fecha_log = date('Y/m/d H:i:s');
-	// 			$id_log = $this->cargar_log_usuario($dni, $fecha_log, 'anular');
-	// 			//Registrar la tabla tickets_log_usuarios.
-	// 			$data = array();//Reinicio la variable data
-	// 			$data['id_log_usuario'] = $id_log;
-	// 			$data['id_ticket'] = $id_ticket;
-	// 			$this->CI->db->set($data);
- //    			$this->CI->db->insert('tickets_log_usuarios');
-
-	// 		}elseif ($respuesta['resultado'] == 2) {
-	// 			//vencer ticket
-	// 			//Cambiar estado del ticket
-	// 			$data = array();//Reinicio la variable data
-	// 			$data['id'] = $id_ticket;
-	// 			$estadoVencido = 4;
-	// 			$data['estado'] = $estadoVencido;
-	// 			$this->CI->Model_Tickets->update($data);
-	// 			//Registrar el nuevo log.
-	// 			$fecha_log = date('Y/m/d H:i:s');
-	// 			$id_log = $this->cargar_log_usuario($dni, $fecha_log, 'vencer');
-	// 			//Registrar la tabla tickets_log_usuarios.
-	// 			$data = array();//Reinicio la variable data
-	// 			$data['id_log_usuario'] = $id_log;
-	// 			$data['id_ticket'] = $id_ticket;
-	// 			$this->CI->db->set($data);
- //    			$this->CI->db->insert('tickets_log_usuarios');
-	// 		}
-	// 		return $respuesta;
-	// 	}
-	// }
-
 	public function anularConTransaccion($dni, $id_ticket){
 		$query = $this->CI->Model_Tickets->find_ticket($dni, $id_ticket);
 		//Controlo que efectivamente sea su ticket
