@@ -33,7 +33,7 @@
 							<td><?= $registro->becados; ?></td>
 							<td><?= $registro->regulares; ?></td>
 							<td><?= $registro->gratuitos; ?></td>
-							<td><?= $registro->total_usuarios; ?></td>
+							<td id="usuarios_<?= $registro->id_facultad; ?>"><?= $registro->total_usuarios; ?></td>
 						</tr>
 						<?php endforeach; ?>
 						<tr class="info">
@@ -46,6 +46,8 @@
 					</tbody>
 				</table>
 				
+				<div id="chart1" style="margin-top:20px;"></div>
+
 				<div class="col-md-offset-9">
 					<?= form_open('reportes/generar_pdf'); ?>
 						<input type="submit" class="btn btn-primary glyphicon glyphicon-print" value=" Descargar PDF" name="PDF1">
@@ -343,6 +345,10 @@
 		</div><!-- tab content -->
 	</div>	
 </div>
+<link href="<?= base_url('css/jquery.jqplot.min.css'); ?>" rel="stylesheet" />
+<script src="<?= base_url('js/jquery.jqplot.min.js'); ?>"></script>
+<script src="<?= base_url('js/jqplot.pieRenderer.min.js'); ?>"></script>
+<script src="<?= base_url('js/jqplot.donutRenderer.min.js'); ?>"></script>
 <script type="text/javascript">
 	base_url = '<?=base_url(); ?>';
 </script>
