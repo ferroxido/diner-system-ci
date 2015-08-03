@@ -433,13 +433,20 @@ class Usuarios extends CI_Controller {
 	public function procesar_barcode(){
 		if($this->input->is_ajax_request()){
 			$barcode = $this->input->post('barcode');
+
+			$is_grupal = false;
+			if (strtoupper($barcode[0]) === 'G') {
+				$barcode = ltrim ($barcode, 'G');
+				$is_grupal = true;
+			}
+
 			if(strlen($barcode) <= 10 && is_numeric($barcode)){
 				$id_ticket = (int) $barcode;
 			}else{
 				$id_ticket = $this->usuariolib->obtener_id_ticket($barcode);	
 			}
 			//Obtener información del ticket en cuestión.
-			$query = $this->Model_Usuarios->get_tickets_control($id_ticket);
+			$query = $this->Model_Tickets->get_tickets_control($id_ticket, $is_grupal);
 
 			$estadoImpreso = 2;
 			$estadoConsumido = 3;

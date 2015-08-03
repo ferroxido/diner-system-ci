@@ -53,9 +53,22 @@
 			</tr>
 		</tbody>
 	</table>
+
+	<div id="chart1" style="margin-top:20px;">
+		hola
+	</div>
+
 	<div id="footer">
 		<hr>
 		<p><?= date('d-m-Y H:i'); ?> - <?= $this->session->userdata('nombre_usuario'); ?></p>
 	</div>
 </body>
 </html>	
+<link href="<?= base_url('css/jquery.jqplot.min.css'); ?>" rel="stylesheet" />
+<script src="<?= base_url('js/jquery.jqplot.min.js'); ?>"></script>
+<script src="<?= base_url('js/jqplot.pieRenderer.min.js'); ?>"></script>
+<script src="<?= base_url('js/jqplot.donutRenderer.min.js'); ?>"></script>
+<script type="text/javascript">
+	base_url = '<?=base_url(); ?>';
+</script>
+<script src="<?= base_url('js/reportes.js'); ?>"></script>

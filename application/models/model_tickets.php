@@ -384,5 +384,34 @@ class Model_Tickets extends CI_Model {
         return $query->result();
     }
 
+    function get_tickets_control($id_ticket, $is_grupal){
+        if ($is_grupal) {
+            $this->db->select('tickets_grupales.id as id_ticket, dias.fecha as fecha, tickets_grupales.id_estado as estado, tickets_grupales.importe as importe, tickets_grupales.cantidad as cantidad, tickets_grupales.delegacion as delegacion, tickets_grupales.recibo as recibo');
+            $this->db->from('tickets_grupales');
+            $this->db->join('dias', 'dias.id = tickets.id_dia');
+            $this->db->join('tickets_grupales_log_usuarios', 'tickets_grupales_log_usuarios.id_ticket_grupal = tickets_grupales.id');
+            $this->db->where('tickets_grupales.id', $id_ticket);
+            $this->db->limit(1);
+            $query = $this->db->get();
+            return $query;
+        } else{
+            $this->db->select('tickets.id as id_ticket, dias.fecha as fecha, tickets.estado as estado, tickets.importe as importe, usuarios.nombre as usuario_nombre, usuarios.dni as dni, usuarios.ruta_foto as ruta, facultades.nombre as facultad_nombre, categorias.nombre as categoria_nombre, usuarios.lu as usuario_lu, log_usuarios.fecha as fecha_log');
+            $this->db->from('tickets');
+            $this->db->join('dias', 'dias.id = tickets.id_dia');
+            $this->db->join('tickets_log_usuarios', 'tickets_log_usuarios.id_ticket = tickets.id');
+            $this->db->join('log_usuarios', 'log_usuarios.id = tickets_log_usuarios.id_log_usuario');
+            $this->db->join('usuarios', 'usuarios.dni = log_usuarios.dni');
+            $this->db->join('facultades', 'facultades.id = usuarios.id_facultad');
+            $this->db->join('categorias', 'categorias.id = usuarios.id_categoria');
+            $this->db->where('tickets.id', $id_ticket);
+            //$this->db->where('dias.fecha', date('Y-m-d'));//El ticket debe ser de la fecha de hoy
+            $this->db->order_by('log_usuarios.fecha','desc');
+            $this->db->limit(1);
+            $query = $this->db->get();
+            return $query;
+        }
+
+    }
+
 }
 
