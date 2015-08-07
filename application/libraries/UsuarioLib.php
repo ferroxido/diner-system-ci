@@ -397,7 +397,4 @@ class UsuarioLib {
 		return $this->CI->Model_Calendario->generate_data($year, $month, $data);
 	}
 
-	public function insert_alumnos($registro){
-		
-	}
 }

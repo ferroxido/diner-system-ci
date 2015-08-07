@@ -74,7 +74,13 @@ $(document).ready(function() {
             seriesColors: [ "#DD4814", "#000000", "#77216F", "#0166A5", "#333333", "#A2B2D6", "#29AAFB", "#EA4E4F"]
         }
     );
-
+    
+    var imgelem = $('#chart1').jqplotToImageElem();
+    var imageSrc = imgelem.src; // this stores the base64 image url in imagesrc    
+    var imgElem = $('<img/>').attr('src', imageSrc);
+    //open(imageSrc);
+    $('#imgChart1').append(imgElem);
+    $('#imgChart1').addClass("img-torta");
 
 	$("#fecha").change(filtrar_ajax);
 	

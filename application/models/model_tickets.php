@@ -390,11 +390,13 @@ class Model_Tickets extends CI_Model {
             $this->db->from('tickets_grupales');
             $this->db->join('dias', 'dias.id = tickets.id_dia');
             $this->db->join('tickets_grupales_log_usuarios', 'tickets_grupales_log_usuarios.id_ticket_grupal = tickets_grupales.id');
+            $this->db->join('log_usuarios', 'log_usuarios.id = tickets_grupales_log_usuarios.id_log_usuario');
             $this->db->where('tickets_grupales.id', $id_ticket);
+            $this->db->order_by('log_usuarios.fecha','desc');
             $this->db->limit(1);
             $query = $this->db->get();
             return $query;
-        } else{
+        }else {
             $this->db->select('tickets.id as id_ticket, dias.fecha as fecha, tickets.estado as estado, tickets.importe as importe, usuarios.nombre as usuario_nombre, usuarios.dni as dni, usuarios.ruta_foto as ruta, facultades.nombre as facultad_nombre, categorias.nombre as categoria_nombre, usuarios.lu as usuario_lu, log_usuarios.fecha as fecha_log');
             $this->db->from('tickets');
             $this->db->join('dias', 'dias.id = tickets.id_dia');
@@ -412,6 +414,70 @@ class Model_Tickets extends CI_Model {
         }
 
     }
+
+    function actualizar_estado_ticket($id_ticket, $dni, $nombre_canonico_accion, $estado){
+        //Variables de ayuda
+        $lugarWeb = 0;
+        $accion = $this->db->where('nombre_canonico', $nombre_canonico_accion)->get('acciones')->row();
+        $datosLog = array(
+            'fecha'       => date('Y/m/d H:i:s'),
+            'lugar'       => $lugarWeb,
+            'id_accion'   => $accion->id,
+            'dni'         => $dni,
+            'descripcion' => $accion->nombre
+        );
+
+        //Comienzo transaccion
+        $this->db->trans_start();
+        //Cambio de estado el ticket
+        $this->db->update('tickets', array('estado' => $estado), array('id' => $id_ticket));
+        //Inserto log
+        $this->db->insert('log_usuarios', $datosLog);
+        $idLog = $this->db->insert_id();
+        //Inserto relacion tickets_log_usuarios
+        $this->db->insert('tickets_log_usuarios', array('id_log_usuario' => $idLog, 'id_ticket' => $id_ticket));
+        $this->db->trans_complete();
+
+        if ($this->db->trans_status() === FALSE)
+        {
+            return false;
+        }else{
+            return true;
+        }
+    }
+
+    function actualizar_estado_ticket_grupal($id_ticket, $dni, $nombre_canonico_accion, $estado){
+        //Variables de ayuda
+        $lugarWeb = 0;
+        $accion = $this->db->where('nombre_canonico', $nombre_canonico_accion)->get('acciones')->row();
+        $datosLog = array(
+            'fecha'       => date('Y/m/d H:i:s'),
+            'lugar'       => $lugarWeb,
+            'id_accion'   => $accion->id,
+            'dni'         => $dni,
+            'descripcion' => $accion->nombre
+        );
+
+        //Comienzo transaccion
+        $this->db->trans_start();
+        //Cambio de estado el ticket_grupal
+        $this->db->update('tickets_grupales', array('estado' => $estado), array('id' => $id_ticket));
+        //Inserto log
+        $this->db->insert('log_usuarios', $datosLog);
+        $idLog = $this->db->insert_id();
+        //Inserto relacion tickets_grupales_log_usuarios
+        $this->db->insert('tickets_grupales_log_usuarios', array('id_log_usuario' => $idLog, 'id_ticket_grupal' => $id_ticket));
+        $this->db->trans_complete();
+
+        if ($this->db->trans_status() === FALSE)
+        {
+            return false;
+        }else{
+            return true;
+        }
+    }
+
+
 
 }
 

@@ -226,6 +226,9 @@ table.calendario {
   margin: .3em;
   text-align: center;
 }
+.img-torta{
+  display: none;
+}
 /* Large desktop */
 @media (min-width: 1200px) {
   

@@ -47,6 +47,7 @@
 				</table>
 				
 				<div id="chart1" style="margin-top:20px;"></div>
+				<div id="imgChart1"></div>
 
 				<div class="col-md-offset-9">
 					<?= form_open('reportes/generar_pdf'); ?>

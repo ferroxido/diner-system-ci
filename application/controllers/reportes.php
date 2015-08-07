@@ -206,4 +206,10 @@ class Reportes extends CI_Controller {
 		$this->load->view('reportes/plantilla_unsa');
 	}
 
+	public function reporte1(){
+		$data['registros'] = $this->Model_Facultades->clasificacion_usuarios();
+		$data['totales'] = $this->Model_Usuarios->total_usuarios();
+		$this->load->view('reportes/reporte_pdf1', $data);
+	}
+
 }
