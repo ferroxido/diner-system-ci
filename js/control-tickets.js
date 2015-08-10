@@ -39,23 +39,37 @@ function ajax_barcode(event){
 							string_fecha = val.fecha_log;
 							var fecha_log = string_fecha.substring(8,10) + '/' + string_fecha.substring(5,7) + '/' + string_fecha.substring(0,4);
 
-							html_info_usuario = '<div class="img-control"><img data-src="holder.js/100%x180" style="width: 70%;" src="' + val.ruta + '"></div><br />';
-							html_info_usuario = html_info_usuario + '<label>DNI: ' + val.dni + '</label><br />';
-							html_info_usuario = html_info_usuario + '<label>Nombre: ' + val.usuario_nombre + '</label><br />';
-							html_info_usuario = html_info_usuario + '<label>L.U: '+ val.usuario_lu +'</label><br />';
-							html_info_usuario = html_info_usuario + '<label>Facultad: '+ val.facultad_nombre +'</label><br />';
-							html_info_usuario = html_info_usuario + '<label>Categoria: '+ val.categoria_nombre +'</label><br />';
+							if (val.delegacion) {
+								html_info_usuario = '<div class="img-control"><img data-src="holder.js/100%x180" style="width: 70%;" src="' + base_url + 'img/users.png' + '"></div><br />';
+								html_info_usuario = html_info_usuario + '<label>Delegacion: ' + val.delegacion + '</label><br />';
+								html_info_usuario = html_info_usuario + '<label>Categoria: '+ val.categoria +'</label><br />';
+							}else {
+								html_info_usuario = '<div class="img-control"><img data-src="holder.js/100%x180" style="width: 70%;" src="' + val.ruta + '"></div><br />';
+								html_info_usuario = html_info_usuario + '<label>DNI: ' + val.dni + '</label><br />';
+								html_info_usuario = html_info_usuario + '<label>Nombre: ' + val.usuario_nombre + '</label><br />';
+								html_info_usuario = html_info_usuario + '<label>L.U: '+ val.usuario_lu +'</label><br />';
+								html_info_usuario = html_info_usuario + '<label>Facultad: '+ val.facultad +'</label><br />';
+								html_info_usuario = html_info_usuario + '<label>Categoria: '+ val.categoria +'</label><br />';
+							}
+
 							
-							if (hoy < new Date(y, m-1, d)){
+							if (hoy < new Date(y, m-1, d)) {
 								$('div#info-ticket').append('<h2>Ticket No Valido</h2><br /><h3>No es del día de hoy</h3>');
-							}else{
+							}else {
 								html_info_ticket = '<label>Número Ticket: ' + val.id_ticket + '</label><br />';
 								html_info_ticket = html_info_ticket + '<label>Fecha: ' + fecha + '</label><br />';
+								if (val.delegacion) {
+									html_info_ticket = html_info_ticket + '<label>Cantidad Personas: ' + val.cantidad + '</label><br />';
+								}
 								html_info_ticket = html_info_ticket + '<label>Importe: $' + val.importe + '</label><br />';
 								html_info_ticket = html_info_ticket + '<label>Estado: ' + val.estado + '</label><br />';
 								if(val.estado == 2){
 									html_info_ticket = html_info_ticket + '<h1 class="valido">VÁLIDO</h1>';
-									$('#historial_tickets').append('<tr><td>'+ val.id_ticket +'</td><td>'+ val.usuario_lu +'</td></tr>');
+									if (val.delegacion) {
+										$('#historial_tickets').append('<tr><td>'+ val.id_ticket +'</td><td>Comedor</td></tr>');
+									}else {
+										$('#historial_tickets').append('<tr><td>'+ val.id_ticket +'</td><td>'+ val.usuario_lu +'</td></tr>');
+									}
 									//Incrementar contador
 									totalCosumidosHoy = parseInt($('span#total_tickets').html());
 									$('span#total_tickets').html(totalCosumidosHoy + 1);

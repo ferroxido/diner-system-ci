@@ -504,7 +504,7 @@ class Usuarios extends CI_Controller {
 			if(strlen($barcode) <= 10 && is_numeric($barcode)){
 				$id_ticket = (int) $barcode;
 			}else{
-				$id_ticket = $this->usuariolib->obtener_id_ticket($barcode);	
+				$id_ticket = $this->usuariolib->obtener_id_ticket($barcode);
 			}
 
 			//Obtener información del ticket en cuestión.

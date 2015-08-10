@@ -78,9 +78,9 @@ $(document).ready(function() {
     var imgelem = $('#chart1').jqplotToImageElem();
     var imageSrc = imgelem.src; // this stores the base64 image url in imagesrc    
     var imgElem = $('<img/>').attr('src', imageSrc);
+
     //open(imageSrc);
     $('#imgChart1').append(imgElem);
-    $('#imgChart1').addClass("img-torta");
 
 	$("#fecha").change(filtrar_ajax);
 	

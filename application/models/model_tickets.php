@@ -386,18 +386,19 @@ class Model_Tickets extends CI_Model {
 
     function get_tickets_control($id_ticket, $is_grupal){
         if ($is_grupal) {
-            $this->db->select('tickets_grupales.id as id_ticket, dias.fecha as fecha, tickets_grupales.id_estado as estado, tickets_grupales.importe as importe, tickets_grupales.cantidad as cantidad, tickets_grupales.delegacion as delegacion, tickets_grupales.recibo as recibo');
+            $this->db->select('tickets_grupales.id as id_ticket, dias.fecha as fecha, tickets_grupales.id_estado as estado, tickets_grupales.importe as importe, tickets_grupales.cantidad as cantidad, tickets_grupales.delegacion as delegacion, log_usuarios.fecha as fecha_log, categorias.nombre as categoria');
             $this->db->from('tickets_grupales');
-            $this->db->join('dias', 'dias.id = tickets.id_dia');
+            $this->db->join('dias', 'dias.id = tickets_grupales.id_dia');
             $this->db->join('tickets_grupales_log_usuarios', 'tickets_grupales_log_usuarios.id_ticket_grupal = tickets_grupales.id');
             $this->db->join('log_usuarios', 'log_usuarios.id = tickets_grupales_log_usuarios.id_log_usuario');
+            $this->db->join('categorias', 'categorias.id = tickets_grupales.id_categoria');
             $this->db->where('tickets_grupales.id', $id_ticket);
             $this->db->order_by('log_usuarios.fecha','desc');
             $this->db->limit(1);
             $query = $this->db->get();
             return $query;
         }else {
-            $this->db->select('tickets.id as id_ticket, dias.fecha as fecha, tickets.estado as estado, tickets.importe as importe, usuarios.nombre as usuario_nombre, usuarios.dni as dni, usuarios.ruta_foto as ruta, facultades.nombre as facultad_nombre, categorias.nombre as categoria_nombre, usuarios.lu as usuario_lu, log_usuarios.fecha as fecha_log');
+            $this->db->select('tickets.id as id_ticket, dias.fecha as fecha, tickets.estado as estado, tickets.importe as importe, usuarios.nombre as usuario_nombre, usuarios.dni as dni, usuarios.ruta_foto as ruta, facultades.nombre as facultad, categorias.nombre as categoria, usuarios.lu as usuario_lu, log_usuarios.fecha as fecha_log');
             $this->db->from('tickets');
             $this->db->join('dias', 'dias.id = tickets.id_dia');
             $this->db->join('tickets_log_usuarios', 'tickets_log_usuarios.id_ticket = tickets.id');

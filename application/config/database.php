@@ -48,9 +48,9 @@
 $active_group = 'default';
 $active_record = TRUE;
 
-$db['default']['hostname'] = 'localhost';//'170.210.201.139';
+$db['default']['hostname'] = 'localhost';
 $db['default']['username'] = 'postgres';
-$db['default']['password'] = 'rony214292';//'l0$p3r12Os20l5';
+$db['default']['password'] = 'postgres';//'l0$p3r12Os20l5';
 $db['default']['database'] = 'comedor';
 $db['default']['dbdriver'] = 'postgre';
 $db['default']['port']     = '5432';
