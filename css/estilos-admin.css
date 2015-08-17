@@ -49,9 +49,6 @@ div#contenido{
   margin: 0px auto;
   padding: 2em;
 }
-div#contenedor_menu{
-  position: fixed;
-}
 div#menu_usuario{
   background-color: #333333;
   color: #FFF;
@@ -239,19 +236,13 @@ table.calendario {
 }
 /* Portrait tablet to landscape and desktop */
 @media (min-width: 768px) and (max-width: 979px) {
-  div#contenedor_menu{
-    position: static;
-  }  
+   
 }
 /* Landscape phone to portrait tablet */
 @media (max-width: 767px) {
-  div#contenedor_menu{
-    position: static;
-  }
+  
 }
 /* Landscape phones and down */
 @media (max-width: 480px) {
-  div#contenedor_menu{
-    position: static;
-  }
+  
 }
