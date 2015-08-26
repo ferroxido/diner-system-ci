@@ -96,12 +96,16 @@ class Home extends CI_Controller {
 						redirect('usuarios/admin');	
 						break;
 
-					case 'Super Administrador':
+					case 'Becas':
 						redirect('usuarios/admin');
 						break;
 
 					case 'Control':
 						redirect('usuarios/control');
+						break;
+
+					case 'Super Administrador':
+						redirect('usuarios/admin');
 						break;
 				}
 			}
