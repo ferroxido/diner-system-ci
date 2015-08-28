@@ -1,5 +1,4 @@
-application/config/database.php
+comedorunsa/application/config/database.php
 SQL/
 *.htaccess
 *.sql
-
