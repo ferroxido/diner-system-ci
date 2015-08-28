@@ -44,11 +44,15 @@ class Model_Tipos_Operaciones extends CI_Model {
         return $query->result();
     }
 
-    function get_operaciones_activas(){
+    function get_operaciones_activas($idPerfil){
         $estadoActivo = 1;
+        $this->db->select('tipos_operaciones.*');
+        $this->db->from('perfiles_tipos_operaciones');
+        $this->db->join('tipos_operaciones', 'perfiles_tipos_operaciones.id_tipo_operacion = tipos_operaciones.id');
+        $this->db->where('id_perfil', $idPerfil);
         $this->db->where('estado', $estadoActivo);
         $this->db->order_by('nombre', 'asc');
-        $query = $this->db->get('tipos_operaciones');
+        $query = $this->db->get();
         return $query->result();        
     }
 

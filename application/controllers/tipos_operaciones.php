@@ -17,7 +17,7 @@ class Tipos_Operaciones extends CI_Controller {
 		$data['titulo'] = 'Tipos de Operaciones';
 		$data['registros'] = $this->Model_Tipos_Operaciones->all();
 		$data['menu'] = $this->Model_Tipos_Operaciones->get_menu();
-		$this->load->view('template-admin', $data);
+		$this->load->view('tmp-admin', $data);
 	}
 
 	public function search(){
@@ -27,7 +27,7 @@ class Tipos_Operaciones extends CI_Controller {
 			$valor = $this->input->post('buscar');
 			$data['registros'] = $this->Model_Tipos_Operaciones->allFilter('tipos_operaciones.nombre', $valor);
 			$data['menu'] = $this->Model_Tipos_Operaciones->get_menu();
-			$this->load->view('template-admin', $data);
+			$this->load->view('tmp-admin', $data);
 		}else{
 			//La session expiro, redireccionamos al ingreso.
 			$mensaje = "La sesión terminó, ingrese nuevamente";
@@ -48,7 +48,7 @@ class Tipos_Operaciones extends CI_Controller {
 		$data['contenido'] = 'tipos_operaciones/edit';
 		$data['titulo'] = 'Editar Tipos de Operaciones';
 		$data['registro'] = $this->Model_Tipos_Operaciones->find($id);
-		$this->load->view('template-admin',$data);
+		$this->load->view('tmp-admin',$data);
 	}
 
 	public function update(){
@@ -70,7 +70,7 @@ class Tipos_Operaciones extends CI_Controller {
 		$data['contenido'] = 'tipos_operaciones/create';
 		$data['titulo'] = 'Crear Operación';
 		$data['menu'] = $this->Model_Tipos_Operaciones->get_menu();
-		$this->load->view('template-admin',$data);
+		$this->load->view('tmp-admin',$data);
 	}
 
 	public function insert(){
