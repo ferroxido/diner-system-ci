@@ -127,9 +127,11 @@ if( ! function_exists('my_menu_collapse'))
 		$opciones = null;
 		get_instance()->load->model('Model_Tipos_Operaciones');
 		if(get_instance()->session->userdata('dni_usuario')){
+			//Obtenemos el perfil para saber que operaciones puede realizar
+			$idPerfil = get_instance()->session->userdata('id_perfil');
 
 			$contenido = '<ul class="menu-list">';
-			$operaciones = get_instance()->Model_Tipos_Operaciones->get_operaciones_activas();
+			$operaciones = get_instance()->Model_Tipos_Operaciones->get_operaciones_activas($idPerfil);
 			foreach ($operaciones as $operacion) {
 				$irA = $operacion->controlador.'/'.$operacion->accion;
 				$contenido = $contenido.'<li>'.anchor($irA, $operacion->nombre, array('class'=>'a-noactivo')).'</li>';
