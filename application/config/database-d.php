@@ -50,8 +50,8 @@ $active_record = TRUE;
 
 $db['default']['hostname'] = 'localhost';
 $db['default']['username'] = 'postgres';
-$db['default']['password'] = 'postgres';//'l0$p3r12Os20l5';
-$db['default']['database'] = 'comedorDB';
+$db['default']['password'] = '';
+$db['default']['database'] = 'dbname';
 $db['default']['dbdriver'] = 'postgre';
 $db['default']['port']     = '5432';
 $db['default']['dbprefix'] = '';
