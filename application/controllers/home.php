@@ -9,6 +9,9 @@ class Home extends CI_Controller {
 	protected $publickey = "6LeiigUTAAAAAEnYEG1X6Lb61xZMZk8EmqjQLRXb";
 	protected $privatekey = "6LeiigUTAAAAANYEHCkeNa3jGdSqzqMmKEoiy45O";
 
+	protected $siteKey = '6LeiigUTAAAAAEnYEG1X6Lb61xZMZk8EmqjQLRXb';
+	protected $secret = '6LeiigUTAAAAANYEHCkeNa3jGdSqzqMmKEoiy45O';
+
 	//Constructor
 	function __construct(){
 		parent::__construct();
@@ -257,6 +260,8 @@ class Home extends CI_Controller {
 		$data['categoria'] = $this->Model_Categorias->findNombre('Regular');
 		$data['publickey'] = $this->publickey;
 		$data['error'] = null;
+		$data['lang'] = 'es';
+		$data['siteKey'] = $this->siteKey;
 		$this->load->view('tmp-index', $data);
 	}
 
@@ -290,6 +295,20 @@ class Home extends CI_Controller {
 		            return true;
 		    } else {
 		            # set the error code so that we can display it
+		            return false;
+		    }
+		}
+	}
+
+	public function validar_norecaptcha(){
+		# was there a reCAPTCHA response?
+		if ($this->input->post('g-recaptcha-response')) {
+			$recaptcha = new \ReCaptcha\ReCaptcha($this->privatekey);
+			$resp = $recaptcha->verify($this->input->post('g-recaptcha-response'), $_SERVER['REMOTE_ADDR']);
+
+		    if ($resp->is_valid) {
+		            return true;
+		    } else {
 		            return false;
 		    }
 		}
