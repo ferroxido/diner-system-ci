@@ -180,6 +180,7 @@ class Home extends CI_Controller {
 
 				case 'Super Administrador':
 				case 'Administrador':
+				case 'Becas':
 					redirect('usuarios/admin');
 					break;
 
