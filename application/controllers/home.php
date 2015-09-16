@@ -43,7 +43,7 @@ class Home extends CI_Controller {
 		$this->form_validation->set_message('parametros_permitidos_ingreso', 'Usted esta mandando parámetros extras.');
 		$this->form_validation->set_message('parametros_permitidos_recordar', 'Usted esta mandando parámetros extras.');
 		$this->form_validation->set_message('parametros_permitidos_cambiar', 'Usted esta mandando parámetros extras.');
-		$this->form_validation->set_message('validar_recaptcha', 'El valor de captcha es incorrecto');
+		$this->form_validation->set_message('validar_norecaptcha', 'Usted es un Robot !!');
 	}
 
 	public function index(){
@@ -281,7 +281,7 @@ class Home extends CI_Controller {
 
 	public function parametros_permitidos_registro(){
 		$registro = $this->input->post();
-		return $this->usuariolib->parametros_permitidos($registro, 8);
+		return $this->usuariolib->parametros_permitidos($registro, 7);
 	}
 
 	public function validar_recaptcha(){
@@ -306,7 +306,7 @@ class Home extends CI_Controller {
 			$recaptcha = new \ReCaptcha\ReCaptcha($this->privatekey);
 			$resp = $recaptcha->verify($this->input->post('g-recaptcha-response'), $_SERVER['REMOTE_ADDR']);
 
-		    if ($resp->is_valid) {
+		    if ($resp->isSuccess()) {
 		            return true;
 		    } else {
 		            return false;
@@ -323,7 +323,7 @@ class Home extends CI_Controller {
 		$this->form_validation->set_rules('lu', 'Libreta', 'required|xss_clean|max_length[8]|is_natural|callback_validar_tabla');
 		$this->form_validation->set_rules('id_provincia', 'Provincia', 'required|is_natural');
 		$this->form_validation->set_rules('id_facultad', 'Facultad', 'required|is_natural');
-		$this->form_validation->set_rules('recaptcha_response_field', 'ReCaptcha', 'required|callback_validar_recaptcha');
+		$this->form_validation->set_rules('g-recaptcha-response', 'NoReCaptcha', 'required|callback_validar_norecaptcha');
 
 		if($this->form_validation->run() == FALSE){
 			//Fallo alguna validación
@@ -346,8 +346,8 @@ class Home extends CI_Controller {
 
 				$registro['id_perfil'] = 4;
 				$registro['id_categoria'] = 2;
-				unset($registro['recaptcha_response_field']);
-				unset($registro['recaptcha_challenge_field']);
+				unset($registro['g-recaptcha-response']);
+
 				$this->Model_Usuarios->insert($registro);
 				$dni = $this->input->post('dni');
 				//Registro el log de usuario para registro

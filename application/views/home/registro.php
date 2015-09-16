@@ -68,15 +68,14 @@
 			</div>
 
 			<div class="row">
-				<div class="col-md-offset-1 col-md-6">
-					<?= recaptcha_get_html($publickey, $error); ?>	
+				<div class="col-md-offset-3 col-md-6">
+		            <div class="g-recaptcha" data-sitekey="<?php echo $siteKey; ?>"></div>
+		            <script type="text/javascript"
+		                    src="https://www.google.com/recaptcha/api.js?hl=<?php echo $lang; ?>">
+		            </script>
 				</div>
 			</div>
 
-            <div class="g-recaptcha" data-sitekey="<?php echo $siteKey; ?>"></div>
-            <script type="text/javascript"
-                    src="https://www.google.com/recaptcha/api.js?hl=<?php echo $lang; ?>">
-            </script>
 
 			<hr>
 
