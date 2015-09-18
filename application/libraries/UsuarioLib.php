@@ -279,34 +279,45 @@ class UsuarioLib {
 	 * $password_generada: password que enviaremos al usuario para su login.
 	 */
 	public function enviar_email($nombre, $email, $password_generada){
-		//----------------Configuración--------------------//
-		$query = $this->CI->Model_Configuraciones->find(0);
-		$config = Array(
-		    'protocol' => 'smtp',
-		    'smtp_host' => 'ssl://'.$query->smtp,
-		    'smtp_port' => 465,
-		    'smtp_user' => $query->email,
-		    'smtp_pass' => $query->password,
-		    'mailtype'  => $query->email_type, 
-		    'charset'   => $query->charset
-		);
-		$this->CI->load->library('email', $config);
-		$this->CI->email->set_newline("\r\n");//Sin esta linea de código no se envía.
-		
-		$this->CI->email->from($query->email, 'UNSA');
-		$this->CI->email->to($email);
-		$this->CI->email->subject('Registración UNSA comedor');//Título del mail
-		$mensaje = str_replace("<nombre>", $nombre, $query->mensaje_email);
-		$mensaje = str_replace("<password>", $password_generada, $mensaje);
-		$this->CI->email->message($mensaje);
+		$posiblesCuentas = array(0, 1, 2);
+		$cont = 0;
+		$numCuenta = rand(0, 2);
+		while ($cont < 2) {
+			//----------------Configuración--------------------//
+			$query = $this->CI->Model_Configuraciones->find($numCuenta);
+			$config = Array(
+			    'protocol' => 'smtp',
+			    'smtp_host' => 'ssl://'.$query->smtp,
+			    'smtp_port' => 465,
+			    'smtp_user' => $query->email,
+			    'smtp_pass' => $query->password,
+			    'mailtype'  => $query->email_type, 
+			    'charset'   => $query->charset
+			);
+			$this->CI->load->library('email', $config);
+			$this->CI->email->set_newline("\r\n");//Sin esta linea de código no se envía.
+			
+			$this->CI->email->from($query->email, 'UNSA');
+			$this->CI->email->to($email);
+			$this->CI->email->subject('Registración UNSA comedor');//Título del mail
+			$mensaje = str_replace("<nombre>", $nombre, $query->mensaje_email);
+			$mensaje = str_replace("<password>", $password_generada, $mensaje);
+			$this->CI->email->message($mensaje);
 
-		//-----------realizamos el envío------------------//
-		if(! $this->CI->email->send()){
-			//show_error($this->email->print_debugger());
-			return FALSE;
-		}else{
-			return TRUE;
+			//-----------realizamos el envío------------------//
+			if(! $this->CI->email->send(true)){
+				//show_error($this->email->print_debugger());
+				do {   
+				    $numCuenta = rand(0, 2);
+				    unset($posiblesCuentas[$numCuenta]);
+				}while(in_array($numCuenta, $posiblesCuentas));
+				$cont++;
+			}else{
+				var_dump($posiblesCuentas);
+				return TRUE;
+			}
 		}
+		return FALSE;
 	}
 
 	/*

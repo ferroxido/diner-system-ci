@@ -1,9 +1,6 @@
 {
     "require": {
-<<<<<<< HEAD
-        "fabpot/goutte": "^3.1"
-=======
+        "fabpot/goutte": "^3.1",
         "google/recaptcha": "~1.1"
->>>>>>> cd90b81358184f51a8f912dfd67382ccf7a69dd7
     }
 }
