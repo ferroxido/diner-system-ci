@@ -426,71 +426,6 @@ class Usuarios extends CI_Controller {
 		}
 	}	
 
-	/*
-	 * Procesa la petición producida al leer el código de barra de los tickets.
-	 * Devuelve los datos del ticket y del usuario que compró el ticket.
-	 */
-	// public function procesar_barcode(){
-	// 	if($this->input->is_ajax_request()){
-	// 		$barcode = $this->input->post('barcode');
-
-	// 		$is_grupal = false;
-	// 		if (strtoupper($barcode[0]) === 'G') {
-	// 			$barcode = ltrim ($barcode, 'G');
-	// 			$is_grupal = true;
-	// 		}
-
-	// 		if(strlen($barcode) <= 10 && is_numeric($barcode)){
-	// 			$id_ticket = (int) $barcode;
-	// 		}else{
-	// 			$id_ticket = $this->usuariolib->obtener_id_ticket($barcode);	
-	// 		}
-	// 		//Obtener información del ticket en cuestión.
-	// 		$query = $this->Model_Tickets->get_tickets_control($id_ticket, $is_grupal);
-
-	// 		$estadoImpreso = 2;
-	// 		$estadoConsumido = 3;
-	// 		$estadoVencido = 4;
-	// 		$hoy = date('Y-m-d 00:00:00');
-
-	// 		if($query->row('estado') == $estadoImpreso && $query->row('fecha') == $hoy){
-	// 			$data['id'] = $id_ticket;
-	// 			$data['estado'] = $estadoConsumido;
-	// 			$this->Model_Tickets->update($data);
-	// 			//Cargamos el log de usuario para consumir
-	// 			$dni = $query->row('dni');
-	// 			$fecha_log = date('Y/m/d H:i:s');
-	// 			$id_log = $this->usuariolib->cargar_log_usuario($dni, $fecha_log, 'consumir');//Registrar el log
-
-	// 			//Cargo la tabla tickets_log_usuarios
-	// 			$registro = array();
-	// 			$registro['id_ticket'] = $id_ticket;
-	// 			$registro['id_log_usuario'] = $id_log;
-	// 			$this->Model_Usuarios->add_tickets_log($registro);
-	// 		}elseif($query->row('estado') == $estadoImpreso && $query->row('fecha') < $hoy){
-	// 			$data['id'] = $id_ticket;
-	// 			$data['estado'] = $estadoVencido;
-	// 			$this->Model_Tickets->update($data);
-	// 			//Cargamos el log de usuario para ticket vencido
-	// 			$dni = $query->row('dni');
-	// 			$fecha_log = date('Y/m/d H:i:s');
-	// 			$id_log = $this->usuariolib->cargar_log_usuario($dni, $fecha_log, 'vencer');//Registrar el log
-
-	// 			//Cargo la tabla tickets_log_usuarios
-	// 			$registro = array();
-	// 			$registro['id_ticket'] = $id_ticket;
-	// 			$registro['id_log_usuario'] = $id_log;
-	// 			$this->Model_Usuarios->add_tickets_log($registro);
-
-	// 			//Cambiamos el valor del objeto query la propiedad estado
-	// 			$query->row()->estado = $estadoVencido;
-	// 		}
-	// 		echo json_encode($query->result());
-	// 	}else{
-	// 		show_404();
-	// 	}
-	// }
-
 	public function procesar_barcode(){
 		if($this->input->is_ajax_request()){
 			$barcode = $this->input->post('barcode');
@@ -523,7 +458,6 @@ class Usuarios extends CI_Controller {
 					$this->Model_Tickets->actualizar_estado_ticket($id_ticket, $dni, 'consumir', $estadoConsumido);
 				}
 
-				$this->usuariolib->actualizar_estado_ticket($id_ticket, $dni, $is_grupal, 'consumir');
 			}elseif($query->row('estado') == $estadoImpreso && $query->row('fecha') < $hoy){
 
 				if ($is_grupal) {

@@ -386,7 +386,7 @@ class Model_Tickets extends CI_Model {
 
     function get_tickets_control($id_ticket, $is_grupal){
         if ($is_grupal) {
-            $this->db->select('tickets_grupales.id as id_ticket, dias.fecha as fecha, tickets_grupales.id_estado as estado, tickets_grupales.importe as importe, tickets_grupales.cantidad as cantidad, tickets_grupales.delegacion as delegacion, log_usuarios.fecha as fecha_log, categorias.nombre as categoria');
+            $this->db->select('tickets_grupales.id as id_ticket, dias.fecha as fecha, tickets_grupales.id_estado as estado, tickets_grupales.importe as importe, tickets_grupales.cantidad as cantidad, tickets_grupales.delegacion as delegacion, log_usuarios.fecha as fecha_log, categorias.nombre as categoria, log_usuarios.dni as dni');
             $this->db->from('tickets_grupales');
             $this->db->join('dias', 'dias.id = tickets_grupales.id_dia');
             $this->db->join('tickets_grupales_log_usuarios', 'tickets_grupales_log_usuarios.id_ticket_grupal = tickets_grupales.id');
@@ -462,7 +462,7 @@ class Model_Tickets extends CI_Model {
         //Comienzo transaccion
         $this->db->trans_start();
         //Cambio de estado el ticket_grupal
-        $this->db->update('tickets_grupales', array('estado' => $estado), array('id' => $id_ticket));
+        $this->db->update('tickets_grupales', array('id_estado' => $estado), array('id' => $id_ticket));
         //Inserto log
         $this->db->insert('log_usuarios', $datosLog);
         $idLog = $this->db->insert_id();
