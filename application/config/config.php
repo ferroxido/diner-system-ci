@@ -14,7 +14,7 @@
 | path to your installation.
 |
 */
-$config['base_url']	= 'http://localhost/comedorunsa';
+$config['base_url']	= 'http://comedor.unsa.edu.ar';
 
 /*
 |--------------------------------------------------------------------------
@@ -91,7 +91,7 @@ $config['charset'] = 'UTF-8';
 | setting this variable to TRUE (boolean).  See the user guide for details.
 |
 */
-$config['enable_hooks'] = FALSE;
+$config['enable_hooks'] = TRUE;
 
 
 /*
@@ -247,7 +247,7 @@ $config['encryption_key'] = 'rony214292';
 $config['sess_cookie_name']		= 'ci_session';
 $config['sess_expiration']		= 900;
 $config['sess_expire_on_close']	= TRUE;
-$config['sess_encrypt_cookie']	= TRUE;
+$config['sess_encrypt_cookie']	= FALSE;
 $config['sess_use_database']	= FALSE;
 $config['sess_table_name']		= 'ci_sessions';
 $config['sess_match_ip']		= TRUE;

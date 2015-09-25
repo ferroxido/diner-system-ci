@@ -2,5 +2,5 @@ application/config/database.php
 application/config/config.php
 SQL/
 img/fotos-usuarios/
-*.htaccess
+.htaccess
 *.sql
