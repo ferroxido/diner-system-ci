@@ -6,7 +6,7 @@ $(document).ready(function() {
 		var tokens = fecha.split('/');
 
 		var pathArray = window.location.pathname.split( '/' );
-		var idCalendario = pathArray[4];//3 en produccion
+		var idCalendario = pathArray[3];//3 en produccion
 
 		//Datos obtenidos del calendario	
 		var diaNum = $(this).find('.dia_num').html();
@@ -127,7 +127,7 @@ $(document).ready(function() {
 
 $(document).ready(function() {
 	var pathArray = window.location.pathname.split( '/' );
-	var idCalendario = pathArray[4];//En producción cambiar a 3.
+	var idCalendario = pathArray[3];//En producción cambiar a 3.
 
 	$.ajax({
 		type: "POST",
