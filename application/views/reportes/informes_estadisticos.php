@@ -46,8 +46,6 @@
 					</tbody>
 				</table>
 				
-				<div id="chart1" style="margin-top:20px;"></div>
-
 				<div class="col-md-offset-9">
 					<?= form_open('reportes/generar_pdf'); ?>
 						<input type="submit" class="btn btn-primary glyphicon glyphicon-print" value=" Descargar PDF" name="PDF1">
@@ -220,7 +218,6 @@
 						<tr>
 							<th> Facultades </th>
 							<th> Anulados </th>
-							<th> Activos </th>
 							<th> Impresos </th>
 							<th> Consumidos </th>
 							<th> Total de Tickets </th>
@@ -231,7 +228,6 @@
 						<tr>
 							<td><?= $registro3->facultad; ?></td>
 							<td><?= $registro3->anulados; ?></td>
-							<td><?= $registro3->activos; ?></td>
 							<td><?= $registro3->impresos; ?></td>
 							<td><?= $registro3->consumidos; ?></td>
 							<td><?= $registro3->total_tickets; ?></td>
@@ -345,10 +341,6 @@
 		</div><!-- tab content -->
 	</div>	
 </div>
-<link href="<?= base_url('css/jquery.jqplot.min.css'); ?>" rel="stylesheet" />
-<script src="<?= base_url('js/jquery.jqplot.min.js'); ?>"></script>
-<script src="<?= base_url('js/jqplot.pieRenderer.min.js'); ?>"></script>
-<script src="<?= base_url('js/jqplot.donutRenderer.min.js'); ?>"></script>
 <script type="text/javascript">
 	base_url = '<?=base_url(); ?>';
 </script>
