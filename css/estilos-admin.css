@@ -136,6 +136,13 @@ div.tablas-propias a:hover {
   color: #3498db;
   text-decoration: none;
 }
+div#almuerzos h4{
+  display: inline-block;
+  margin: .5em;
+}
+div#botones-agregar-comidas, div#paginador-semanas{
+  text-align: center;
+}
 fieldset {
   border-width: 0.1em;
   border-style: solid;
@@ -222,9 +229,19 @@ table.calendario {
   -o-box-sizing: border-box;
   -webkit-box-sizing: border-box;
   box-sizing: border-box;
-  height: 100px;
+  padding: .7em;
+  height: 80px;
   margin: .3em;
   text-align: center;
+}
+.info-maquinas.verde{
+  background-color: #2C8D3A;
+}
+.info-maquinas.amarillo{
+  background-color: #E7A413;
+}
+.info-maquinas.rojo{
+  background-color: #BC271C;
 }
 .img-torta{
   display: none;

@@ -4,16 +4,25 @@
 	<div class="row">
 		<?php foreach ($maquinas as $maquina): ?>
 		<div class="col-md-4">
-			<div class="info-maquinas">
-			<label for="">Terminal <?= $maquina->id." ".$maquina->facultad?></label>
-			<label for="">Estado: <?= $maquina->estado?></label>
-			<?php 
-				if ($maquina->estado_num == 1 || $maquina->estado_num == 4) {
-					echo '<span class="glyphicon glyphicon-ok text-success"></span>';
-				}else{
-					echo '<span class="glyphicon glyphicon-remove text-danger"></span>';
+			<?php
+				$className = "";
+				switch ($maquina->estado_num) {
+					case 1:
+						$className = "verde";
+						break;
+					
+					case 4:
+						$className = "amarillo";
+						break;
+
+					default:
+						$className = "rojo";
+						break;
 				}
 			?>
+			<div class="info-maquinas <?= $className?>">
+				<label>Terminal <?= $maquina->id." ".$maquina->facultad?></label>
+				<label>Estado: <?= $maquina->estado?></label>
 			</div>
 		</div>
 		<?php endforeach; ?>
