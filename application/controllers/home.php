@@ -54,11 +54,6 @@ class Home extends CI_Controller {
 		$this->load->view('home/login', $data);
 	}
 
-	public function acerca_de(){
-		$data['contenido'] = 'home/acerca_de';
-		$this->load->view('template-index', $data);//Cargamos la vista y el template
-	}
-
 	public function acceso_denegado(){
 		$this->load->view('home/acceso_denegado');
 	}
