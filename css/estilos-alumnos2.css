@@ -36,6 +36,7 @@ div#contenedor{
 div#info-perfil{
   padding: 5em 1em 1em 1em;
   text-align: center;
+  height: 100vh;
 }
 div#col1{
   background-color: #333333;

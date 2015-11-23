@@ -37,6 +37,7 @@ body,html{
 div#info-perfil{
   padding: 5em 1em 1em 1em;
   text-align: center;
+  height: 100vh;
 }
 div#info_comedor{
   padding: 5em 1em 1em 1em;
