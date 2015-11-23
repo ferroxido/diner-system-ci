@@ -35,7 +35,7 @@ class Tipos_Operaciones extends CI_Controller {
 			$data['mostrar_mensaje'] = TRUE;
 			$data['exito'] = false;//Variable para saber si el mensaje es bueno o malo.
 			$data['mensaje'] = $mensaje;
-			$this->load->view('template-index', $data);
+			$this->load->view('tmp-index', $data);
 		}
 	}
 

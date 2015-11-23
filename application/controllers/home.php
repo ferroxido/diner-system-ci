@@ -58,15 +58,6 @@ class Home extends CI_Controller {
 		$this->load->view('home/acceso_denegado');
 	}
 
-	public function ingreso(){
-		$this->session->sess_destroy();//Destruimos cualquier session que haya quedado guardada.
-		$data['contenido'] = 'home/ingreso';
-		$data['mostrar_mensaje'] = false;
-		$data['exito'] = true;
-		$data['mensaje'] = "";
-		$this->load->view('template-index', $data);//Cargamos la vista y el template
-	}
-
 	public function parametros_permitidos_ingreso(){
 		$registro = $this->input->post();
 		return $this->usuariolib->parametros_permitidos($registro, 2);

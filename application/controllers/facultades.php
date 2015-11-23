@@ -14,14 +14,14 @@ class Facultades extends CI_Controller {
 	public function index(){
 		$data['contenido'] = 'facultades/index';
 		$data['registros'] = $this->Model_Facultades->all();
-		$this->load->view('template-admin', $data);
+		$this->load->view('tmp-admin', $data);
 	}
 
 	public function search(){
 		$data['contenido'] = 'facultades/index';
 		$valor = $this->input->post('buscar');
 		$data['registros'] = $this->Model_Facultades->allFilter('nombre', $valor);
-		$this->load->view('template-admin', $data);
+		$this->load->view('tmp-admin', $data);
 	}
 
 	public function norepeat(){
@@ -44,7 +44,7 @@ class Facultades extends CI_Controller {
 
 	public function create(){
 		$data['contenido'] = 'facultades/create';
-		$this->load->view('template-admin',$data);
+		$this->load->view('tmp-admin',$data);
 	}
 
 	public function insert(){
