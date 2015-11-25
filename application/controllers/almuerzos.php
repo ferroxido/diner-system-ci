@@ -18,8 +18,27 @@ class Almuerzos extends CI_Controller {
             $data['days_of_week'][] = $this->Model_Dias->find_almuerzo(date('Y-m-d', $nextMonday));
             $nextMonday += $offset;
         }
+
+        $data['entradas'] = $this->Model_Dias->get_food('entradas');
+        $data['principales'] = $this->Model_Dias->get_food('platos_principales');
+        $data['postres'] = $this->Model_Dias->get_food('postres');
         $data['contenido'] = 'almuerzos/index';
         $this->load->view('tmp-admin', $data);
+    }
+
+    public function insert_food($type_food){
+        if (isset($type_food)) {
+            $registro = $this->input->post();
+
+            $this->form_validation->set_rules('descripcion', 'Descripcion', 'required');
+            if($this->form_validation->run() == FALSE){
+                //Si no cumplio alguna de las reglas
+                $this->index();
+            }else{
+                $this->Model_Dias->insert_food($registro, $type_food);
+                redirect('almuerzos/index');
+            }
+        }
     }
 
     public function update(){
@@ -30,9 +49,6 @@ class Almuerzos extends CI_Controller {
 
     }
 
-    public function insert(){
-
-    }
 
     public function delete($id){
 
