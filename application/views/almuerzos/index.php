@@ -62,6 +62,7 @@
                 <tr>
                     <td><?= $entrada->id; ?></td>
                     <td><?= $entrada->descripcion; ?></td>
+                    <td><a href="" class="glyphicon glyphicon-pencil" data-toggle="modal" data-target="<?= "#entradas".$entrada->id ?>"></a></td>
                 </tr>
                 <?php endforeach; ?>
             </tbody>
@@ -84,6 +85,7 @@
                 <tr>
                     <td><?= $principal->id; ?></td>
                     <td><?= $principal->descripcion; ?></td>
+                    <td><a href="" class="glyphicon glyphicon-pencil" data-toggle="modal" data-target="<?= "#principales".$principal->id ?>"></a></td>
                 </tr>
                 <?php endforeach; ?>
             </tbody>
@@ -106,6 +108,7 @@
                 <tr>
                     <td><?= $postre->id; ?></td>
                     <td><?= $postre->descripcion; ?></td>
+                    <td><a href="" class="glyphicon glyphicon-pencil" data-toggle="modal" data-target="<?= "#postres".$postre->id ?>"></a></td>
                 </tr>
                 <?php endforeach; ?>
             </tbody>
@@ -113,7 +116,7 @@
     </div>
 </div>
 
-<!-- Modal -->
+<!-- Modalales para agregar nuevas comidas -->
 <div class="modal fade" id="entrada" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -130,7 +133,7 @@
                 <div class="row">
                     <div class="form-group">
                         <?= form_label('Nombre: ', 'nombre', array('class'=>'col-md-3 control-label')); ?>
-                        <div class="col-md-4">
+                        <div class="col-md-6">
                             <?= form_input(array('class'=>'form-control','type'=>'text', 'name'=>'descripcion', 'id'=>'nombre')); ?>
                         </div>
                     </div>
@@ -153,7 +156,6 @@
     </div>
 </div>
 
-<!-- Modal -->
 <div class="modal fade" id="principal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -170,7 +172,7 @@
                 <div class="row">
                     <div class="form-group">
                         <?= form_label('Nombre: ', 'nombre', array('class'=>'col-md-3 control-label')); ?>
-                        <div class="col-md-4">
+                        <div class="col-md-6">
                             <?= form_input(array('class'=>'form-control','type'=>'text', 'name'=>'descripcion', 'id'=>'nombre')); ?>
                         </div>
                     </div>
@@ -193,7 +195,6 @@
     </div>
 </div>
 
-<!-- Modal -->
 <div class="modal fade" id="postre" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -210,7 +211,7 @@
                 <div class="row">
                     <div class="form-group">
                         <?= form_label('Nombre: ', 'nombre', array('class'=>'col-md-3 control-label')); ?>
-                        <div class="col-md-4">
+                        <div class="col-md-6">
                             <?= form_input(array('class'=>'form-control','type'=>'text', 'name'=>'descripcion', 'id'=>'nombre')); ?>
                         </div>
                     </div>
@@ -232,3 +233,135 @@
         </div>
     </div>
 </div>
+
+<!-- Modalales para agregar editar comidas -->
+<?php foreach ($entradas as $entrada): ?>
+<div class="modal fade" id="<?= "entradas".$entrada->id ?>" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            
+        </div>
+        <div class="modal-body">
+            <?= form_open('almuerzos/update_food/entradas', array('class'=>'form-horizontal')); ?>
+                <legend>Agregar Postre</legend>
+
+                <?= my_validation_errors(validation_errors()); ?>
+
+                <?= form_hidden('id', $entrada->id); ?>
+
+                <div class="row">
+                    <div class="form-group">
+                        <?= form_label('Nombre: ', 'nombre', array('class'=>'col-md-3 control-label')); ?>
+                        <div class="col-md-6">
+                            <?= form_input(array('class'=>'form-control','type'=>'text', 'name'=>'descripcion', 'id'=>'nombre', 'value'=>$entrada->descripcion)); ?>
+                        </div>
+                    </div>
+                </div>
+
+                <hr>
+
+                <div class="form-group">
+                    <div class="col-md-offset-2">
+                        <div class="col-md-10">
+                            <?= form_button(array('type'=>'submit', 'content'=>' Aceptar', 'class'=>'btn btn-success glyphicon glyphicon-ok')); ?>
+                            <?= anchor('almuerzos/index', ' Cancelar',array('class'=>'btn btn-default glyphicon glyphicon-remove')); ?>
+                        </div>
+                    </div>
+                </div>
+
+            <?= form_close(); ?>
+        </div>
+        </div>
+    </div>
+</div>
+<?php endforeach; ?>
+
+<!-- Modalales para agregar editar comidas -->
+<?php foreach ($principales as $principal): ?>
+<div class="modal fade" id="<?= "principales".$principal->id ?>" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            
+        </div>
+        <div class="modal-body">
+            <?= form_open('almuerzos/update_food/platos_principales', array('class'=>'form-horizontal')); ?>
+                <legend>Agregar Postre</legend>
+
+                <?= my_validation_errors(validation_errors()); ?>
+
+                <?= form_hidden('id', $principal->id); ?>
+
+                <div class="row">
+                    <div class="form-group">
+                        <?= form_label('Nombre: ', 'nombre', array('class'=>'col-md-3 control-label')); ?>
+                        <div class="col-md-6">
+                            <?= form_input(array('class'=>'form-control','type'=>'text', 'name'=>'descripcion', 'id'=>'nombre', 'value'=>$principal->descripcion)); ?>
+                        </div>
+                    </div>
+                </div>
+
+                <hr>
+
+                <div class="form-group">
+                    <div class="col-md-offset-2">
+                        <div class="col-md-10">
+                            <?= form_button(array('type'=>'submit', 'content'=>' Aceptar', 'class'=>'btn btn-success glyphicon glyphicon-ok')); ?>
+                            <?= anchor('almuerzos/index', ' Cancelar',array('class'=>'btn btn-default glyphicon glyphicon-remove')); ?>
+                        </div>
+                    </div>
+                </div>
+
+            <?= form_close(); ?>
+        </div>
+        </div>
+    </div>
+</div>
+<?php endforeach; ?>
+
+<!-- Modalales para agregar editar comidas -->
+<?php foreach ($postres as $postre): ?>
+<div class="modal fade" id="<?= "postres".$postre->id ?>" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            
+        </div>
+        <div class="modal-body">
+            <?= form_open('almuerzos/update_food/postres', array('class'=>'form-horizontal')); ?>
+                <legend>Agregar Postre</legend>
+
+                <?= my_validation_errors(validation_errors()); ?>
+
+                <?= form_hidden('id', $postre->id); ?>
+
+                <div class="row">
+                    <div class="form-group">
+                        <?= form_label('Nombre: ', 'nombre', array('class'=>'col-md-3 control-label')); ?>
+                        <div class="col-md-6">
+                            <?= form_input(array('class'=>'form-control','type'=>'text', 'name'=>'descripcion', 'id'=>'nombre', 'value'=>$postre->descripcion)); ?>
+                        </div>
+                    </div>
+                </div>
+
+                <hr>
+
+                <div class="form-group">
+                    <div class="col-md-offset-2">
+                        <div class="col-md-10">
+                            <?= form_button(array('type'=>'submit', 'content'=>' Aceptar', 'class'=>'btn btn-success glyphicon glyphicon-ok')); ?>
+                            <?= anchor('almuerzos/index', ' Cancelar',array('class'=>'btn btn-default glyphicon glyphicon-remove')); ?>
+                        </div>
+                    </div>
+                </div>
+
+            <?= form_close(); ?>
+        </div>
+        </div>
+    </div>
+</div>
+<?php endforeach; ?>

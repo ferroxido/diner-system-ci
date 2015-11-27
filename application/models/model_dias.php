@@ -90,4 +90,10 @@ class Model_Dias extends CI_Model {
         $this->db->set($registro);
         $this->db->insert($type_food);
     }
+
+    function update_food($registro, $type_food) {
+        $this->db->set($registro);
+        $this->db->where('id', $registro['id']);
+        $this->db->update($type_food);
+    }
 }

@@ -41,6 +41,21 @@ class Almuerzos extends CI_Controller {
         }
     }
 
+    public function update_food($type_food) {
+        if (isset($type_food)) {
+            $registro = $this->input->post();
+
+            $this->form_validation->set_rules('descripcion', 'Descripcion', 'required');
+            if($this->form_validation->run() == FALSE){
+                //Si no cumplio alguna de las reglas
+                $this->index();
+            }else{
+                $this->Model_Dias->update_food($registro, $type_food);
+                redirect('almuerzos/index');
+            }
+        }
+    }
+
     public function update(){
 
     }

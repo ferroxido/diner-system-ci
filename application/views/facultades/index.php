@@ -1,4 +1,4 @@
-<div class="page-header">	
+<div class="page-header">
 	<h1>Facultades <small>mantenimiento de registros</small></h1>
 </div>
 
@@ -54,7 +54,6 @@
     	<div class="modal-content">
       	<div class="modal-header">
         	<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-        	
       	</div>
       	<div class="modal-body">
       		<?= form_open('index.php/facultades/update', array('class'=>'form-horizontal')); ?>
@@ -77,7 +76,7 @@
 						<?= form_label('Nombre: ', 'nombre', array('class'=>'col-md-3 control-label')); ?>
 						<div class="col-md-4">
 							<?= form_input(array('class'=>'form-control','type'=>'text', 'name'=>'nombre', 'id'=>'nombre','value'=>$registro->nombre)); ?>
-						</div>	
+						</div>
 					</div>
 				</div>
 
@@ -90,13 +89,13 @@
 						<?= form_hidden('created', $registro->created); ?>
 					</div>
 				</div>
-		
+
 				<div class="row">
 					<div class="form-group">
 						<?= form_label('Actualizado: ', 'updated', array('class'=>'col-md-3 control-label')); ?>
 						<div class="col-md-4">
 							<input class="form-control" type="text" name="updated" value="<?= date("d/m/Y - H:i",strtotime($registro->updated)); ?>" disabled/>
-						</div>		
+						</div>
 						<?= form_hidden('updated', $registro->updated); ?>
 					</div>
 				</div>
@@ -108,14 +107,13 @@
 						<div class="col-md-10">
 							<?= form_button(array('type'=>'submit', 'content'=>' Aceptar', 'class'=>'btn btn-success glyphicon glyphicon-ok')); ?>
 							<?= anchor('facultades/index', ' Cancelar',array('class'=>'btn btn-default glyphicon glyphicon-remove')); ?>
-						</div>				
+						</div>
 					</div>
 				</div>
 
 			<?= form_close(); ?>
       	</div>
       	<div class="modal-footer">
-			
       	</div>
     	</div>
   	</div>
