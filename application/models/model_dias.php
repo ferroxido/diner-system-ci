@@ -79,5 +79,21 @@ class Model_Dias extends CI_Model {
             }
         }
         return $data;
-    }   
+    }
+
+    function get_food($tipo) {
+        $query = $this->db->get($tipo);
+        return $query->result();
+    }
+
+    function insert_food($registro, $type_food) {
+        $this->db->set($registro);
+        $this->db->insert($type_food);
+    }
+
+    function update_food($registro, $type_food) {
+        $this->db->set($registro);
+        $this->db->where('id', $registro['id']);
+        $this->db->update($type_food);
+    }
 }

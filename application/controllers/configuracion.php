@@ -16,7 +16,7 @@ class Configuracion extends CI_Controller {
 	public function index(){
 		$data['contenido'] = 'configuraciones/index';
 		$data['registro'] = $this->Model_Configuraciones->all();
-		$this->load->view('template-admin', $data);
+		$this->load->view('tmp-admin', $data);
 	}
 
 	public function clave(){
@@ -24,7 +24,7 @@ class Configuracion extends CI_Controller {
 		$data['mostrar_mensaje'] = false;
 		$data['exito'] = true;
 		$data['mensaje'] = "";
-		$this->load->view('template-admin', $data);		
+		$this->load->view('tmp-admin', $data);		
 	}
 
 	public function validar_dni(){
@@ -66,7 +66,7 @@ class Configuracion extends CI_Controller {
 			$data['mostrar_mensaje'] = TRUE;
 			$data['exito'] = $exito;
 			$data['mensaje'] = $mensaje;
-			$this->load->view('template-index', $data);//Cargamos la vista y el template
+			$this->load->view('tmp-index', $data);//Cargamos la vista y el tmp
 		}
 	}	
 

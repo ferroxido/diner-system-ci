@@ -14,7 +14,7 @@
    
 </head>
 <body>
-	<div class="navbar navbar-default navbar-fixed-top">
+	<div class="navbar navbar-inverse navbar-fixed-top">
 	    <div class="container">
 	        <div class="navbar-header">
 	        	<?= anchor('home/index', 'ComedorUNSa', array('class' => 'navbar-brand'));?>

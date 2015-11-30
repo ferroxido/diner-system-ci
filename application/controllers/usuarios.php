@@ -368,26 +368,6 @@ class Usuarios extends CI_Controller {
 		}
 	}
 
-	public function imprimir(){
-		if($this->session->userdata('dni_usuario') != null){
-			$dni = $this->session->userdata('dni_usuario');
-			$data['contenido'] = 'usuarios/imprimir';
-			$data['registro'] = $this->Model_Usuarios->find($dni);
-			$this->load->model('Model_Tickets');
-			$data['tickets_proximos'] = $this->Model_Tickets->get_tickets_proximos($dni);
-			$this->load->view('template_usuario', $data);
-		}	
-	}
-
-	public function descargar(){
-		$this->load->helper('download');
-		$data = 'Here is some text!';
-		$name = 'mytext.txt';
-		force_download($name, $data);
-		$data['contenido'] = 'usuarios/descargar';
-		$this->load->view('template_usuario', $data);
-	}
-
 	/*
 	 * Acción para mostrar la interfaz del usuario de control.
 	 * El usuario de control es el que se encarga de pasar los tickets por el lecto de código de barra.
