@@ -11,11 +11,11 @@
                 <thead>
                     <tr>
                         <th></th>
-                        <th>Lunes</th>
-                        <th>Martes</th>
-                        <th>Miércoles</th>
-                        <th>Jueves</th>
-                        <th>Viernes</th>
+                        <th>Lunes <a href="#"><?= date("d/m",strtotime($days_of_week[0]->fecha)); ?></a></th>
+                        <th>Martes <a href="#"><?= date("d/m",strtotime($days_of_week[1]->fecha)); ?></a></th>
+                        <th>Miércoles <a href="#"><?= date("d/m",strtotime($days_of_week[2]->fecha)); ?></a></th>
+                        <th>Jueves <a href="#"><?= date("d/m",strtotime($days_of_week[3]->fecha)); ?></a></th>
+                        <th>Viernes <a href="#"><?= date("d/m",strtotime($days_of_week[4]->fecha)); ?></a></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -122,7 +122,7 @@
         <div class="modal-content">
         <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-            
+
         </div>
         <div class="modal-body">
             <?= form_open('almuerzos/insert_food/entradas', array('class'=>'form-horizontal')); ?>
@@ -161,7 +161,7 @@
         <div class="modal-content">
         <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-            
+
         </div>
         <div class="modal-body">
             <?= form_open('almuerzos/insert_food/platos_principales', array('class'=>'form-horizontal')); ?>
@@ -200,7 +200,7 @@
         <div class="modal-content">
         <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-            
+
         </div>
         <div class="modal-body">
             <?= form_open('almuerzos/insert_food/postres', array('class'=>'form-horizontal')); ?>
@@ -241,7 +241,7 @@
         <div class="modal-content">
         <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-            
+
         </div>
         <div class="modal-body">
             <?= form_open('almuerzos/update_food/entradas', array('class'=>'form-horizontal')); ?>
@@ -285,7 +285,7 @@
         <div class="modal-content">
         <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-            
+
         </div>
         <div class="modal-body">
             <?= form_open('almuerzos/update_food/platos_principales', array('class'=>'form-horizontal')); ?>
@@ -329,7 +329,7 @@
         <div class="modal-content">
         <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-            
+
         </div>
         <div class="modal-body">
             <?= form_open('almuerzos/update_food/postres', array('class'=>'form-horizontal')); ?>

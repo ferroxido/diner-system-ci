@@ -13,8 +13,8 @@ class Almuerzos extends CI_Controller {
     public function index(){
         $data['days_of_week'] = array();
         $offset = 86400;
-        $nextMonday = strtotime( "next monday" );
-        for ($i=0; $i < 5; $i++) { 
+        $nextMonday = strtotime( 'monday' );
+        for ($i=0; $i < 5; $i++) {
             $data['days_of_week'][] = $this->Model_Dias->find_almuerzo(date('Y-m-d', $nextMonday));
             $nextMonday += $offset;
         }
