@@ -59,5 +59,5 @@ class Model_Facultades extends CI_Model {
         }
         $lista[20] = 'Todas';
         return $lista;
-    }    
+    }
 }

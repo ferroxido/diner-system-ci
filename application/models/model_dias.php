@@ -25,7 +25,7 @@ class Model_Dias extends CI_Model {
         $this->db->join('platos_principales', 'platos_principales.id = dias.id_plato_principal', 'left');
         $this->db->join('postres', 'postres.id = dias.id_postre', 'left');
         $this->db->where('dias.fecha', $fecha);
-        return $this->db->get()->row();
+        return $this->db->get();
     }
 
     function insert($registro) {
@@ -95,5 +95,14 @@ class Model_Dias extends CI_Model {
         $this->db->set($registro);
         $this->db->where('id', $registro['id']);
         $this->db->update($type_food);
+    }
+
+    function get_food_dropdown($tipo){
+        $lista = array();
+        $registros = $this->db->get($tipo)->result();
+        foreach($registros as $registro){
+            $lista[$registro->id] = $registro->descripcion;
+        }
+        return $lista;
     }
 }

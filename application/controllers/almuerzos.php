@@ -10,12 +10,21 @@ class Almuerzos extends CI_Controller {
     	$this->load->model('Model_Dias');
     }
 
-    public function index(){
+    public function index($go = 0){
         $data['days_of_week'] = array();
+        $data['go'] = $go;
         $offset = 86400;
-        $nextMonday = strtotime( 'monday' );
+        $nextMonday = strtotime( 'monday this week' ) + $go * 7 * $offset;
         for ($i=0; $i < 5; $i++) {
-            $data['days_of_week'][] = $this->Model_Dias->find_almuerzo(date('Y-m-d', $nextMonday));
+            $query = $this->Model_Dias->find_almuerzo(date('Y-m-d', $nextMonday));
+            if ($query->num_rows() > 0) {
+                $data['days_of_week'][] = $query->row();
+            }else {
+                $generic_obj =  new stdClass();
+                $generic_obj->fecha = date('Y-m-d', $nextMonday);
+                $generic_obj->existe = FALSE;
+                $data['days_of_week'][] = $generic_obj;
+            }
             $nextMonday += $offset;
         }
 
@@ -23,6 +32,9 @@ class Almuerzos extends CI_Controller {
         $data['principales'] = $this->Model_Dias->get_food('platos_principales');
         $data['postres'] = $this->Model_Dias->get_food('postres');
         $data['contenido'] = 'almuerzos/index';
+        $data['entradasdrop'] = $this->Model_Dias->get_food_dropdown('entradas');
+        $data['platosdrop'] = $this->Model_Dias->get_food_dropdown('platos_principales');
+        $data['postresdrop'] = $this->Model_Dias->get_food_dropdown('postres');
         $this->load->view('tmp-admin', $data);
     }
 
@@ -31,10 +43,10 @@ class Almuerzos extends CI_Controller {
             $registro = $this->input->post();
 
             $this->form_validation->set_rules('descripcion', 'Descripcion', 'required');
-            if($this->form_validation->run() == FALSE){
+            if($this->form_validation->run() == FALSE) {
                 //Si no cumplio alguna de las reglas
                 $this->index();
-            }else{
+            }else {
                 $this->Model_Dias->insert_food($registro, $type_food);
                 redirect('almuerzos/index');
             }
@@ -46,27 +58,26 @@ class Almuerzos extends CI_Controller {
             $registro = $this->input->post();
 
             $this->form_validation->set_rules('descripcion', 'Descripcion', 'required');
-            if($this->form_validation->run() == FALSE){
+            if($this->form_validation->run() == FALSE) {
                 //Si no cumplio alguna de las reglas
                 $this->index();
-            }else{
+            }else {
                 $this->Model_Dias->update_food($registro, $type_food);
                 redirect('almuerzos/index');
             }
         }
     }
 
-    public function update(){
+    public function insert($go){
+        $registro = $this->input->post();
 
-    }
-
-    public function create(){
-
-    }
-
-
-    public function delete($id){
-
+        if($this->form_validation->run() == FALSE){
+            //Si no cumplio alguna de las reglas
+            $this->index($go);
+        }else{
+            $this->Model_Dias->update($registro);
+            redirect('almuerzos/index/'.$go);
+        }
     }
 
     public function scrapy() {
