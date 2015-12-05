@@ -2,7 +2,7 @@
     <h1>Almuerzos <small>para los próximos días</small></h1>
 </div>
 <div id="almuerzos">
-    <div id="paginador-semanas" class="row">   
+    <div id="paginador-semanas" class="row">
         <?= anchor('almuerzos/index/'.($go-1), '<i class="glyphicon glyphicon-arrow-left"></i><h4>Prev</h4>'); ?><h4>Semana  </h4><?= anchor('almuerzos/index/'.($go+1), '<i class="glyphicon glyphicon-arrow-right"></i><h4>Next</h4>'); ?>
     </div>
     <div class="row">
@@ -28,13 +28,13 @@
                     <tr>
                         <td>Principal</td>
                         <?php foreach ($days_of_week as $day): ?>
-                            <td><?= isset($day->entrada)?$day->entrada:'Falta cargar'; ?></td>
+                            <td><?= isset($day->principal)?$day->principal:'Falta cargar'; ?></td>
                         <?php endforeach; ?>
                     </tr>
                     <tr>
                         <td>Postre</td>
                         <?php foreach ($days_of_week as $day): ?>
-                            <td><?= isset($day->entrada)?$day->entrada:'Falta cargar'; ?></td>
+                            <td><?= isset($day->postre)?$day->postre:'Falta cargar'; ?></td>
                         <?php endforeach; ?>
                     </tr>
                 </tbody>
@@ -377,7 +377,7 @@
             <?= form_open('almuerzos/insert/'.$go, array('class'=>'form-horizontal')); ?>
                 <legend>Seleccione la comida para el <?= date("d/m",strtotime($day->fecha)); ?></legend>
 
-                <?= form_hidden('id', $entrada->id); ?>
+                <?= form_hidden('fecha', $day->fecha); ?>
 
                 <div class="row">
                     <div class="form-group">

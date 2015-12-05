@@ -70,14 +70,8 @@ class Almuerzos extends CI_Controller {
 
     public function insert($go){
         $registro = $this->input->post();
-
-        if($this->form_validation->run() == FALSE){
-            //Si no cumplio alguna de las reglas
-            $this->index($go);
-        }else{
-            $this->Model_Dias->update($registro);
-            redirect('almuerzos/index/'.$go);
-        }
+        $this->Model_Dias->update($registro);
+        redirect('almuerzos/index/'.$go);
     }
 
     public function scrapy() {
