@@ -8,6 +8,7 @@
 			<li role="presentation"><a href="#informe3" aria-controls="informe3" role="tab" data-toggle="tab">Clasificación de Tickets</a></li>
 			<li role="presentation"><a href="#informe4" aria-controls="informe4" role="tab" data-toggle="tab">Control de Consumo</a></li>
 			<li role="presentation"><a href="#informe5" aria-controls="informe5" role="tab" data-toggle="tab">Ranking de Ausentismos</a></li>
+			<li role="presentation"><a href="#informe6" aria-controls="informe6" role="tab" data-toggle="tab">Saldos</a></li>
 		</ul>
 
 		<div class="tab-content">
@@ -90,7 +91,7 @@
 									<label for="desde" class="col-md-2">Desde: </label>
 									<div class="col-md-4">
 										<input id="desde" name="desde" type="text" class="form-control" />
-									</div>	
+									</div>
 								</div>
 							</div>
 
@@ -104,7 +105,7 @@
 									</div>
 									<div class="col-md-4">
 										<button type="button" class="btn btn-primary boton-filtrar glyphicon glyphicon-leaf"> Filtrar</button>	
-									</div>	
+									</div>
 								</div>
 							</div>
 						</div>
@@ -203,7 +204,7 @@
 									</div>
 									<div class="col-md-4">
 										<button type="button" class="btn btn-primary boton-filtrar2 glyphicon glyphicon-leaf"> Filtrar</button>
-									</div>	
+									</div>
 								</div>
 							</div>
 						</div>
@@ -267,7 +268,7 @@
 								<div class="form-group">
 									<label for="fecha" class="col-md-1">Fecha: </label>
 									<div class="col-md-4">
-										<div class="input-group">						
+										<div class="input-group">
 											<input id="fecha" name="fecha" type="text" class="form-control" placeholder="Filtrar por fecha" />
 											<span class="input-group-addon"><i class="glyphicon glyphicon-search"></i></span>
 										</div>
@@ -337,9 +338,47 @@
 						<input form="form_reporte6" type="submit" class="btn btn-primary glyphicon glyphicon-print" value=" Descargar PDF" name="PDF6">
 					<?= form_close(); ?>
 				</div>
-			</div>			
+			</div>
+			<!-- Tabla para el sexto reporte -->
+			<div role="tabpanel" class="tab-pane" id="informe6">
+				<br>
+				<div class="tablas-propias">
+				<table class="table table-bordered table-striped table-hover">
+					<thead>
+						<tr>
+							<th> Dni </th>
+							<th> L.u </th>
+							<th> Facultad </th>
+							<th> Categoria </th>
+							<th> Saldo </th>
+						</tr>
+					</thead>
+					<tbody>
+						<?php foreach ($registros6 as $registro6): ?>
+						<tr>
+							<td><?= $registro6->dni; ?></td>
+							<td><?= $registro6->lu; ?></td>
+							<td><?= $registro6->facultad; ?></td>
+							<td><?= $registro6->categoria; ?></td>
+							<td><?= $registro6->saldo; ?></td>
+						</tr>
+						<?php endforeach; ?>
+					</tbody>
+				</table>
+				</div>
+				<br>
+				<div id="paginacion">
+					<input id="numeroPaginas" type="hidden" value='<?= $numeroPaginas; ?>'>
+				</div>
+				<br>
+				<div class="col-md-offset-9">
+					<?= form_open('reportes/generar_pdf', array('id'=>'form_reporte7')); ?>
+						<input form="form_reporte7" type="submit" class="btn btn-primary glyphicon glyphicon-print" value=" Descargar PDF" name="PDF8">
+					<?= form_close(); ?>
+				</div>
+			</div>
 		</div><!-- tab content -->
-	</div>	
+	</div>
 </div>
 <script type="text/javascript">
 	base_url = '<?=base_url(); ?>';

@@ -3,10 +3,11 @@
 class Reportes extends CI_Controller {
 
 	protected $filasPorPagina = 200;
-	protected $primeraPagina = 1;	
+	protected $primeraPagina = 1;
 
 	function __construct(){
 		parent::__construct();
+        ini_set('memory_limit', '512M');
 		//Cargo la librería html2pdf
 		$this->load->library('ConvertToPDF');
 		$this->load->library('reportesLib');
@@ -17,14 +18,8 @@ class Reportes extends CI_Controller {
 		$this->load->model('Model_Tickets');
 	}
 
-	public function informes_contables(){
-		$data['contenido'] = 'reportes/informes_contables';
-		$data['registros'] = $this->Model_Tickets->get_tickets_por_dias($month,$year);
-		$this->load->view('tmp-admin', $data);		
-	}
-
-	public function informes_estadisticos(){
-		$data['contenido'] = 'reportes/informes_estadisticos';
+	public function index(){
+		$data['contenido'] = 'reportes/index';
 		//Datos para el informe de usuarios por facultad
 		$data['registros'] = $this->Model_Facultades->clasificacion_usuarios();
 		$data['totales'] = $this->Model_Usuarios->total_usuarios();
@@ -45,6 +40,11 @@ class Reportes extends CI_Controller {
 		$data['meses'] = $this->reporteslib->getListaMeses();
  		//Datos para el ranking de ausentismos
 		$data['registros5'] = $this->Model_Tickets->get_ranking_ausentismos();
+
+        //Datos para el reporte 6
+        $totalRows = $this->Model_Usuarios->get_total_usuarios_con_saldo();
+        $data['numeroPaginas'] = ceil($totalRows / $this->filasPorPagina);
+        $data['registros6'] = $this->Model_Usuarios->get_usuarios_saldos($this->filasPorPagina, $this->primeraPagina);
 
 		$this->load->view('tmp-admin', $data);
 	}
@@ -105,23 +105,23 @@ class Reportes extends CI_Controller {
 		}
 	}
 
-	public function obtener_registros_tickets(){
-		$desde = $this->input->post('desde');
-		$hasta = $this->input->post('hasta');
+    public function obtener_registros_tickets(){
+        $desde = $this->input->post('desde');
+        $hasta = $this->input->post('hasta');
 
-		$data['tickets'] = $this->Model_Tickets->servicios_tickets($desde, $hasta);
-		$data['totales'] = $this->Model_Tickets->get_total_servicios($desde, $hasta)->result();
-		echo json_encode($data);
-	}
+        $data['tickets'] = $this->Model_Tickets->servicios_tickets($desde, $hasta);
+        $data['totales'] = $this->Model_Tickets->get_total_servicios($desde, $hasta)->result();
+        echo json_encode($data);
+    }
 
-	public function obtener_clasificacion_tickets(){
-		$desde = $this->input->post('desde2');
-		$hasta = $this->input->post('hasta2');
+    public function obtener_clasificacion_tickets(){
+        $desde = $this->input->post('desde2');
+        $hasta = $this->input->post('hasta2');
 
-		$data['tickets2'] = $this->Model_Tickets->clasificacion_tickets($desde, $hasta);
-		$data['totales2'] = $this->Model_Tickets->get_total_tickets($desde, $hasta)->result();
-		echo json_encode($data);
-	}
+        $data['tickets2'] = $this->Model_Tickets->clasificacion_tickets($desde, $hasta);
+        $data['totales2'] = $this->Model_Tickets->get_total_tickets($desde, $hasta)->result();
+        echo json_encode($data);
+    }
 
 	public function generar_pdf(){
 		if($this->session->userdata('dni_usuario') != null){
@@ -196,20 +196,20 @@ class Reportes extends CI_Controller {
 				$data['registros'] = $this->Model_Tickets->get_detalle_ranking($cantidadAusentismo);
 				$html = $this->load->view('reportes/reporte_pdf7', $data, true);
 				$this->converttopdf->doPDF('Ausentes',$html,false,'');
-			}
+			}else if($this->input->post('PDF8')) {
+                $data['registros'] = $this->Model_Usuarios->get_usuarios_saldos();
+                $html = $this->load->view('reportes/reporte_pdf8', $data, true);
+                $this->converttopdf->doPDF('Saldos',$html,false,'');
+            }
 		}else{
 			redirect('home/index');
 		}
 	}
 
-	public function plantilla_unsa(){
-		$this->load->view('reportes/plantilla_unsa');
-	}
-
-	public function reporte1(){
-		$data['registros'] = $this->Model_Facultades->clasificacion_usuarios();
-		$data['totales'] = $this->Model_Usuarios->total_usuarios();
-		$this->load->view('reportes/reporte_pdf1', $data);
-	}
+    public function reporte1(){
+        $data['registros'] = $this->Model_Facultades->clasificacion_usuarios();
+        $data['totales'] = $this->Model_Usuarios->total_usuarios();
+        $this->load->view('reportes/reporte_pdf1', $data);
+    }
 
 }

@@ -374,6 +374,7 @@
 
         </div>
         <div class="modal-body">
+        <?php if (!isset($day->noexiste)): ?>
             <?= form_open('almuerzos/insert/'.$go, array('class'=>'form-horizontal')); ?>
                 <legend>Seleccione la comida para el <?= date("d/m",strtotime($day->fecha)); ?></legend>
 
@@ -416,6 +417,9 @@
                 </div>
 
             <?= form_close(); ?>
+        <?php else: ?>
+            <h3>No se puede cargar el almuerzo. El dia debe ser generado primero en el calendario</h3>
+        <?php endif; ?>
         </div>
         </div>
     </div>

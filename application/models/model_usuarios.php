@@ -317,4 +317,24 @@ class Model_Usuarios extends CI_Model {
             return true;
         }
     }
-}   
+
+    public function get_usuarios_saldos($filasPorPagina, $posicion){
+        $this->db->select('dni, usuarios.nombre, lu, facultades.nombre as facultad, categorias.nombre as categoria, saldo');
+        $this->db->from('usuarios');
+        $this->db->join('facultades', 'usuarios.id_facultad = facultades.id');
+        $this->db->join('categorias', 'usuarios.id_categoria = categorias.id');
+        $this->db->where('saldo >', 0);
+        $this->db->order_by('facultades.nombre');
+        $this->db->limit(1000);
+        $query = $this->db->get();
+        return $query->result();
+    }
+
+    public function get_total_usuarios_con_saldo(){
+        $this->db->select('COUNT(dni) as total_rows');
+        $this->db->from('usuarios');
+        $this->db->where('saldo >', 0);
+        $query = $this->db->get();
+        return $query->row('total_rows');
+    }
+}

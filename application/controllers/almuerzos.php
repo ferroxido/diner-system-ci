@@ -22,7 +22,7 @@ class Almuerzos extends CI_Controller {
             }else {
                 $generic_obj =  new stdClass();
                 $generic_obj->fecha = date('Y-m-d', $nextMonday);
-                $generic_obj->existe = FALSE;
+                $generic_obj->noexiste = TRUE;
                 $data['days_of_week'][] = $generic_obj;
             }
             $nextMonday += $offset;
