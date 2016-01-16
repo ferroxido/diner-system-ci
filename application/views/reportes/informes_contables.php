@@ -10,7 +10,7 @@
 		<div class="tab-content">
 			<div role="tabpanel" class="tab-pane active" id="informe1">
 				<br>
-				<div class="tablas-propias">				
+				<div class="tablas-propias">
 					<table class="table table-condensed table-bordered table-striped table-hover">
 						<thead>
 							<tr>

@@ -5,7 +5,7 @@ class ReportesLib {
 
 	function __construct(){
 		$this->CI = & get_instance();//Obtener la instancia del objeto por referencia.
-		$this->CI->load->model('Model_Tickets');//Cargamos el modelo.
+		$this->CI->load->model('Model_tickets');//Cargamos el modelo.
 	}
 
 	public function getListaDias(){

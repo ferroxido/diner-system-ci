@@ -58,7 +58,7 @@
 		        <!-- Contenido de la aplicación -->
 		        <div class="col-md-9 col-md-offset-3">
 		        	<div id="contenido" class="row">
-		        		<?= $this->load->view($contenido); ?>
+		        		<?php $this->load->view($contenido); ?>
 		        	</div>
 		        </div>
       		</div>

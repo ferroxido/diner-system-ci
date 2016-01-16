@@ -5,7 +5,7 @@ class TiposoperacionesLib {
 
 	function __construct(){
 		$this->CI = & get_instance();//Obtener la instancia del objeto por referencia.
-		$this->CI->load->model('Model_Tipos_Operaciones');//Cargamos el modelo.
+		$this->CI->load->model('Model_tipos_operaciones');//Cargamos el modelo.
 	}
 
 	public function my_validation($registro){

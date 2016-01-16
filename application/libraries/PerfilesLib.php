@@ -4,8 +4,8 @@ class PerfilesLib {
 
 	function __construct(){
 		$this->CI = & get_instance();//Obtener la instancia del objeto por referencia.
-		$this->CI->load->model('Model_Perfiles');//Cargamos el modelo.
-		$this->CI->load->model('Model_Perfiles_Tipos_Operaciones');
+		$this->CI->load->model('Model_perfiles');//Cargamos el modelo.
+		$this->CI->load->model('Model_perfiles_tipos_operaciones');
 	}
 
 	public function norepetir($registro){
@@ -23,8 +23,8 @@ class PerfilesLib {
 		$lista_asignados = array();
 		$lista_noasignados = array();
 
-		$this->CI->load->model('Model_Tipos_Operaciones');
-        $tipos_operaciones = $this->CI->Model_Tipos_Operaciones->all();
+		$this->CI->load->model('Model_tipos_operaciones');
+        $tipos_operaciones = $this->CI->Model_tipos_operaciones->all();
 
         foreach($tipos_operaciones as $tipo_operacion) {
             $this->CI->db->where('id_perfil', $id_perfil);
@@ -48,7 +48,7 @@ class PerfilesLib {
 		$registro['id_perfil'] = $id_perfil;
 		$registro['created'] = date('Y/m/d H:i');
 		$registro['updated'] = date('Y/m/d H:i');
-		$this->CI->Model_Perfiles_Tipos_Operaciones->insert($registro);
+		$this->CI->Model_perfiles_tipos_operaciones->insert($registro);
 	}
 
 	public function quitar_permiso($id_tipo_operacion, $id_perfil){

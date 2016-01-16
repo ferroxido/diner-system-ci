@@ -9,14 +9,14 @@ class UsuarioLib {
 	function __construct(){
 		$this->CI = & get_instance();//Obtener la instancia del objeto por referencia.
 		//Cargamos los distintos modelos que vamos a necesitar.
-		$this->CI->load->model('Model_Usuarios');
-		$this->CI->load->model('Model_Perfiles');
-		$this->CI->load->model('Model_Dias');
-		$this->CI->load->model('Model_Log_Usuarios');
-		$this->CI->load->model('Model_Tickets');
-		$this->CI->load->model('Model_Configuraciones');
-		$this->CI->load->model('Model_Calendario');
-		$this->CI->load->model('Model_Alumnos');
+		$this->CI->load->model('Model_usuarios');
+		$this->CI->load->model('Model_perfiles');
+		$this->CI->load->model('Model_dias');
+		$this->CI->load->model('Model_log_usuarios');
+		$this->CI->load->model('Model_tickets');
+		$this->CI->load->model('Model_configuraciones');
+		$this->CI->load->model('Model_calendario');
+		$this->CI->load->model('Model_alumnos');
 	}
 
 	/*
@@ -24,7 +24,7 @@ class UsuarioLib {
 	 * de session necesarias. Además cargamos el log de usuario para el ingreso.
 	 */
 	public function loginok($dni, $password){
-		$query = $this->CI->Model_Usuarios->get_login($dni);
+		$query = $this->CI->Model_usuarios->get_login($dni);
 
 		if($query->num_rows() > 0){
 			$passwordDB = $query->row('password');
@@ -32,7 +32,7 @@ class UsuarioLib {
 
 			if(md5($password) == $passwordDB){
 				$usuario = $query->row();
-				$perfil = $this->CI->Model_Perfiles->find($usuario->id_perfil);
+				$perfil = $this->CI->Model_perfiles->find($usuario->id_perfil);
 				$datosSession = array('nombre_usuario' => $usuario->nombre, 'dni_usuario' => $usuario->dni,'estado_usuario' => $usuario->estado, 'id_perfil' => $usuario->id_perfil, 'perfil_nombre'=>$perfil->nombre);
 				$this->CI->session->set_userdata($datosSession);
 
@@ -76,7 +76,7 @@ class UsuarioLib {
 		}
 
 		$dni = $this->CI->session->userdata('dni_usuario');
-		$query = $this->CI->Model_Usuarios->get_login($dni);
+		$query = $this->CI->Model_usuarios->get_login($dni);
 		$passwordDB = $query->row('password');
 		$passwordDB = substr($passwordDB, 4, 32);//Desencriptamos
 
@@ -165,13 +165,13 @@ class UsuarioLib {
 	 * Carga el registro en la tabla log_usuarios
 	 */
 	public function cargar_log_usuario($dni, $fecha, $accion){
-		$query = $this->CI->Model_Log_Usuarios->find_accion($accion);
+		$query = $this->CI->Model_log_usuarios->find_accion($accion);
 		$registro['fecha'] = $fecha;
 		$registro['lugar'] = 0;//0 -> WEB, 1..6 -> Máquinas
 		$registro['id_accion'] = $query->row('id');
 		$registro['dni'] = $dni;
 		$registro['descripcion'] = $query->row('nombre');
-		$id_log =  $this->CI->Model_Log_Usuarios->add_log($registro);
+		$id_log =  $this->CI->Model_log_usuarios->add_log($registro);
 		return $id_log;
 	}
 
@@ -191,7 +191,7 @@ class UsuarioLib {
 	}
 
 	public function anularConTransaccion($dni, $id_ticket){
-		$query = $this->CI->Model_Tickets->find_ticket($dni, $id_ticket);
+		$query = $this->CI->Model_tickets->find_ticket($dni, $id_ticket);
 		//Controlo que efectivamente sea su ticket
 		if ($query->num_rows() == 1){
 			//validar fecha de anulacion
@@ -199,7 +199,7 @@ class UsuarioLib {
 			$respuesta = $this->validar_fecha_anulacion($fecha);
 			if ($respuesta['resultado'] == 0) {
 				//Anulo tranquilamente
-				$respuesta['exito'] = $this->CI->Model_Usuarios->transactionAnular($id_ticket, $dni);
+				$respuesta['exito'] = $this->CI->Model_usuarios->transactionAnular($id_ticket, $dni);
 				if (!$respuesta['exito']) {
 					$respuesta['mensaje'] = 'Error en la transacción';
 				}else{
@@ -207,7 +207,7 @@ class UsuarioLib {
 				}
 			}elseif ($respuesta['resultado'] == 2) {
 				//vencer ticket
-				$respuesta['exito'] = $this->CI->Model_Usuarios->transactionVencer($id_ticket, $dni);
+				$respuesta['exito'] = $this->CI->Model_usuarios->transactionVencer($id_ticket, $dni);
 				if (!$respuesta['exito']) {
 					$respuesta['mensaje'] = 'Error en la transacción';
 				}else{
@@ -262,7 +262,7 @@ class UsuarioLib {
 		$email = $registro['email'];
 		$lu = $registro['lu'];
 
-		$query = $this->CI->Model_Usuarios->find_simple($dni, $lu, $email);
+		$query = $this->CI->Model_usuarios->find_simple($dni, $lu, $email);
 		if($query->num_rows() == 1){
 			return TRUE;
 		}else{
@@ -284,7 +284,7 @@ class UsuarioLib {
 		$numCuenta = rand(0, 2);
 		while ($cont < 2) {
 			//----------------Configuración--------------------//
-			$query = $this->CI->Model_Configuraciones->find($numCuenta);
+			$query = $this->CI->Model_configuraciones->find($numCuenta);
 			$config = Array(
 			    'protocol' => 'smtp',
 			    'smtp_host' => 'ssl://'.$query->smtp,
@@ -335,7 +335,7 @@ class UsuarioLib {
 		$lu = $usuario['lu'];
 		$dni = $usuario['dni'];
 
-		$query = $this->CI->Model_Alumnos->find($lu, $dni);
+		$query = $this->CI->Model_alumnos->find($lu, $dni);
 
 		if($query->num_rows() == 1){
 			return true;
@@ -353,7 +353,7 @@ class UsuarioLib {
 		$estadoRegistrado = 1;
 		$estadoBloqueado = 0;
 
-		$query = $this->CI->Model_Alumnos->get_materias_aprobadas($lu);
+		$query = $this->CI->Model_alumnos->get_materias_aprobadas($lu);
 		$numMaterias = (int) $query->row('materias_aprobadas');
 
 		if($numMaterias >= 2){
@@ -404,8 +404,8 @@ class UsuarioLib {
 	public function get_calendario_informativo(){
 		$year = date('Y');
 		$month = date('m');
-		$data = $this->CI->Model_Dias->get_data_from_month($year, $month);//Array asociativo
-		return $this->CI->Model_Calendario->generate_data($year, $month, $data);
+		$data = $this->CI->Model_dias->get_data_from_month($year, $month);//Array asociativo
+		return $this->CI->Model_calendario->generate_data($year, $month, $data);
 	}
 
 }

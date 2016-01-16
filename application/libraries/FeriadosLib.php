@@ -4,7 +4,7 @@ class FeriadosLib {
 
 	function __construct(){
 		$this->CI = & get_instance();//Obtener la instancia del objeto por referencia.
-		$this->CI->load->model('Model_Feriados');//Cargamos el modelo.
+		$this->CI->load->model('Model_feriados');//Cargamos el modelo.
 	}
 
 

@@ -4,10 +4,10 @@ class CalendarioLib {
 
 	function __construct(){
 		$this->CI = & get_instance();//Obtener la instancia del objeto por referencia.
-		$this->CI->load->model('Model_Calendario');//Cargamos el modelo.
-		$this->CI->load->model('Model_Tickets');//Cargamos el modelo.
-		$this->CI->load->model('Model_Usuarios');//Cargamos el modelo.
-		$this->CI->load->model('Model_Dias');//Cargamos el modelo.
+		$this->CI->load->model('Model_calendario');//Cargamos el modelo.
+		$this->CI->load->model('Model_tickets');//Cargamos el modelo.
+		$this->CI->load->model('Model_usuarios');//Cargamos el modelo.
+		$this->CI->load->model('Model_dias');//Cargamos el modelo.
 		$this->CI->load->library('usuarioLib');
 	}
 
@@ -90,7 +90,7 @@ class CalendarioLib {
 			$calendario = array();
 
 			for ($i = 0; $i < $totalMonth; $i++){
-				$calendario[$month] = $this->CI->Model_Calendario->generate($year, $month);
+				$calendario[$month] = $this->CI->Model_calendario->generate($year, $month);
 
 				//Si el mes es diciembre, incrementamos $year
 				if ($month == 12){
@@ -109,7 +109,7 @@ class CalendarioLib {
 	}
 
 	public function calcular_meses($id_calendario){
-		$query = $this->CI->Model_Calendario->buscar($id_calendario);
+		$query = $this->CI->Model_calendario->buscar($id_calendario);
 		$resultado = array();
 
 		if($query->num_rows == 1){
@@ -266,7 +266,7 @@ class CalendarioLib {
 		$estadoAnulado = 0;//Estado para el ticket
 		$estadoFeriado = 0;//Estado para el dia
 
-		$query = $this->CI->Model_Calendario->get_tickets($fecha);
+		$query = $this->CI->Model_calendario->get_tickets($fecha);
 		if ($query->num_rows() > 0) {
 			//Registro el log
 			$fechaLog = date('Y/m/d H:i:s');
@@ -278,7 +278,7 @@ class CalendarioLib {
 				$registro = array();
 				$registro['id'] = $ticket->id;
 				$registro['estado'] = $estadoAnulado;
-				$this->CI->Model_Tickets->update($registro);
+				$this->CI->Model_tickets->update($registro);
 
 				//Registrar en la tabla tickets_log_usuarios
 				$data = array();//Reinicio la variable data
@@ -291,7 +291,7 @@ class CalendarioLib {
 				$registro = array();
 				$registro['dni'] = $ticket->dni;
 				$registro['saldo'] = $ticket->saldo + $ticket->importe;
-				$this->CI->Model_Usuarios->update($registro);
+				$this->CI->Model_usuarios->update($registro);
 			}
 			//Marcar el día como feriado
 			$registro = array();
@@ -300,7 +300,7 @@ class CalendarioLib {
 			$registro['estado'] = $estadoFeriado;
 			$registro['tickets_totales'] = 0;
 			$registro['tickets_vendidos'] = 0;
-			$this->CI->Model_Dias->update($registro);
+			$this->CI->Model_dias->update($registro);
 
 			return true;
 		}else{

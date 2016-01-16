@@ -49,8 +49,8 @@ function autorizar(){
 	$estadoBloqueado = 0;
 	if($CI->session->userdata('estado_usuario') == $estadoBloqueado){
 		//Si el usuario esta bloqueado, el id perfil será el de bloqueado.
-		$CI->load->model('Model_Perfiles');
-		$id_perfil = $CI->Model_Perfiles->findNombre('Bloqueado')->id;
+		$CI->load->model('Model_perfiles');
+		$id_perfil = $CI->Model_perfiles->findNombre('Bloqueado')->id;
 	}else{
 		//El perfil del usuario ya está logueado
 		$id_perfil = $CI->session->userdata('id_perfil');//Ya tengo su perfil
