@@ -20,28 +20,18 @@ class Model_log_usuarios extends CI_Model {
     }
 
     function all_filter($accion, $buscar_dni, $filasPorPagina, $posicion){
-        if($accion == '0'){
-            $this->db->select('log_usuarios.*, acciones.nombre as accion, usuarios.nombre as nombre');
-            $this->db->from('log_usuarios');
-            $this->db->join('acciones', 'log_usuarios.id_accion = acciones.id');
-            $this->db->join('usuarios', 'log_usuarios.dni = usuarios.dni');
-            $this->db->like('log_usuarios.dni', $buscar_dni, 'after');
-            $this->db->order_by('fecha', 'desc');
-            $this->db->limit($filasPorPagina, $posicion);
-            $query = $this->db->get();
-            return $query->result();
-        }else{
-            $this->db->select('log_usuarios.*, acciones.nombre as accion, usuarios.nombre as nombre');
-            $this->db->from('log_usuarios');
-            $this->db->join('acciones', 'log_usuarios.id_accion = acciones.id');
-            $this->db->join('usuarios', 'log_usuarios.dni = usuarios.dni');
+        $this->db->select('log_usuarios.*, acciones.nombre as accion, usuarios.nombre as nombre');
+        $this->db->from('log_usuarios');
+        $this->db->join('acciones', 'log_usuarios.id_accion = acciones.id');
+        $this->db->join('usuarios', 'log_usuarios.dni = usuarios.dni');
+        if($accion !== '0'){
             $this->db->where('id_accion', $accion);
-            $this->db->like('log_usuarios.dni', $buscar_dni, 'after');
-            $this->db->order_by('fecha', 'desc');
-            $this->db->limit($filasPorPagina, $posicion);
-            $query = $this->db->get();
-            return $query->result();            
         }
+        $this->db->like('log_usuarios.dni', $buscar_dni, 'after');
+        $this->db->order_by('fecha', 'DESC');
+        $this->db->limit($filasPorPagina, $posicion);
+        $query = $this->db->get();
+        return $query->result();
     }
 
     function find($fecha){

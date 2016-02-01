@@ -31,7 +31,7 @@ $(document).ready(function() {
 					var obj = JSON.parse(response);
 					if(obj.length > 0){
 						try{
-							var items = []; 	
+							var items = [];
 							$.each(obj, function(i,val){
 								//Formateamos la fecha
 								var string_fecha = val.fecha;

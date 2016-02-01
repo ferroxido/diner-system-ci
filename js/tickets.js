@@ -36,7 +36,7 @@ function filtrar_ajax(){
 				}
 			}else{
 				$('#destino_resultado').html($('<tr/>').text(" No Se encontraron registros"));
-			}					
+			}
 		},
 		error: function(){
 			console.log('Error en la respuesta');
@@ -167,9 +167,9 @@ $(document).ready(function() {
 					}
 				}else{
 					$('#destino_resultado').html($('<tr/>').text(" No Se encontraron registros"));
-				}					
+				}
 			},
-			error: function(){						
+			error: function(){
 				console.log('Error en la respuesta');
 			}
 		});

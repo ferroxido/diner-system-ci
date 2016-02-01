@@ -36,7 +36,7 @@
 	    </div>
 	</div>
 	<div class="contenedor">
-		<?= $this->load->view($contenido);?>
+		<?php $this->load->view($contenido);?>
 	</div>
 	<footer>
 		<p><?= $this->session->userdata('nombre_usuario'); ?>&copy; Sistema de gestión de tickes UNSA - <?= date('d-m-Y H:i') ?> </p>

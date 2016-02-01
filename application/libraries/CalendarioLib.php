@@ -112,7 +112,7 @@ class CalendarioLib {
 		$query = $this->CI->Model_calendario->buscar($id_calendario);
 		$resultado = array();
 
-		if($query->num_rows == 1){
+		if($query->num_rows() == 1){
 			$ajuste = 1;
 			$total = 0;
 			$totalMeses = 12;

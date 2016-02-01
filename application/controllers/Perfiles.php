@@ -81,7 +81,6 @@ class Perfiles extends CI_Controller {
 	public function perfiles_tipos_operaciones($id){
 		$data['contenido'] = 'perfiles/perfiles_tipos_operaciones';
 		$data['titulo'] = 'Asignando operaciones';
-		
 		$operaciones = $this->perfileslib->get_operaciones($id);
 		$data['query_izq'] = $operaciones[0];
 		$data['query_der'] = $operaciones[1];

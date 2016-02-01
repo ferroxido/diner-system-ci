@@ -121,8 +121,8 @@ class Model_usuarios extends CI_Model {
 
     function get_provincias(){
         $lista = array();
-        $this->load->model('Model_Provincias');
-        $registros = $this->Model_Provincias->all();
+        $this->load->model('Model_provincias');
+        $registros = $this->Model_provincias->all();
         foreach($registros as $registro){
             $lista[$registro->id] = $registro->nombre;
         }

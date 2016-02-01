@@ -1,7 +1,7 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
 
-class Model_Provincias extends CI_Model {
+class Model_provincias extends CI_Model {
 
     function __construct()
     {

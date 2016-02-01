@@ -30,7 +30,7 @@ class PerfilesLib {
             $this->CI->db->where('id_perfil', $id_perfil);
             $this->CI->db->where('id_tipo_operacion', $tipo_operacion->id);
             $query = $this->CI->db->get('perfiles_tipos_operaciones');
-            $existe = ($query->num_rows >0);
+            $existe = ($query->num_rows() >0);
 
             if($existe) {
                 $lista_asignados[] = array($tipo_operacion->id, $tipo_operacion->nombre, $id_perfil);

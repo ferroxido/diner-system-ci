@@ -3,7 +3,7 @@
 class Tickets extends CI_Controller {
 
 	protected $filasPorPagina = 200;
-	protected $primeraPagina = 1;	
+	protected $primeraPagina = 1;
 
 	//Constructor
 	function __construct(){
@@ -61,7 +61,7 @@ class Tickets extends CI_Controller {
 	public function detalles($id_ticket){
 		$data['contenido'] = 'tickets/detalles';
 		$data['registros'] = $this->Model_tickets->get_ticket_detalle($id_ticket);
-		$this->load->view('tmp-admin', $data);		
+		$this->load->view('tmp-admin', $data);
 	}
 
 	public function vencimiento_cron(){

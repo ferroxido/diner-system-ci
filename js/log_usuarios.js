@@ -1,14 +1,16 @@
 function filtrar_ajax(){
 	accion = $('#drop_down').val();
 	buscar_dni = $("#buscar_dni").val();
-	
+	primeraPagina = 1;
+
 	$.ajax({
 		type: "post",
 		url: base_url + "log_usuarios/filtrar",
 		cache: false,
 		data:{
 			accion:accion,
-			buscar_dni:buscar_dni
+			buscar_dni:buscar_dni,
+			page_num: primeraPagina
 		},
 		success: function(response){
 			$('#destino_resultado').html("");
@@ -26,10 +28,10 @@ function filtrar_ajax(){
 				}
 			}else{
 				$('#destino_resultado').html($('<tr/>').text(" No Se encontraron registros"));
-			}		
+			}
 			
 		},
-		error: function(){						
+		error: function(){
 			console.log('error en la respuesta');
 		}
 	});

@@ -4,7 +4,7 @@ class ProvinciasLib {
 
 	function __construct(){
 		$this->CI = & get_instance();//Obtener la instancia del objeto por referencia.
-		$this->CI->load->model('Model_Provincias');//Cargamos el modelo.
+		$this->CI->load->model('Model_provincias');//Cargamos el modelo.
 	}
 
 	public function norepetir($registro){

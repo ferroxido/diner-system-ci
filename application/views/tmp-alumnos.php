@@ -37,11 +37,11 @@
 	    </div>
 	</div>
 
-	<div id="contenedor">		
+	<div id="contenedor">
 		<div class="row">
-			<!-- Información del alumno -->	
+			<!-- Información del alumno -->
 			<div id="col1" class="col-md-4">
-				<div id="info-perfil">					
+				<div id="info-perfil">
 					<div id="img_alumno">
 						<a href="#" class="thumbnail">
 							<?= form_open_multipart('usuarios/subir_foto', array('id'=>'form-foto')); ?>
@@ -79,9 +79,9 @@
 						<div class="form-group group-label">
 							<label class="label-titulo">Saldo: </label>
 							<label class="mostrar-info"><?= '$ '.$registro->saldo; ?></label>
-						</div>								
+						</div>
 					</div>
-				</div>	
+				</div>
 			</div>
 			<div id="col2" class="col-md-4">
 				<div id="info_comedor">
@@ -122,7 +122,7 @@
 			</div>
 			
 			<!-- Información variable -->
-			<?= $this->load->view($contenido); ?>
+			<?php $this->load->view($contenido); ?>
 			
 		</div>
       	<footer>

@@ -104,8 +104,8 @@ class Model_calendario extends CI_Model{
 
     public function buscar($id){
         $this->db->where('id', $id);
-        $query = $this->db->get('calendario'); 
-        return $query;     
+        $query = $this->db->get('calendario');
+        return $query;
     }
 
     public function get_dias_feriados($id){

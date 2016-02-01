@@ -8,15 +8,15 @@ class Calendario extends CI_Controller{
 	function __construct(){
 		parent::__construct();
 
-      	$this->load->model('Model_calendario');
-      	$this->load->model('Model_feriados');
-      	$this->load->library('calendarioLib');
-      	$this->load->library('usuarioLib');
-      	$this->form_validation->set_message('required', 'Debe ingresar un valor para %s');
-      	$this->form_validation->set_message('desde_menor_hasta', 'La fecha %s es mayor que %s, eso no es posible');
-      	$this->form_validation->set_message('validar_calendario_unico', 'Existe otro calendario que se solapa con este');
-      	$this->form_validation->set_message('validar_feriado', 'El feriado debe estar entre las fechas indicadas');
-      	$this->form_validation->set_message('validar_anulacion', 'Clave incorrecta!');
+        $this->load->model('Model_calendario');
+        $this->load->model('Model_feriados');
+        $this->load->library('calendarioLib');
+        $this->load->library('usuarioLib');
+        $this->form_validation->set_message('required', 'Debe ingresar un valor para %s');
+        $this->form_validation->set_message('desde_menor_hasta', 'La fecha %s es mayor que %s, eso no es posible');
+        $this->form_validation->set_message('validar_calendario_unico', 'Existe otro calendario que se solapa con este');
+        $this->form_validation->set_message('validar_feriado', 'El feriado debe estar entre las fechas indicadas');
+        $this->form_validation->set_message('validar_anulacion', 'Clave incorrecta!');
 	}
 
 	public function index(){
