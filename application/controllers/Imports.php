@@ -10,9 +10,10 @@ class Imports extends CI_Controller {
         $this->load->model('Model_alumnos');
         $this->load->helper('directory');
         $this->load->helper('file');
+        $this->load->library('importLib');
     }
 
-    public function index(){
+    public function index($mensaje=NULL){
         $data['contenido'] = 'imports/index';
 
         $files_name = directory_map($this->imports_path);
@@ -48,6 +49,17 @@ class Imports extends CI_Controller {
                 redirect('imports/index');
             }
         }
+    }
+
+    public function procesar($file_name){
+        $file = file($this->imports_path.$file_name);
+        $csv = array_map('str_getcsv', $file, array_fill(0, sizeof($file), ';'));
+
+        $inserted = $this->importlib->procesar_datos($csv);
+
+        echo '<pre>';
+        print_r($inserted);
+        echo '</pre>';
     }
 
 }

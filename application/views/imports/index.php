@@ -7,7 +7,7 @@
   <button type="submit" class="btn btn-primary">Importar</button>
 <?= form_close(); ?>
 
-<h2>Files</h2>
+<h2>Archivos</h2>
 
 <table class="table table-bordered table-striped table-hover">
     <thead>
@@ -25,7 +25,7 @@
             <td><?= $data['name']; ?></td>
             <td><?= $data['size'].' bytes'; ?></td>
             <td><?= date("d/m/Y H:i:s",$data['date']); ?></td>
-            <td><?= anchor('usuarios/movimientos/', ' ', array('class' => 'glyphicon glyphicon-play-circle')); ?></td>
+            <td><?= anchor('imports/procesar/'.$data['name'], ' ', array('class' => 'glyphicon glyphicon-play-circle')); ?></td>
         </tr>
         <?php endforeach; ?>
     </tbody>
