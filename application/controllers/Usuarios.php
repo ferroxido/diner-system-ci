@@ -77,7 +77,7 @@ class Usuarios extends CI_Controller {
 
 	public function no_repetir_usuario_update(){
 		return $this->usuariolib->no_repetir_usuario($this->input->post(), 'update');
-	}	
+	}
 
 	//Para el usuario administrador
 	public function edit($dni = null){
@@ -140,7 +140,7 @@ class Usuarios extends CI_Controller {
 		if($this->input->post()){
 			$registro = $this->input->post();
 			$this->form_validation->set_rules('nombre', 'Nombre', 'required|xss_clean|max_length[45]|callback_caracteres_permitidos');
-			$this->form_validation->set_rules('email', 'Email', 'required|xss_clean|valid_email|max_length[64]|callback_parametros_permitidos_ingresar_usuario');
+			$this->form_validation->set_rules('email', 'Email', 'required|xss_clean|valid_email|max_length[64]|callback_parametros_permitidos_insertar_usuario');
 			$this->form_validation->set_rules('dni', 'Usuario', 'required|xss_clean|max_length[10]|is_natural|callback_no_repetir_usuario_insertar');
 			$this->form_validation->set_rules('lu', 'Libreta', 'required|xss_clean|max_length[8]|is_natural');
 			$this->form_validation->set_rules('id_provincia', 'Provincia', 'required|is_natural');
@@ -327,13 +327,13 @@ class Usuarios extends CI_Controller {
 				$config['height']       = 400;
 
 				$this->load->library('image_lib', $config);
-				
+
 				if(!$this->image_lib->resize()){
 					$mostrar = true;
 					$error = "No se pudo subir la imagen ".$this->image_lib->display_errors();
 					$this->editar_perfil($mostrar, $error);
 				}else{
-					//Guardamos la imagen en la DB				
+					//Guardamos la imagen en la DB
 					$registro['dni'] = $dni;
 					$registro['ruta_foto'] = base_url('img/fotos-usuarios/'.$info['file_name']);
 					$this->Model_usuarios->update($registro);
@@ -354,7 +354,7 @@ class Usuarios extends CI_Controller {
 			$this->load->view('tmp-alumnos2', $data);
 		}
 	}
-	
+
 	public function anulando($id_ticket){
 		if($this->session->userdata('dni_usuario') != null){
 			//Realizar anulación
@@ -404,7 +404,7 @@ class Usuarios extends CI_Controller {
 		}else{
 			show_404();
 		}
-	}	
+	}
 
 	public function procesar_barcode(){
 		if($this->input->is_ajax_request()){
@@ -447,12 +447,12 @@ class Usuarios extends CI_Controller {
 				}
 
 				//Cambiamos el valor del objeto query la propiedad estado
-				$query->row()->estado = $estadoVencido;	
+				$query->row()->estado = $estadoVencido;
 			}
 			echo json_encode($query->result());
 		}else{
 			show_404();
-		}		
+		}
 	}
 
 	//Compra de tickets del alumno
