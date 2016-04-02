@@ -35,7 +35,7 @@ class Imports extends CI_Controller {
             $config['max_width']  = '0';
             $config['max_height']  = '0';
             $config['overwrite'] = true;
-            //$config['file_name'] = 'test';
+            $config['file_name'] = 'test';
 
             $this->load->library('upload', $config);
 
@@ -56,10 +56,7 @@ class Imports extends CI_Controller {
         $csv = array_map('str_getcsv', $file, array_fill(0, sizeof($file), ';'));
 
         $inserted = $this->importlib->procesar_datos($csv);
-
-        echo '<pre>';
-        print_r($inserted);
-        echo '</pre>';
+        echo json_encode($inserted);
     }
 
 }
