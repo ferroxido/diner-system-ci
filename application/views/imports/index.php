@@ -1,3 +1,7 @@
+<div id="mensaje">
+    <?= my_validation_errors($mensaje); ?>
+</div>
+
 <?= form_open_multipart('imports/import', array()); ?>
   <div class="form-group">
     <label for="exampleInputFile">File input</label>

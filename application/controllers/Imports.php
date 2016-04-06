@@ -15,7 +15,7 @@ class Imports extends CI_Controller {
 
     public function index($mensaje=NULL){
         $data['contenido'] = 'imports/index';
-
+        $data['mensaje'] = $mensaje;
         $files_name = directory_map($this->imports_path);
         $files_imported = array();
         foreach ($files_name as $file_name) {
@@ -34,17 +34,15 @@ class Imports extends CI_Controller {
             $config['max_size'] = '2048';
             $config['max_width']  = '0';
             $config['max_height']  = '0';
-            $config['overwrite'] = true;
-            $config['file_name'] = 'test';
+            $config['overwrite'] = FALSE;
+            //$config['file_name'] = 'test';
 
             $this->load->library('upload', $config);
 
             if (! $this->upload->do_upload()){
                 //Controlar error al subir archivo.
-                $mostrar = true;
-                $error = "No se pudo subir la imagen ".$this->upload->display_errors();
-
-                echo $error;
+                $mensaje = "No se pudo subir la imagen ".$this->upload->display_errors();
+                $this->index($mensaje);
             }else{
                 redirect('imports/index');
             }
@@ -52,11 +50,15 @@ class Imports extends CI_Controller {
     }
 
     public function procesar($file_name){
-        $file = file($this->imports_path.$file_name);
-        $csv = array_map('str_getcsv', $file, array_fill(0, sizeof($file), ';'));
+        if($this->input->is_ajax_request()){
+            $file = file($this->imports_path.$file_name);
+            $csv = array_map('str_getcsv', $file, array_fill(0, sizeof($file), ';'));
 
-        $inserted = $this->importlib->procesar_datos($csv);
-        echo json_encode($inserted);
+            $inserted = $this->importlib->procesar_datos($csv);
+            echo json_encode(sizeof($inserted));
+        }else{
+            show_404();
+        }
     }
 
 }
