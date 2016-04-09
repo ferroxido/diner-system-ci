@@ -116,6 +116,15 @@
 
 				<div class="row">
 					<div class="form-group">
+						<?= form_label('Estado: ', 'estado', array('class'=>'col-md-3 control-label')); ?>
+						<div class="col-md-6">
+							<?= form_input(array('class'=>'form-control','type'=>'number', 'name'=>'estado', 'id'=>'estado')); ?>
+						</div>
+					</div>
+				</div>
+
+				<div class="row">
+					<div class="form-group">
 						<?= form_label('Creado: ', 'created', array('class'=>'col-md-3 control-label')); ?>
 						<div class="col-md-6">
 							<input class="form-control" type="text" name="created" value="<?= date("d/m/Y - H:i",strtotime($registro->created)); ?>" disabled/>

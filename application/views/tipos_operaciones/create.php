@@ -26,7 +26,7 @@
 			<?= form_label('Acción: ', 'accion', array('class'=>'col-md-3 control-label')); ?>
 			<div class="col-md-4">
 				<?= form_input(array('class'=>'form-control','type'=>'text', 'name'=>'accion', 'id'=>'accion','value'=>set_value('accion'))); ?>
-			</div>
+			</div>		
 		</div>
 	</div>
 
@@ -41,9 +41,9 @@
 
 	<div class="row">
 		<div class="form-group">
-			<?= form_label('Enviar al menu?: ', 'estado', array('class'=>'col-md-3 control-label')); ?>
+			<?= form_label('Estado: ', 'estado', array('class'=>'col-md-3 control-label')); ?>
 			<div class="col-md-4">
-				<input type="checkbox" name="estado" id="estado">
+				<?= form_input(array('class'=>'form-control','type'=>'number', 'name'=>'estado', 'id'=>'estado')); ?>
 			</div>
 		</div>
 	</div>
