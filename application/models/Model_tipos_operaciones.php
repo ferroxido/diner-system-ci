@@ -74,8 +74,8 @@ class Model_tipos_operaciones extends CI_Model {
 
     function get_menu(){
         $lista = array();
-        $this->load->model('Model_Menu');
-        $registros = $this->Model_Menu->all();
+        $this->load->model('Model_menu');
+        $registros = $this->Model_menu->all();
 
         foreach ($registros as $registro) {
             $lista[$registro->id] = $registro->nombre;
