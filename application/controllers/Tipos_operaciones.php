@@ -82,6 +82,9 @@ class Tipos_Operaciones extends CI_Controller {
 			//Si no cumplio alguna de las reglas
 			$this->create();
 		}else{
+			if (isset($registro['estado'])){
+				$registro['estado'] = 1;
+			}
 			$registro['created'] = date('Y/m/d H:i');
 			$registro['updated'] = date('Y/m/d H:i');
  			$this->Model_tipos_operaciones->insert($registro);
