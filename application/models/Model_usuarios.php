@@ -37,7 +37,7 @@ class Model_usuarios extends CI_Model {
         $this->db->limit($filasPorPagina, $posicion);
         $query = $this->db->get();
         return $query->result();
-    }    
+    }
 
     function allFilter($campo, $valor){
         $this->db->select('usuarios.*, perfiles.nombre as perfil_nombre');
@@ -55,8 +55,8 @@ class Model_usuarios extends CI_Model {
         $this->db->join('provincias', 'usuarios.id_provincia = provincias.id', 'left');
         $this->db->join('facultades', 'usuarios.id_facultad = facultades.id', 'left');
         $this->db->join('categorias', 'usuarios.id_categoria = categorias.id', 'left');
-    	$this->db->where('usuarios.dni',$dni);
-    	return $this->db->get()->row();//Equivale a SELECT * FROM usuarios WHERE id='$id'
+        $this->db->where('usuarios.dni',$dni);
+        return $this->db->get()->row();
     }
 
     function find_simple($dni, $lu, $email){
@@ -68,8 +68,8 @@ class Model_usuarios extends CI_Model {
     }
 
     function insert($registro){
-    	$this->db->set($registro);
-    	$this->db->insert('usuarios');
+        $this->db->set($registro);
+        $this->db->insert('usuarios');
     }
 
     function insert_alumnos($registro){
@@ -82,9 +82,9 @@ class Model_usuarios extends CI_Model {
     }
 
     function update($registro){
-    	$this->db->set($registro);
-    	$this->db->where('dni',$registro['dni']);
-    	$this->db->update('usuarios');
+        $this->db->set($registro);
+        $this->db->where('dni',$registro['dni']);
+        $this->db->update('usuarios');
     }
 
     function get_id_estado($nombre){
@@ -93,13 +93,13 @@ class Model_usuarios extends CI_Model {
     }
 
     function delete($dni){
-    	$this->db->where('dni',$dni);
-    	$this->db->delete('usuarios');
+        $this->db->where('dni',$dni);
+        $this->db->delete('usuarios');
     }
 
     function get_login($dni){
-    	$this->db->where('dni',$dni);//El dni es el login de usuario
-    	return $this->db->get('usuarios');//SELECT * FROM usuarios WHERE () and ()
+        $this->db->where('dni',$dni);
+        return $this->db->get('usuarios');
     }
 
     function get_perfiles(){
@@ -195,6 +195,7 @@ class Model_usuarios extends CI_Model {
         return $query->row('importe');
     }
 
+    // @todo refactor query
     function get_movimientos($dni, $fecha){
         $idAccionCompra = 1;
         $idAccionAnular = 2;
@@ -240,7 +241,7 @@ class Model_usuarios extends CI_Model {
                 (SELECT fecha::date AS fecha, SUM(valor) AS dinero FROM billetes WHERE dni = '$dni' GROUP BY fecha::date) AS dinero
                 ON dinero.fecha = dias.fecha
                 WHERE dias.fecha = '$fecha'
-                ORDER BY fecha ASC");            
+                ORDER BY fecha ASC");
         }
         return $query->result();
     }

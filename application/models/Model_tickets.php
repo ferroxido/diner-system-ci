@@ -1,6 +1,6 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-
+//@todo refactorizar y mejorar todas las consultas.
 class Model_tickets extends CI_Model {
 
     function __construct()
@@ -478,7 +478,13 @@ class Model_tickets extends CI_Model {
         }
     }
 
+    function get_all_tickets_older_yesterday() {
+        $query = $this->db->query("SELECT tickets.id, fecha FROM tickets 
+            INNER JOIN dias ON tickets.id_dia = dias.id 
+            WHERE fecha <= current_date-1 
+            AND tickets.estado = 2");
 
+        return $query->result();
+    }
 
 }
-

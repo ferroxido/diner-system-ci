@@ -36,7 +36,7 @@ class CalendarioLib {
 						//por ahora son validas
 						if($monthDesde < $monthHasta){
 							//listo la fecha desde es menor que hasta
-							return true;		
+							return true;
 						}else{
 							//Coinciden en mes. Debo comparar dias
 							$dayDesde = $tokensDesde[2];
@@ -234,7 +234,7 @@ class CalendarioLib {
 		$claveDB = substr($claveDB, 4, 32);
 
 		if(md5($clave) == $claveDB){
-			return true;				
+			return true;
 		}else{
 			return false;
 		}

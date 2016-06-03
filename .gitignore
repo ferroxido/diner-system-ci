@@ -3,5 +3,6 @@ application/config/config.php
 SQL/
 img/fotos-usuarios/
 imports-csv/
+cronlogs/
 .htaccess
 *.sql
