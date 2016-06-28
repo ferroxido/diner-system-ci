@@ -482,7 +482,8 @@ class Model_tickets extends CI_Model {
         $query = $this->db->query("SELECT tickets.id, fecha FROM tickets 
             INNER JOIN dias ON tickets.id_dia = dias.id 
             WHERE fecha <= current_date-1 
-            AND tickets.estado = 2");
+            AND tickets.estado = 2
+            LIMIT 10");
 
         return $query->result();
     }
